@@ -1,0 +1,22 @@
+
+.NewItemInformation1 {
+    align-items: center;
+    flex-direction: column;
+    display:flex;
+	margin-top: 2%;
+	
+}
+
+.in_button{
+    margin: 10px;
+}
+
+.inventory_input {
+	background-color: #eee;
+	border: none;
+	padding: 12px 15px;
+	margin: 8px 8px;
+	width: 30%;
+	
+	text-align: center;
+}

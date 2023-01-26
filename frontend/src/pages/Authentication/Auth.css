@@ -1,0 +1,87 @@
+
+.form-container {
+	/* right: 25%; */
+	display: grid;
+	position: absolute;
+	justify-content: center;
+	align-items: center;
+	width: 600px;
+	height: 70%;
+	margin-top: 10%;
+	top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+	place-items: center;
+	border: 3px solid  #9f01ea;
+	border-radius: 20px;
+	/* transition: all 0.6s ease-in-out; */
+}
+
+.loginForm {
+	/* background-color: #FFFFFF;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	padding: 5px 5px;
+	height: 100%;
+	width: 50%;
+	text-align: center; */
+	/* position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%); */
+	margin-top: 10px;
+	display: flex; /* or grid*/
+	align-items: center;
+	justify-content: center;
+	flex-direction: column; /* or grid-template-columns*/
+}
+
+.registerForm {
+	background-color: #FFFFFF;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	padding: 10px 10px;
+	height: 100%;
+	text-align: center;
+}
+
+.auth_input {
+	background-color: #eee;
+	border: none;
+	padding: 12px 15px;
+	margin: 8px 8px;
+	width: 100%;
+	border: 2px solid black;
+}
+
+.login-container {
+	/* left: 0; */
+	align-items: center;
+	width: 50%;
+	/* z-index: 2; */
+}
+
+.register-container {
+	/* right: 0; */
+	
+	align-items: center;;
+	width: 50%;
+	justify-content: center;
+	/* z-index: 1; */
+}
+
+.or_header {
+	align-items: center;
+	justify-content: center;
+	margin-top: 20px;
+}
+
+.others_button {
+	align-items: center;
+	justify-content: center;
+	margin-top: 20px;
+}

@@ -1,0 +1,48 @@
+.videoCard_Container {
+  width: 360px;
+  margin-bottom: 45px;
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+
+}
+
+.videoCard_Image {
+  width: 100%;
+  height: 202px;
+  background-color: #999;
+  flex: 1;
+}
+
+.videoCard_Details {
+  display: flex;
+  margin-top: 16px;
+  gap: 12px;
+  flex: 1;
+}
+
+.videoCard_ChannelImage {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #999;
+  display: none;
+}
+
+
+.videoCard_Title {
+  font-size: 16px;
+  font-weight: 500;
+  /* color: ${({ theme }) => theme.text}; */
+}
+
+.videoCard_ChannelName {
+  font-size: 14px;
+  /* color: ${({ theme }) => theme.textSoft}; */
+  margin: 9px 0px;
+}
+
+.videoCard_Info {
+  font-size: 14px;
+  /* color: ${({ theme }) => theme.textSoft}; */
+}

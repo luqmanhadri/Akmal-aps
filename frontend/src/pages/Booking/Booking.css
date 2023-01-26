@@ -1,0 +1,139 @@
+/* .Inventory {
+  justify-content: center;
+  align-items: center;
+}
+
+.SearchItemBar {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 2%;
+  height: 40px;
+  background-color: white;
+  border: 3px solid #febb02;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px 0px;
+  border-radius: 5px;
+
+  width: 100%;
+  max-width: 1024px;
+
+}
+
+.headerIcon {
+  color: lightgray;
+  margin: 10px;
+}
+
+.headerSearchItem {
+ 
+  flex: 1;
+  align-items: center;
+
+}
+
+@media (max-width: 575px) {
+  .headerSearchItem {
+    flex: 0;
+    width: 100%;
+  }
+}
+
+.headerSearchInput {
+  border: none;
+  outline: none;
+  margin: 10px;
+}
+
+.headerSearchText {
+  color: lightgray;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.date {
+  position: absolute;
+  top: 50px;
+  z-index: 2;
+}
+
+.search-form {
+  
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 2%;
+  height: 40px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px 0px;
+  border-radius: 5px;
+ 
+  width: 100%;
+  max-width: 1024px;
+} */
+
+.header-container {
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+  width: 100%;
+    max-width: 100%;
+  
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+
+.search-input, .check-in, .check-out, .time-start, .time-end, .store-select {
+  height: 40px;
+  border: 3px solid #febb02;
+  /* border-radius: 10px; */
+  width: 450px;
+  /* margin-top: 5px;
+  margin-left: 0px; */
+  margin-left: 15px;
+  margin-top: 5px;
+}
+
+@media (max-width: 600px) {
+  .header-container {
+      display: flex;
+      flex-wrap: wrap;
+  }
+  .search-input, .check-in, .check-out, .time-start, .time-end, .store-select {
+      width: 100%;
+  }
+}
+
+.search-button {
+  width: 120px;
+  border: 3px solid #febb02;
+}
+
+/* @media (max-width: 768px) {
+  .search-form {
+    flex-wrap: wrap;
+  }
+
+  .search-input,
+  .date-picker,
+  .search-button,
+  .dropdown {
+    width: 100%;
+  }
+
+  .date-picker {
+    margin-bottom: 10px;
+  }
+} */
+
+

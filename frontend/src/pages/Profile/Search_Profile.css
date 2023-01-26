@@ -1,0 +1,248 @@
+
+.Athlete_Search_Bar {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 1%;
+    height: 50px;
+    background-color: white;
+    border: 3px solid #febb02;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    /* padding: 10px 0px; */
+    border-radius: 5px;
+    /* bottom: -25px; */
+    width: 100%;
+    max-width: 1024px;
+
+}
+
+
+.profile_searchbar {
+
+    display: flex;
+    align-items: center;
+    border: none;
+    outline: none;
+    margin: 5px;
+    width: 30%;
+    
+}
+
+.profile_searchbar_button {
+    background-color: #eee;
+    border: none;
+    padding: 12px 15px;
+    width: 10%;
+}
+
+
+/*Profile card css*/
+.profile-card-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-card-container .card {
+    position: relative;
+    width: 350px;
+    height: 470px;
+    /* background: linear-gradient(120deg,  #343A4F, #0F1620); */
+    /* background: linear-gradient(10deg, #131720,#414850); */
+    background: linear-gradient(120deg, #343A4F, #0F1620);
+    border-radius: 10px;
+    border: 5px solid #3D9DEA;
+    overflow: hidden;
+    margin-top: 20px;
+
+}
+
+.profile-card-container .card:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(176deg, #3D9DEA, #4A4EEE);
+    clip-path: circle(150px at 80% 20%);
+    transition: 0.5s ease-in-out;
+}
+
+.profile-card-container .card:hover:before {
+    clip-path: circle(300px at 80% -20%);
+}
+
+.profile-card-container .card:after {
+    content: 'APS';
+    position: absolute;
+    top: 30%;
+    left: -20%;
+    font-size: 12em;
+    font-weight: 800;
+    font-style: italic;
+    color: #131720
+}
+
+.profile-card-container .card .imgBx {
+    position: absolute;
+    top: 40%;
+    transform: translateY(-50%);
+    z-index: 10000;
+    width: 100%;
+    height: 300px;
+    transition: 0.5s;
+}
+
+.profile-card-container .card:hover .imgBx {
+    top: 0%;
+    transform: translateY(0%);
+    
+
+}
+
+.profile-card-container .card .imgBx img {
+    /* border-radius: 70%; */
+    /* border: 2px solid white; */
+    background-color: white;
+    border-radius: 10%;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 210px;
+    height: 210px;
+}
+
+.profile-card-container .card .contentBx {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 190px;
+    text-align: center;
+    transition: 1s;
+    z-index: 10;
+    /* text-transform: uppercase; */
+
+}
+
+
+.profile-card-container .card:hover .contentBx {
+    height: 220px;
+}
+
+.profile-card-container .card:hover .contentBx  h2{
+    margin-top: 2px;
+}
+
+.profile-card-container .card .contentBx h2 {
+    position: relative;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #fff;
+    /* margin: 0; */
+    margin-top: 15px;
+    
+}
+
+.profile-card-container .card .contentBx h3 {
+    position: relative;
+    font-size: medium;
+    letter-spacing: 1px;
+    color: #fff;
+    /* margin: 0; */
+    margin-top: 15px;
+    text-transform: uppercase;
+}
+
+.profile-card-container .card .contentBx .size,
+.profile-card-container .card .contentBx .color {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 20px;
+    transition: 0.5s;
+    opacity: 0;
+    visibility: hidden;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.profile-card-container .card:hover .contentBx .size {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0.5s;
+}
+
+.profile-card-container .card:hover .contentBx .color {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0.6s;
+}
+
+.profile-card-container .card .contentBx .size h3,
+.profile-card-container .card .contentBx .color h3 {
+    color: #fff;
+    font-weight: 300;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-right: 10px;
+    margin-top: 3px;
+}
+
+.profile-card-container .card .contentBx .size span {
+    width: 26px;
+    height: 26px;
+    text-align: center;
+    line-height: 26px;
+    font-size: 14px;
+    display: inline-block;
+    color: #111;
+    background: #fff;
+    margin: 0 5px;
+    transition: 0.5s;
+    color: #111;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.profile-card-container .card .contentBx .size span:hover {
+    background: #9bdc28;
+
+}
+
+.profile-card-container .card .contentBx .color span {
+    width: 20px;
+    height: 20px;
+    background: #ff0;
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+
+.profile-card-container .card .contentBx button {
+    display: inline-block;
+    padding: 5px;
+    /* background: #fff; */
+    border-radius: 4px;
+    margin-top: 10px;
+    /* text-decoration: none; */
+    font-weight: 600;
+    /* color: #111; */
+    opacity: 0;
+    transform: translateY(50px);
+    transition: 0.5s;
+    margin-top: 0;
+}
+
+.profile-card-container .card:hover .contentBx button {
+    opacity: 1;
+    transform: translateY(0px);
+    transition-delay: 0.75s;
+
+}

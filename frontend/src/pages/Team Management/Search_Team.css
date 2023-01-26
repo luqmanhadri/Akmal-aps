@@ -1,0 +1,28 @@
+.search_bar {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 1%;
+  height: 50px;
+  background-color: white;
+  border: 3px solid #37003c;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  /* padding: 10px 0px; */
+  border-radius: 10px;
+  /* bottom: -25px; */
+  width: 50%;
+  max-width: 1024px;
+}
+
+.profile_searchbar{
+  width : 80%;
+  border-radius: 10px;
+  height: 30px;
+}
+
+.card-hover:hover {
+  transform: translateY(-10px);
+  box-shadow: 2px 2px 10px #aaa;
+}
