@@ -10,87 +10,229 @@ import routeicon from "../../utils/routeicons.png";
 import timeicon from "../../utils/timeicons.png";
 import runicon from "../../utils/Run.png";
 import LineChart from "../../components/Fitness/FitnessChart";
+import Cookies from 'js-cookie';
 
-
-const authLink = "https://www.strava.com/oauth/token";
-
-//const [athleteActivity,setathleteActivity]=useState("")
-
-const clientID = 97652;
-
-function initalAuth() {
-  window.open(
-    `https://www.strava.com/oauth/authorize?client_id=${clientID}&redirect_uri=http://localhost&response_type=code&scope=activity:read_all`
-  );
+const token = Cookies.get('access_token');
+if (token) {
+  const data = JSON.parse(token);
+  // console.log(data);
+} else {
+  console.log("Failed")
 }
 
+let datatoken
+
+if (token && typeof token !== 'undefined') {
+  datatoken = JSON.parse(token);
+  // use datatoken here
+}
+
+// Authorization Process
+const authLink = "https://www.strava.com/oauth/token";
+const clientID = 97652;
+var authorizationCode;
+var refreshToken;
+var accessToken;
+var expiresAt;
+var authprocess = false;
+var buttonPress = false;
+var authorizationDone = false;
+
+function initalAuth() {
+  window.location.href = `https://www.strava.com/oauth/authorize?client_id=97652&redirect_uri=http://localhost:3000/fitness&response_type=code&scope=activity:read_all,profile:read_all`;
+  buttonPress = true;
+  console.log(buttonPress);
+}
+
+// setInterval(() => {
+//   console.log("This function is called every 5 seconds!");
+// }, 5000);
+
+// Get the current URL
+const currentUrl = window.location.href;
+
+// Parse the query string of the URL
+const urlParams = new URLSearchParams(currentUrl);
+
+// Get the value of the code parameter
+const code = urlParams.get("code");
+
+// Store the value of the code parameter in a variable
+
+authorizationCode = code;
+
+if (authorizationCode != undefined&&authorizationDone==false) {
+  console.log("Post Authorize");
+  postAuthorize();
+}
+//console.log(authorizationCode);
+function postAuthorize() {
+  axios
+    .post("https://www.strava.com/api/v3/oauth/token", {
+      client_id: "97652",
+      client_secret: "70e445a71d44cd5cd8cb8cf55699ee321e44ca21",
+      code: `${authorizationCode}`,
+      grant_type: "authorization_code",
+    })
+    .then((response) => {
+      // Handle the response
+      // Get the refresh_token and access_token values from the response data
+      const { refresh_token, access_token, expires_at } = response.data;
+
+      // Store the values in variables
+      refreshToken = refresh_token;
+      accessToken = access_token;
+      expiresAt = expires_at;
+      console.log("Successfull POST Authorize");
+      postTokenToDB();
+      authorizationDone=true;
+    })
+    .catch((error) => {
+      // Handle the error
+      console.log("ERROR to POST Authorize");
+    });
+}
+
+function postTokenToDB() {
+  const PostToken = {
+    userid: datatoken._id,
+    refreshToken: `${refreshToken}`,
+    accessToken: `${accessToken}`,
+    expires_at: `${expiresAt}`,
+  };
+  //console.log(PostToken);
+  axios
+    .post("http://localhost:3001/fitness/token", PostToken)
+    .then((response) => {
+      // Handle the response
+      console.log("Successfull Store Token to DB");
+    })
+    .catch((error) => {
+      // Handle the error
+      console.log("ERROR Store Token to DB");
+    });
+}
+
+
+getTokenfromDB();
+
+function getTokenfromDB() {
+  axios
+    .get("http://localhost:3001/fitness/get")
+    .then((response) => {
+      // Get the refreshToken, accessToken, and expires_at values from the response data
+      //const { refreshToken, accessToken, expires_at } = response.data;
+      //console.log(response.data)
+      refreshToken = response.data.refreshToken;
+      accessToken = response.data.accessToken;
+      expiresAt = response.data.expires_at;
+      //console.log(refreshToken)
+      if (expiresAt < Date.now() / 1000) {
+        // Dah expired token
+        //console.log(expiresAt - Date.now());
+        reAuthorize();
+      }
+      
+    })
+    .catch((error) => {
+      // Handle the error
+      console.log(error, "ERROR to Get Token From DB");
+    });
+}
+
+const reAuthorize = () => {
+  console.log("Reauthorize being made");
+  fetch(authLink, {
+    method: "post",
+    headers: {
+      Accept: "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+    },
+
+    body: JSON.stringify({
+      client_id: "97652",
+      client_secret: "70e445a71d44cd5cd8cb8cf55699ee321e44ca21",
+      refresh_token: `${refreshToken}`,
+      grant_type: "refresh_token",
+    }),
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      // setToken(res.access_token);
+      accessToken = res.access_token;
+      expiresAt = res.expires_at;
+      //console.log(accessToken);
+      postTokenToDB();
+      // getActivities(res);
+      // getLoggedInAthlete(res);
+      // getAthleteStats();
+    })
+    .catch((error) => {
+      console.log("ERROR REAUTHORIZE", error);
+    });
+};
+
 function Fitness() {
-  const [token, setToken] = useState("");
+  var token = accessToken;
   const [athleteActivity, setathleteActivity] = useState([]);
   const [athleteFirstname, setathleteFirstname] = useState("");
   const [athleteLastName, setathleteLastName] = useState("");
-  const [athleteFollowers, setathleteFollowers] = useState("");
-  const [athleteId, setathleteId] = useState("");
+  const [athleteFollowers, setathleteFollowers] = useState(0);
+  var friend = 0;
+  //const [athleteId, setathleteId] = useState("");
+  var athleteId;
+  //console.log(token);
 
 
   useEffect(() => {
-    const reAuthorize = () => {
-      fetch(authLink, {
-        method: "post",
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          client_id: "97652",
-          client_secret: "70e445a71d44cd5cd8cb8cf55699ee321e44ca21",
-          refresh_token: "e9bb7132ec616d6b67454f8aa56ae37ed4c845f3",
-          grant_type: "refresh_token",
-        }),
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          getActivities(res);
-          getLoggedInAthlete(res);
-          setToken(res.access_token);
-          getAthleteStats();
-        })
-        .catch((error) => {
-          console.log("ERROR 404", error);
-        });
-    };
-    reAuthorize();
+    getLoggedInAthlete();
+    getActivities();
   }, []);
 
-  async function getLoggedInAthlete(res) {
-    const getLoggedInAthlete = `https://www.strava.com/api/v3/athlete?access_token=${res.access_token}`;
-    await axios.get(getLoggedInAthlete).then((res) => {
-      //console.log(res.data)
-      setathleteId(res.data.id);
-      setathleteFirstname(res.data.firstname);
-      setathleteLastName(res.data.lastname);
-    });
+  async function getLoggedInAthlete() {
+    const getLoggedInAthlete = `https://www.strava.com/api/v3/athlete?access_token=${token}`;
+    await axios
+      .get(getLoggedInAthlete)
+      .then((res) => {
+        //console.log(res.data);
+        athleteId = res.data.id;
+        setathleteFirstname(res.data.firstname);
+        setathleteLastName(res.data.lastname);
+        setathleteFollowers(res.data.follower_count);
+        friend = res.data.friend_count;
+        authorizationDone = true;
+      })
+      .catch((error) => {
+        console.log("ERROR TO GET LOGIN", error);
+        authorizationDone=false;
+      });
+    getAthleteStats();
   }
 
-  async function getActivities(res) {
-    const getActivityLink = `https://www.strava.com/api/v3/athlete/activities?access_token=${res.access_token}`;
-    await axios.get(getActivityLink).then((res) => {
-      //console.log(res.data);
+  async function getActivities() {
+    const getActivityLink = `https://www.strava.com/api/v3/athlete/activities?access_token=${token}`;
+    await axios
+      .get(getActivityLink)
+      .then((res) => {
+        //console.log(res.data);
 
-      setathleteActivity(
-        res.data.map((element) => {
-          return {
-            id: element.id,
-            name: element.name,
-            max_speed: element.max_speed,
-            moving_time: element.moving_time,
-            distance: element.distance,
-            kudos: element.kudos_count,
-          };
-        })
-      );
-    });
+        setathleteActivity(
+          res.data.map((element) => {
+            return {
+              id: element.id,
+              name: element.name,
+              max_speed: element.max_speed,
+              moving_time: element.moving_time,
+              distance: element.distance,
+              kudos: element.kudos_count,
+            };
+          })
+        );
+      })
+      .catch((error) => {
+        console.log("ERROR TO GET ATHLETE ACTIVITIES", error);
+        authorizationDone=false;
+      });
   }
 
   const [athleteAllRunStats, setathleteAllRunStats] = useState({});
@@ -100,6 +242,7 @@ function Fitness() {
   //recent_ride_totals
 
   async function getAthleteStats() {
+    //console.log(athleteId)
     await axios
       .get(`https://www.strava.com/api/v3/athletes/${athleteId}/stats`, {
         headers: {
@@ -116,14 +259,45 @@ function Fitness() {
         );
       })
       .catch((error) => {
-        console.log("ERROR ", error);
+        console.log("ERROR TO GET ATHLETE STATS", error);
       });
   }
-  getAthleteStats();
+  //getAthleteStats();
   //athleteRecentRunStats.count+athleteRecentCycleStats.count
+  var weeklyactivity = athleteRecentRunStats + athleteRecentCycleStats;
+  function postActivities() {
+    const Activities = {
+      id: athleteId,
+      athleteName: athleteFirstname,
+      weeklyactivities: weeklyactivity,
+    };
+    axios
+      .post("http://localhost:3001/fitness/data", Activities)
+      .then((response) => {
+        // Handle the response
+        console.log("Successfull Store FitnessData to DB");
+      })
+      .catch((error) => {
+        // Handle the error
+        console.log("ERROR Store FitnessData to DB");
+      });
+  }
+
+  function deAuthorize() {
+    try {
+      const response = axios.post(
+        `https://www.strava.com/oauth/deauthorize?access_token=${token}`
+      );
+      console.log(response);
+      authorizationDone=false;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  //postActivities();
   var weekActivityCount =
     Number(athleteRecentRunStats.count) + Number(athleteRecentCycleStats.count);
- 
 
   var activityCount = athleteActivity.length;
   var Distance = athleteActivity.map((value) => {
@@ -174,10 +348,10 @@ function Fitness() {
   ];
 
   function getWeekOfMonth(date) {
-    let adjustedDate = date.getDate()+ date.getDay();
-    let prefixes = ['0', '1', '2', '3', '4', '5'];
-    return (parseInt(prefixes[0 | adjustedDate / 7])+1);
-}
+    let adjustedDate = date.getDate() + date.getDay();
+    let prefixes = ["0", "1", "2", "3", "4", "5"];
+    return parseInt(prefixes[0 | (adjustedDate / 7)]) + 1;
+  }
 
   const date0 = new Date();
   date0.setDate(date0.getDate() - 6);
@@ -213,7 +387,6 @@ function Fitness() {
   // date6.setDate(date6.getDate());
   let time6 = date6.getTime();
   let day6 = "Today";
-  
 
   async function getActivitiesChart() {
     await axios
@@ -247,7 +420,14 @@ function Fitness() {
         y: { beginAtZero: true, min: 0, max: 10, ticks: { stepSize: 1 } },
       },
     },
-    labels: ["Last 5 weeks", "Last 4 weeks", "Last 3 weeks", "Last 2 weeks", "Last weeks", "This week"],
+    labels: [
+      "Last 5 weeks",
+      "Last 4 weeks",
+      "Last 3 weeks",
+      "Last 2 weeks",
+      "Last weeks",
+      "This week",
+    ],
     datasets: [
       {
         label: "Activities",
@@ -259,12 +439,35 @@ function Fitness() {
     ],
   };
 
+  var year = new Date().getFullYear();
+
   return (
     <div>
-      
-      <button onClick={initalAuth}>Authorize</button>
       <div class="content-wrapper">
-        <div class="container-xxl flex-grow-1 container-p-y mt-5">
+        <div class="container-xxl flex-grow-1 container-p-y mt-2">
+          {authorizationDone ? (
+            <div className="row">
+              <div className="col-md-2">
+                <h5>Connected to Strava</h5>
+              </div>
+              <div className="col-md-2">
+                <a href="" onClick={deAuthorize}>
+                  Unlink from Strava
+                </a>
+              </div>
+            </div>
+          ) : (
+            <div className="row">
+            <div className="col-md-4">
+              <h5>You are not connected to Strava</h5>
+            </div>
+            <div className="col-md-2">
+              <a href="#" onClick={initalAuth}>
+                Click to link to Strava
+              </a>
+            </div>
+          </div>
+          )}
           <div class="row">
             <div class="col-lg-8 mb-4 order-0">
               <div class="card">
@@ -280,11 +483,7 @@ function Fitness() {
                         activities this week. Check your new badge in your
                         profile.
                       </p>
-                      <a
-                        href="/profile"
-                        class="btn btn-sm btn-outline-primary"
-                        
-                      >
+                      <a href="/profile" class="btn btn-sm btn-outline-primary">
                         View Badges
                       </a>
                     </div>
@@ -326,10 +525,10 @@ function Fitness() {
                             class="dropdown-menu dropdown-menu-end"
                             aria-labelledby="cardOpt3"
                           >
-                            <a class="dropdown-item" href="javascript:void(0);">
+                            <a class="dropdown-item" href="">
                               View More
                             </a>
-                            <a class="dropdown-item" href="javascript:void(0);">
+                            <a class="dropdown-item" href="">
                               Delete
                             </a>
                           </div>
@@ -371,10 +570,10 @@ function Fitness() {
                             class="dropdown-menu dropdown-menu-end"
                             aria-labelledby="cardOpt6"
                           >
-                            <a class="dropdown-item" href="javascript:void(0);">
+                            <a class="dropdown-item" href="">
                               View More
                             </a>
-                            <a class="dropdown-item" href="javascript:void(0);">
+                            <a class="dropdown-item" href="">
                               Delete
                             </a>
                           </div>
@@ -398,11 +597,9 @@ function Fitness() {
                     <FontAwesomeIcon icon={faRunning} /> This Month
                   </h5>
                   <div>
-                    
-                      <div className="fitnessChartJS">
-                        <LineChart chartData={data} />
-                      </div>
-                    
+                    <div className="fitnessChartJS">
+                      <LineChart chartData={data} />
+                    </div>
                   </div>
                   <div></div>
                 </div>
@@ -438,10 +635,10 @@ function Fitness() {
                             class="dropdown-menu dropdown-menu-end"
                             aria-labelledby="cardOpt4"
                           >
-                            <a class="dropdown-item" href="javascript:void(0);">
+                            <a class="dropdown-item" href="">
                               View More
                             </a>
-                            <a class="dropdown-item" href="javascript:void(0);">
+                            <a class="dropdown-item" href="">
                               Delete
                             </a>
                           </div>
@@ -481,10 +678,10 @@ function Fitness() {
                             <i class="bx bx-dots-vertical-rounded"></i>
                           </button>
                           <div class="dropdown-menu" aria-labelledby="cardOpt1">
-                            <a class="dropdown-item" href="javascript:void(0);">
+                            <a class="dropdown-item" href="">
                               View More
                             </a>
-                            <a class="dropdown-item" href="javascript:void(0);">
+                            <a class="dropdown-item" href="">
                               Delete
                             </a>
                           </div>
@@ -507,37 +704,38 @@ function Fitness() {
               <div class="col-12 mb-4">
                 <div class="card">
                   <div class="card-body">
-                    <div class="d-flex justify-content-between flex-sm-row flex-column">
-                      <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
-                        <div class="card-title">
-                          <h5 class="text-nowrap mb-2">Profile</h5>
+                    <div class="card-title">
+                      <h5 class="text-nowrap mb-3">Profile</h5>
 
-                          <div class="card_stats mt-3">
-                            <ul class="list-group list-group-horizontal text-md-center">
-                              <li class="list-group-item">
-                                &nbsp;&nbsp;Followers&nbsp;&nbsp;&nbsp;{" "}
-                                <h3 class="mb-0">10</h3>
-                              </li>
-                              <li class="list-group-item">
-                                &nbsp;&nbsp; Following&nbsp;&nbsp;&nbsp;
-                                <h3 class="mb-0">111</h3>
-                              </li>
-                              <li class="list-group-item">
-                                &nbsp;&nbsp; Activities&nbsp;&nbsp;&nbsp;
-                                <h3 class="mb-0">{activityCount}</h3>
-                              </li>
-                            </ul>
+                      <div class="card-group mb-2">
+                        <div class="card text-center">
+                          <div class="card-body py-1">
+                            <p class="card-title">Followers</p>
+                            <h3 class="card-text">{athleteFollowers}</h3>
                           </div>
                         </div>
-                        <div class="mt-sm-auto">
-                          <small class="text-success text-nowrap fw-semibold">
-                            <i class="bx bx-chevron-up"></i>Name
-                          </small>
-                          <h3 class="mb-0">
-                            {athleteFirstname} {athleteLastName}
-                          </h3>
+                        <div class="card text-center">
+                          <div class="card-body py-1">
+                            <p class="card-title">Friends</p>
+                            <h3 class="card-text">{friend}</h3>
+                          </div>
+                        </div>
+                        <div class="card text-center">
+                          <div class="card-body py-1">
+                            <p class="card-title">Activities</p>
+                            <h3 class="card-text">{activityCount}</h3>
+                          </div>
                         </div>
                       </div>
+                    </div>
+                    <div class="mt-sm-auto">
+                      <small class="text-success text-nowrap fw-semibold">
+                        <i class="bx bx-chevron-up"></i>Name
+                      </small>
+                      <h3 class="mb-0">
+                        {athleteFirstname} {athleteLastName}
+                      </h3>
+
                       <div id="profileReportChart"></div>
                     </div>
                   </div>
@@ -569,13 +767,13 @@ function Fitness() {
                       class="dropdown-menu dropdown-menu-end"
                       aria-labelledby="orederStatistics"
                     >
-                      <a class="dropdown-item" href="javascript:void(0);">
+                      <a class="dropdown-item" href="">
                         Select All
                       </a>
-                      <a class="dropdown-item" href="javascript:void(0);">
+                      <a class="dropdown-item" href="">
                         Refresh
                       </a>
-                      <a class="dropdown-item" href="javascript:void(0);">
+                      <a class="dropdown-item" href="">
                         Share
                       </a>
                     </div>
@@ -851,15 +1049,14 @@ function Fitness() {
       <footer class="content-footer footer bg-footer-theme">
         <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
           <div class="mb-2 mb-md-0">
-            ©<script>document.write(new Date().getFullYear());</script>, made
-            with ❤️ by
-            <a
+            {year}, made with ❤️
+            {/* <a
               href="https://themeselection.com"
               target="_blank"
               class="footer-link fw-bolder"
             >
               ThemeSelection
-            </a>
+            </a> */}
           </div>
           <div>
             <a
@@ -874,7 +1071,7 @@ function Fitness() {
               target="_blank"
               class="footer-link me-4"
             >
-              More Themes
+              More
             </a>
             <a
               href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"

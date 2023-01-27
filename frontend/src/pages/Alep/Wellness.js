@@ -39,9 +39,26 @@ import righthand from "../../utils/BodyMapPictures/righthand.png";
 import rightLeg from "../../utils/BodyMapPictures/rightLeg.png";
 import rightThigh from "../../utils/BodyMapPictures/rightThigh.png";
 import noinjury from "../../utils/BodyMapPictures/no injury.png";
+import Cookies from 'js-cookie';
+import { Link } from "react-router-dom";
+
+const token = Cookies.get('access_token');
+if (token) {
+  const data = JSON.parse(token);
+  // console.log(data);
+} else {
+  console.log("Failed")
+}
+
+let datatoken
+
+if (token && typeof token !== 'undefined') {
+  datatoken = JSON.parse(token);
+  // use datatoken here
+}
 
 function Wellness() {
-  const [wellnessmood, setwellnessmood] = useState(true);
+  var wellnessmood
 
   const validationSchema = Yup.object({
     trainingInput: Yup.number(),
@@ -55,6 +72,7 @@ function Wellness() {
 
   const formik = useFormik({
     initialValues: {
+      userId:"1234",
       trainingInput: 0,
       inBedStart: "",
       inBedEnd: "",
@@ -84,7 +102,8 @@ function Wellness() {
         setInjuryData(element.injuryPart);
         setstressData(element.stressInput);
       });
-
+      calculateMood()
+      postMood();
       return request;
     }
     getInjury();
@@ -155,11 +174,30 @@ function Wellness() {
     count++;
     return hours;
   });
-
+  var chartlength=chart.length;
   function calculateMood(){
-    
+    if (injuryData>0) {
+      wellnessmood=false
+    }
+   
   }
-
+  function postMood() {
+    const PostMood = {
+      userid: datatoken._id,
+      wellnessmood: wellnessmood,
+    };
+    console.log(PostMood);
+    axios
+      .post("http://localhost:3001/wellness/mood", PostMood)
+      .then((response) => {
+        // Handle the response
+        console.log("Successfull Store Mood to DB");
+      })
+      .catch((error) => {
+        // Handle the error 
+        console.log("ERROR Store Mood to DB");
+      });
+  }
   function showvalue(injuryInput) {
     let xy = injuryInput;
     if (xy == 1) {
@@ -282,12 +320,9 @@ function Wellness() {
                       You have {checkFormDone(checkForm) ?<span class="fw-bold">done</span> : <span class="fw-bold">not</span> } submit wellness
                       form today. Check your new badge in your profile.
                     </p>
-                    <a
-                      href="javascript:;"
-                      class="btn btn-sm btn-outline-primary"
-                    >
+                    <Link to={`/profile/${datatoken._id}`} className="btn btn-sm btn-outline-primary">
                       View Badges
-                    </a>
+                    </Link>
                   </div>
                 </div>
                 <div class="col-sm-5 text-center text-sm-left">
@@ -523,7 +558,7 @@ function Wellness() {
                             />
                           </Box>
                           <div class="form-text">
-                            You can use letters, numbers & periods
+                            Describe your stress level
                           </div>
                         </div>
                         <div class="mb-3">
@@ -713,7 +748,7 @@ function Wellness() {
                       </div>
                     </div>
                     <span class="fw-semibold d-block mb-1">Sleep Time</span>
-                    <h3 class="card-title mb-2">{chart[6]} h</h3>
+                    <h3 class="card-title mb-2">{chart[chartlength-1]} h</h3>
                     <small class="text-success fw-semibold">
                       <i class="bx bx-up-arrow-alt"></i> +28.14%
                     </small>
@@ -734,7 +769,7 @@ function Wellness() {
                         <small class="text-success text-nowrap fw-semibold">
                           <i class="bx bx-chevron-up"></i>Name
                         </small>
-                        <h3 class="mb-0">Alif Irfan</h3>
+                        <h3 class="mb-0">{datatoken.name}</h3>
                       </div>
                     </div>
                     <div id="profileReportChart"></div>

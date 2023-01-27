@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { convertTime } from "../../utils/convertTime";
 import Button from "@mui/material/Button";
+import './Schedule.css'
 
 function Schedule() {
   const [listofEvent, setlistofEvent] = useState([]);

@@ -54,11 +54,11 @@ function NavbarC() {
   return (
 
 
-    <Navbar bg="dark" variant="dark" expand="lg">
-      <Navbar.Brand >APS</Navbar.Brand>
+    <Navbar bg="dark" variant="dark" expand="xl" sticky="top">
+      <Navbar.Brand className="navbar1" >APS</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav" bg="dark">
-        <Nav className="mr-auto" bg="dark">
+        <Nav className="navbarcollapse"  >
         
           
           <Nav.Link as={Link} to="/search_profile">Search Profile</Nav.Link>

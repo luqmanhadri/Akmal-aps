@@ -1,13 +1,22 @@
-/* .navbar {
-    background-color: red;
+.navbar1 {
+    margin: 1%;
+    
 }
 
 .navbarLogo {
     height :100%;
     
     
+    /* width : 80%, */
     
+}
+.navbarcollapse{
+    background-color: #212529;
     
+}
+
+.barsize{
+    margin: 1px;
 }
 
 .navbarImg {
@@ -17,5 +26,4 @@
 .logout_button {
     margin-top: 5%;
     margin-left: 10px;
-} */
-
+}

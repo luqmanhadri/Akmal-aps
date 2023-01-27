@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const WellnessSchema = new mongoose.Schema(
   {
-    wellnessmood: {
-      type: Boolean,
+    userId: {
+      type: String,
     },
     sleepData: {
       type: String,
