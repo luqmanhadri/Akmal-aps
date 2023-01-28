@@ -8,7 +8,9 @@ const SignUp = ({ formData, setFormData, page, setPage, x, setX }) => {
 
     const [passwordMatch, setPasswordMatch] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
-    const [inputTouched, setInputTouched] = useState(false);
+
+    const [showErrorUsername, setShowErrorUsername] = useState(false);
+    const [showErrorPassword, setShowErrorPassword] = useState(false);
 
     const handleConfirmPasswordChange = (e) => {
         setFormData({ ...formData, confirmPassword: e.target.value });
@@ -23,26 +25,149 @@ const SignUp = ({ formData, setFormData, page, setPage, x, setX }) => {
         }
     }
     return (
-        <div className="register_container">
+        // <div className="register_container">
+        <div >
 
-            <h1 style={{ fontWeight: 'bold', marginBottom: '20px' }}>Sign Up</h1>
+            
+            <div class="register-box">
+                <h2>Register</h2>
+                <div className="signup_form">
+                    <div class="form-box">
 
-            <h5>Username : </h5>
+                        <input
+                            type="text"
+                            className="signup_input"
+                            value={formData.username}
+                            onChange={(e) => {
+                                setFormData({ ...formData, username: e.target.value });
+                                if (e.target.value.length >= 6) {
+                                    setShowErrorUsername(false);
+                                } else {
+                                    setShowErrorUsername(true);
+                                }
+                            }}
+                        />
+                        <label>Username</label>
+                    </div>
+
+                    {showErrorUsername && formData.username.length < 6 && (
+                        <p style={{ color: "red" }}>Username must be at least 6 characters</p>
+                    )}
+
+                    <div class="form-box">
+
+
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            className="signup_input"
+
+                            value={formData.password}
+                            // onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                            onChange={(e) => {
+                                setFormData({ ...formData, password: e.target.value });
+                                if (e.target.value.length >= 8) {
+                                    setShowErrorPassword(false);
+                                } else {
+                                    setShowErrorPassword(true);
+                                }
+                            }}
+                        />
+                        <label>Password : </label>
+                        <button className="btn btn-success"
+                            style={{ marginBottom: '20px' }}
+                            onClick={() => setShowPassword(!showPassword)}>
+                            {showPassword ? "Hide" : "Show"}
+                        </button>
+                    </div>
+
+
+                    
+
+                    {showErrorPassword && formData.password.length < 8 && (
+                        <p style={{ color: 'red' }}
+                        >Password must be at least 8 characters</p>)}
+
+                    <div class="form-box">
+
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            className="signup_input"
+
+                            value={formData.confirmPassword}
+                            onChange={handleConfirmPasswordChange}
+
+                        />
+                        <label>Confirm Password : </label>
+                    </div>
+
+                    {!passwordMatch && <p style={{ color: 'red' }}>Passwords do not match</p>}
+
+                    <div class="form-box">
+                        <select className='signup_input' id="select_role"
+                            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                        >
+                            <option value="" ></option>
+                            <option value="athlete" style={{ color: 'black' }}>Athlete</option>
+                            <option value="manager" style={{ color: 'black' }}>Manager</option>
+                            <option value="coach" style={{ color: 'black' }}>Coach</option>
+                            <option value="storekeeper" style={{ color: 'black' }}>Storekeeper</option>
+                        </select>
+                        <label>Select role : </label>
+                    </div>
+
+                    {/* <button className="btn btn-primary"
+                onClick={() => {
+                    if ((formData.username !== "" && formData.username.length >= 6) && formData.password !== ""
+                        && formData.confirmPassword !== "" && formData.role !== "") {
+                        setPage(page + 1);
+                        setX(1000);
+                        console.log(formData)
+                    } else {
+                        alert("Please fill all the fields")
+                    }
+                }}
+            >
+                Next
+            </button>  */}
+                    <button className="signup_button"
+                        onClick={() => {
+                            if ((formData.username !== "" && formData.username.length >= 6) && formData.password !== ""
+                                && formData.confirmPassword !== "" && formData.role !== "") {
+                                setPage(page + 1);
+                                setX(1000);
+                                console.log(formData)
+                            } else {
+                                alert("Please fill all the fields")
+                            }
+                        }}
+                    >
+
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        Submit
+                    </button>
+                </div>
+            </div>
+            {/* <h1 style={{ fontWeight: 'bold', marginBottom: '20px' }}>Sign Up</h1>
+
+            <label>Username : </label>
             <input
                 type="text"
                 placeholder="Username"
-                className="register_input"
+                className="signup_input"
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
 
             />
             {formData.username.length < 6 && <p style={{ color: 'red' }}>Username must be at least 6 characters</p>}
 
-            <h5>Password : </h5>
+            <label>Password : </label>
             
                 <input
                     type={showPassword ? "text" : "password"}
-                    className="register_input"
+                    className="signup_input"
                     placeholder="Password"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -54,10 +179,10 @@ const SignUp = ({ formData, setFormData, page, setPage, x, setX }) => {
 
             {formData.password.length < 8 && <p style={{ color: 'red' }}>Password must be at least 8 characters</p>}
 
-            <h5>Confirm Password : </h5>
+            <label>Confirm Password : </label>
             <input
                 type={showPassword ? "text" : "password"}
-                className="register_input"
+                className="signup_input"
                 placeholder="Confirm Password"
                 value={formData.confirmPassword}
                 onChange={handleConfirmPasswordChange}
@@ -65,8 +190,8 @@ const SignUp = ({ formData, setFormData, page, setPage, x, setX }) => {
             />
             {!passwordMatch && <p style={{ color: 'red' }}>Passwords do not match</p>}
 
-            <h5>Select role : </h5>
-            <select className='register_input' id="select_role"
+            <label>Select role : </label>
+            <select className='signup_input' id="select_role"
                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
             >
                 <option value="">Select Role</option>
@@ -89,7 +214,7 @@ const SignUp = ({ formData, setFormData, page, setPage, x, setX }) => {
                 }}
             >
                 Next
-            </button>
+            </button> */}
 
         </div>
 

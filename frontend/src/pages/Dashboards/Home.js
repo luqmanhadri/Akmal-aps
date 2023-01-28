@@ -36,7 +36,14 @@ function Home() {
     console.log("Failed")
   }
 
-  const datatoken = JSON.parse(token)
+  
+  let datatoken
+  
+  if (token && typeof token !== 'undefined') {
+    datatoken = JSON.parse(token);
+    console.log(datatoken._id)
+    // use datatoken here
+  }
   // useEffect(() => {
   //   const accountRes = axios.get(`http://localhost:3001/account/find/${datatoken._id}`);
   //   // axios.get(`http://localhost:3001/account/${id}`).then((response) => {
