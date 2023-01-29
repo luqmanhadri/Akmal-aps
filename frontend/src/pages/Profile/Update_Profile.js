@@ -58,6 +58,8 @@ const Update_Profile = () => {
   const [email, setEmail] = useState(profileDetails.email);
   const [weight, setWeight] = useState(profileDetails.weight);
   const [state, setState] = useState(profileDetails.state);
+  const [gender, setGender] = useState(profileDetails.gender);
+  const [contact, setContact] = useState(profileDetails.contact);
   
   const [image, setImage] = useState(undefined);
   const [imageUrl, setImageUrl] = useState(profileDetails.imgUrl);
@@ -252,6 +254,9 @@ const Update_Profile = () => {
         weight: weight,
         sport: sport,
         email: email,
+        state: state,
+        gender: gender,
+        contact: contact,
 
         imgUrl: imageUrl
       }
@@ -270,7 +275,7 @@ const Update_Profile = () => {
     <div >
 
 
-      <MDBContainer
+      {/* <MDBContainer
         style={{
           border: '3px solid #9f01ea',
           background: '#fff', width: '60%',
@@ -384,11 +389,7 @@ const Update_Profile = () => {
           </MDBCol>
 
           <MDBRow>
-            {/* <button className='btn btn-primary' 
-          style={{ display: 'flex', justifyContent: 'center', 
-          alignItems: 'center', width: '50%'}}
-          onClick={handleSubmit}
-          >Update Profile</button> */}
+           
 
             <MDBCol className='text-center'>
               <button className='btn btn-primary' style={{ width: '50%' }}
@@ -397,7 +398,211 @@ const Update_Profile = () => {
           </MDBRow>
 
         </MDBRow>
-      </MDBContainer>
+      </MDBContainer> */}
+
+<div class="login-box-container" style={{marginTop: '20px'}}>
+
+<div class="login-box">
+
+    <h2>Personal Info</h2>
+    
+    <div className="signup_form">
+
+    <label style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <input
+                accept="image/*"
+                id="profilePhoto"
+                type="file"
+                style={{ display: 'none' }}
+              //  value={profileDetails.imgUrl}
+                onChange={(event) => setImage(event.target.files[0])}
+
+            />
+            <Avatar
+                src={profileDetails.imgUrl}
+                sx={{ width: 100, height: 100, cursor: 'pointer' }}
+            />
+        </label>
+        
+    <div class="row" style={{marginTop: '50px'}}>
+<div class="col-lg-6 col-xs-12" >
+        
+        <div class="user-box">
+
+
+            <input className='signup_input'
+                type="text"
+                defaultValue={profileDetails.name}
+                onChange={(e) => setName(e.target.value )}
+
+            />
+            <label >Full Name : </label>
+        </div>
+
+        <div class="user-box">
+
+
+            <input className='signup_input'
+                type="number"
+                defaultValue={profileDetails.age}
+                onChange={(e) => setAge( e.target.value )}
+            />
+            <label >Age: </label>
+        </div>
+
+        <div class="user-box">
+
+
+            <input className='signup_input'
+                type="number"
+                defaultValue={profileDetails.contact}
+                onChange={(e) => setContact(e.target.value )}
+            />
+            <label >Contact Number: </label>
+        </div>
+
+        
+
+        
+                <div class="user-box">
+
+
+                    <input className='signup_input'
+                        type="date"
+                        defaultValue={profileDetails.birthday}
+                        onChange={(e) => setBirthday(e.target.value )}
+                    />
+                    <label>Birthday : </label>
+                </div>
+        
+                <div class="user-box">
+
+
+                    <input className='signup_input'
+                        type="number"
+                        defaultValue={profileDetails.height}
+                        onChange={(e) => setHeight(e.target.value )}
+                    />
+                    <label>Height : </label>
+                </div>
+
+
+           
+
+       
+
+            </div>
+
+
+            <div class="col-lg-6 col-xs-12" >
+        <div class="user-box">
+
+            <select
+                className='signup_input'
+                value={gender || profileDetails.gender}
+                onChange={(e) => setGender(e.target.value)}>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+
+            </select>
+            <label>Gender : </label>
+        </div>
+
+       
+                <div class="user-box">
+                    <input className='signup_input'
+                        type="text"
+                        defaultValue={profileDetails.sport}
+                        onChange={(e) => setSport(e.target.value )}
+                    />
+                    <label>Sport : </label>
+                </div>
+         
+
+        
+
+        <div class="user-box">
+
+        <input className='signup_input'
+                type="text"
+                
+                defaultValue={profileDetails.email}
+                onChange={(e) => setEmail(e.target.value)}
+            />
+             <label>Email : </label>
+        </div>
+
+
+        <div class="user-box">
+
+            <select
+                className='signup_input'
+                value={state || profileDetails.state}
+                // defaultValue={profileDetails.state}
+                onChange={(e) => setState(e.target.value)}>
+                <option value="">Select State</option>
+                <option value="Kelantan">Kelantan</option>
+                <option value="Johor">Johor</option>
+                <option value="Melaka">Melaka</option>
+                <option value="Negeri Sembilan">Negeri Sembilan</option>
+                <option value="Selangor">Selangor</option>
+                <option value="WP Kuala Lumpur">WP Kuala Lumpur</option>
+                <option value="Perak">Perak</option>
+                <option value="Pulau Pinang">Pulau Pinang</option>
+                <option value="Kedah">Kedah</option>
+                <option value="Perlis">Perlis</option>
+                <option value="Terengganu">Terengganu</option>
+                <option value="Pahang">Pahang</option>
+                <option value="Sabah">Sabah</option>
+                <option value="Sarawak">Sarawak</option>
+            </select>
+            <label>State : </label>
+        </div>
+
+        
+                <div class="user-box">
+
+
+                    <input className='signup_input'
+                        type="number"
+                        defaultValue={profileDetails.weight}
+                        onChange={(e) => setWeight(e.target.value )}
+                    />
+                    <label>Weight : </label>
+                </div>
+
+
+        </div>
+
+
+
+
+        <button className="signup_button"
+            // onClick={() => {
+            //     if ((formData.username !== "" && formData.username.length >= 6) && formData.password !== ""
+            //         && formData.confirmPassword !== "" && formData.role !== "") {
+            //         setPage(page + 1);
+            //         setX(1000);
+            //         console.log(formData)
+            //     } else {
+            //         alert("Please fill all the fields")
+            //     }
+            // }}
+            onClick={handleSubmit}
+        >
+
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            Submit
+        </button>
+        </div>
+    </div>
+</div>
+
+</div>
       
 
 

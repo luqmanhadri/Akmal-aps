@@ -5,7 +5,13 @@ const AnnouncementSchema = new mongoose.Schema({
 
     announcementBody: {
         type: String,
+        required: true
     },
+
+    date : {
+        type: Date,
+        required: true
+    }
     
 }, {timestamps: true});
 

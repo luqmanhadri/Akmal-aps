@@ -141,18 +141,26 @@ function ManageBooking() {
                   
                   {booking.approved === false &&  booking.rejected === false ?(
                     <div>
-                     <button className='btn btn-primary m-2' onClick={() => approveBooking(booking._id)} >Approve</button>
-                     <button className='btn btn-danger m-2' onClick={() => rejectBooking(booking._id)}>Reject</button>
+                     <button className='btn btn-primary m-2' 
+                     onClick={() => {approveBooking(booking._id);
+                      window.location.reload()}} >Approve</button>
+                     <button className='btn btn-danger m-2' 
+                     onClick={() => {rejectBooking(booking._id);
+                      window.location.reload()}}>Reject</button>
                      </div>) : (
                       <div></div>)
                   }
 
                   {booking.approved === true && booking.picked === false && booking.returned === false? (
-                    <button className='btn btn-success m-2' onClick={() => pickedBooking(booking._id)}>
+                    <button className='btn btn-success m-2' 
+                    onClick={() => {pickedBooking(booking._id);
+                      window.location.reload()}}>
                       Picked</button>) : (<div></div>)
                   }
                   {booking.picked === true && booking.returned === false ? (
-                    <button className='btn btn-warning m-2' onClick={() => returnedBooking(booking._id)}>
+                    <button className='btn btn-warning m-2' 
+                    onClick={() => {returnedBooking(booking._id);
+                      window.location.reload()}}>
                       Returned</button>) : (<div></div>)
                   }
                 </MDBCardBody>

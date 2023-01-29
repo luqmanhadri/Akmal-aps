@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import './Upload.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { Snackbar } from "@mui/material";
+import Cookies from 'js-cookie';
 
 
 const Upload = ({ setOpen }) => {
@@ -25,8 +26,24 @@ const Upload = ({ setOpen }) => {
   const [videoUrl1, setVideoUrl] = useState("");
   const [openMB, setOpenMB] = useState(false);
 
+  const token = Cookies.get('access_token');
+  if (token) {
+    const data = JSON.parse(token);
+    // console.log(data);
+  } else {
+    console.log("Failed")
+  }
+
+  let datatoken
+  
+  if (token && typeof token !== 'undefined') {
+    datatoken = JSON.parse(token);
+    // use datatoken here
+  }
+
+
   const { currentUser } = useSelector((state) => state.user);
-  const id = currentUser._id
+  const id = datatoken._id
 
   const navigate = useNavigate()
 

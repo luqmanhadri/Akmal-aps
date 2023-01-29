@@ -64,7 +64,7 @@ const Login = () => {
     </div> */}
 
 <div class="register-box">
-                <h2>Register</h2>
+                <h2>Login</h2>
                 <div className="signup_form">
                     <div class="form-box">
 

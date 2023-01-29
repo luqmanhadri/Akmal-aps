@@ -6,7 +6,7 @@ const { verifyToken } = require("../middlewares/verifyToken");
 
 router.get("/", getAnnouncement);
 
-router.post("/", verifyToken,createAnnouncement)
+router.post("/", createAnnouncement)
 
 
 module.exports = router;

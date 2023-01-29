@@ -26,52 +26,98 @@ const PersonalInfo = ({ formData, setFormData, page, setPage, x, setX }) => {
     let navigate = useNavigate()
     const [image, setImage] = useState(undefined);
     // const [imageUrl, setImageUrl] = useState("");
-    const [imgPerc, setImgPerc] = useState(0);
+    // const [imgPerc, setImgPerc] = useState(0);
+    // const [imageUrl, setImageUrl] = useState("");
 
 
-    const uploadFile = (file, urlType) => {
+    // const uploadFile = (file, urlType) => {
+    //     const storage = getStorage(app);
+    //     const fileName = new Date().getTime() + file.name;
+    //     const storageRef = ref(storage, fileName);
+    //     const uploadTask = uploadBytesResumable(storageRef, file);
+
+    //     uploadTask.on(
+    //         "state_changed",
+    //         (snapshot) => {
+    //             const progress =
+    //                 (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    //             urlType === "imgUrl" ? setImgPerc(Math.round(progress)) : console.log("Something wrong");
+    //             switch (snapshot.state) {
+    //                 case "paused":
+    //                     console.log("Upload is paused");
+    //                     break;
+    //                 case "running":
+    //                     console.log("Upload is running");
+    //                     break;
+    //                 default:
+    //                     break;
+    //             }
+    //         },
+    //         (error) => { },
+    //         () => {
+    //             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+    //                 // setImageUrl(downloadURL)
+    //                 // setFormData.imageUrl(downloadURL)
+    //                 setFormData({ ...formData, imgUrl: downloadURL })
+
+
+    //             });
+    //         }
+    //     );
+    // };
+
+    const uploadFile = async (file) => {
         const storage = getStorage(app);
         const fileName = new Date().getTime() + file.name;
+        // const storageRef = storage.ref(fileName);
         const storageRef = ref(storage, fileName);
+        // const uploadTask = storageRef.put(file);
         const uploadTask = uploadBytesResumable(storageRef, file);
+       
+        return new Promise((resolve, reject) => {
+            uploadTask.on(
+                "state_changed",
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log("Upload is " + progress + "% done");
+                    switch (snapshot.state) {
+                        case "paused":
+                            console.log("Upload is paused");
+                            break;
+                        case "running":
+                            console.log("Upload is running");
+                            break;
+                        default:
+                            break;
+                    }
+                },
+                (error) => {
+                    reject(error);
+                },
+                // async () => {
+                //     const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+                //     resolve(downloadURL);
+                // }
+                () => {
+                          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                            // setImageUrl(downloadURL);
+                            resolve(downloadURL);
+                          });
+                          
+                        }
+            );
+        });
+      }
 
-        uploadTask.on(
-            "state_changed",
-            (snapshot) => {
-                const progress =
-                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                urlType === "imgUrl" ? setImgPerc(Math.round(progress)) : console.log("Something wrong");
-                switch (snapshot.state) {
-                    case "paused":
-                        console.log("Upload is paused");
-                        break;
-                    case "running":
-                        console.log("Upload is running");
-                        break;
-                    default:
-                        break;
-                }
-            },
-            (error) => { },
-            () => {
-                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    // setImageUrl(downloadURL)
-                    // setFormData.imageUrl(downloadURL)
-                    setFormData({ ...formData, imgUrl: downloadURL })
-
-
-                });
-            }
-        );
-    };
-
-    useEffect(() => {
-        image && uploadFile(image, "imgUrl");
-    }, [image]);
+    // useEffect(() => {
+    //     image && uploadFile(image, "imgUrl");
+    // }, [image]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const imageUrl = (image && await uploadFile(image, "imgUrl"));
         try {
+        
             const res = await axios.post("http://localhost:3001/account",
                 {
                     username: formData.username,
@@ -85,7 +131,7 @@ const PersonalInfo = ({ formData, setFormData, page, setPage, x, setX }) => {
                     email: formData.email,
                     gender: formData.gender,
                     state: formData.state,
-                    imgUrl: formData.imageUrl,
+                    imgUrl: imageUrl,
                     role: formData.role,
                     contact: formData.contact,
                     approved: false
@@ -324,7 +370,7 @@ const PersonalInfo = ({ formData, setFormData, page, setPage, x, setX }) => {
                         <label >Age: </label>
                     </div>
 
-                    {formData.role !== "storekeeper" ?
+                    {formData.role === "storekeeper" ?
                         (<>
                             <div class="user-box">
                                 <select
@@ -478,16 +524,17 @@ const PersonalInfo = ({ formData, setFormData, page, setPage, x, setX }) => {
 
 
                     <button className="signup_button"
-                        onClick={() => {
-                            if ((formData.username !== "" && formData.username.length >= 6) && formData.password !== ""
-                                && formData.confirmPassword !== "" && formData.role !== "") {
-                                setPage(page + 1);
-                                setX(1000);
-                                console.log(formData)
-                            } else {
-                                alert("Please fill all the fields")
-                            }
-                        }}
+                        // onClick={() => {
+                        //     if ((formData.username !== "" && formData.username.length >= 6) && formData.password !== ""
+                        //         && formData.confirmPassword !== "" && formData.role !== "") {
+                        //         setPage(page + 1);
+                        //         setX(1000);
+                        //         console.log(formData)
+                        //     } else {
+                        //         alert("Please fill all the fields")
+                        //     }
+                        // }}
+                        onClick={handleSubmit}
                     >
 
                         <span></span>

@@ -33,8 +33,10 @@ import CartPage from './pages/Booking/CartPage';
 import Storekeeper from './pages/Dashboards/Storekeeper/Storekeeper';
 import ManageBooking from './pages/Dashboards/Storekeeper/ManageBooking';
 import InventoryList from './pages/Dashboards/Storekeeper/InventoryList';
-import { ToastContainer } from 'react-toastify';
+import {toast,ToastContainer,Slide,Bounce, Flip, Zoom} from 'react-toastify';
 import BookingStatus from './pages/Booking/BookingStatus';
+import 'react-toastify/dist/ReactToastify.css'
+import Create_Announcement from './pages/Dashboards/Create_Announcement';
 
 function App() {
   // const client = new QueryClient();
@@ -45,7 +47,9 @@ function App() {
     
     <Router>
     <NavbarC/>
-    
+    <ToastContainer theme='colored' 
+      transition={Zoom} 
+      autoClose={8000} hideProgressBar={false}></ToastContainer>
         <Routes>
           <Route path="/">
             <Route index element={<Landing />} />
@@ -79,6 +83,7 @@ function App() {
             <Route path="bookingstatus/:id" element={<BookingStatus />} />
             <Route path="managebooking" element={< ManageBooking/>} />
             <Route path="inventorylist" element={< InventoryList/>} />
+            <Route path="announcement" element={< Create_Announcement/>} />
           </Route>
         </Routes>
     </Router>

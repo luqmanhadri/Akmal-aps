@@ -64,7 +64,11 @@ const BookingSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
     default: "false"
-  }
+  },
+
+remarks : {
+  type: String,
+}
 
 });
 

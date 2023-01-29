@@ -12,6 +12,7 @@ import Card from '../Videos/Card';
 // import Add_Achievement from './Add_Achievement';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+
 import { Avatar, IconButton } from '@mui/material';
 import { Modal, Button } from 'react-bootstrap';
 import Table from '@mui/material/Table';
@@ -43,6 +44,8 @@ import Team_Navbar from './Team_Navbar';
 import badge from '../../images/gold-shield-icon-vector-18193912 (3).png'
 import Add_Team_Achievement from './Add_Team_Achievement';
 
+
+
 function Team_Profile() {
 
   const [teamDetails, setTeamDetails] = useState([]);
@@ -57,6 +60,8 @@ function Team_Profile() {
   const [managerImages, setManagerImages] = useState({});
   const [coachImages, setCoachImages] = useState({});
   const { currentUser } = useSelector((state) => state.user);
+  const [showDialog, setShowDialog] = useState(false);
+const toggleDialog = () => setShowDialog(!showDialog);
   
   const dispatch = useDispatch();
   let navigate = useNavigate();
@@ -209,7 +214,8 @@ const getCoachImage = async (coachId) => {
                       return (
                         <MDBListGroupItem key={manager.id} className="d-flex justify-content-between align-items-center">
                           <MDBCol>
-                          <Avatar src={managerImages[manager.id]} style={{height : '100px', width : '100px'}}/>
+                          <Avatar src={managerImages[manager.id]} 
+                          style={{height : '100px', width : '100px'}}/>
                           </MDBCol>
                           <MDBCol>
                           <MDBCardText >Manager : {manager.name}</MDBCardText>
@@ -276,7 +282,18 @@ const getCoachImage = async (coachId) => {
                       <MDBListGroupItem key={achievement._id} className="d-flex justify-content-between align-items-center">
                         <MDBCardText >{achievement.year}</MDBCardText>
                         <MDBCardText > {achievement.achievement}</MDBCardText>
-                        <IconButton onClick={() => deleteAchievement(achievement._id)}><DeleteIcon/></IconButton>
+                        {/* {datatoken && datatoken.sport === path && (datatoken.role === "coach" || datatoken.role === "manager") ? 
+                        (<>
+                        <IconButton onClick={() => editAchievement(achievement._id)}><EditIcon/></IconButton></>) : (<></>)} */}
+
+                        {datatoken && datatoken.sport === path && (datatoken.role === "coach" || datatoken.role === "manager") ? 
+                        (<>
+                        <IconButton 
+                        // onClick={() => deleteAchievement(achievement._id)}
+                        >
+                          <DeleteIcon/></IconButton></>) : (<></>)}
+                        
+                        
                       </MDBListGroupItem>
    
 
@@ -291,6 +308,7 @@ const getCoachImage = async (coachId) => {
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                   <TableHead>
                     <TableRow style={{ backgroundColor: '#37003c' }}>
+                    <TableCell style={{ color: 'white' }}></TableCell>
                       <TableCell style={{ color: 'white' }}>Name</TableCell>
                       <TableCell style={{ color: 'white' }} align="right">State</TableCell>
                       <TableCell style={{ color: 'white' }} align="right">Age</TableCell>
@@ -304,6 +322,13 @@ const getCoachImage = async (coachId) => {
                         key={player._id}
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                       >
+                        <TableCell component="th" scope="row" 
+                        onClick={() => navigate(`/profile/${player._id}`)}
+                        style={{cursor: 'pointer'}}
+                        >
+                          <Avatar src={player.imgUrl} style={{height: '100px', width: '100px'}}/>
+          
+                        </TableCell>
                         <TableCell component="th" scope="row" 
                         onClick={() => navigate(`/profile/${player._id}`)}
                         style={{cursor: 'pointer'}}
