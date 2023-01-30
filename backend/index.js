@@ -14,6 +14,7 @@ const teamRouter = require('./routes/Team');
 const announcementRouter = require('./routes/Announcement');
 const cookieParser = require("cookie-parser")
 // const session = require("express-session")
+const fitnessRouter = require('./routes/Fitness');
 
 const app = express();
 dotenv.config();
@@ -62,6 +63,7 @@ app.use("/event", eventRouter);
 app.use("/wellness", wellnessRouter);
 app.use("/booking", bookingRouter);
 app.use("/team", teamRouter);
+app.use("/fitness", fitnessRouter);
 
 
 

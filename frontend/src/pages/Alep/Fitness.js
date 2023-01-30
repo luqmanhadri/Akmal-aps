@@ -11,6 +11,7 @@ import timeicon from "../../utils/timeicons.png";
 import runicon from "../../utils/Run.png";
 import LineChart from "../../components/Fitness/FitnessChart";
 import Cookies from 'js-cookie';
+import './Fitness.css'
 
 const token = Cookies.get('access_token');
 if (token) {
@@ -26,7 +27,7 @@ if (token && typeof token !== 'undefined') {
   datatoken = JSON.parse(token);
   // use datatoken here
 }
-
+function Fitness() {
 // Authorization Process
 const authLink = "https://www.strava.com/oauth/token";
 const clientID = 97652;
@@ -36,7 +37,7 @@ var accessToken;
 var expiresAt;
 var authprocess = false;
 var buttonPress = false;
-var authorizationDone = false;
+const [authorizationDone, setauthorizationDone] = useState(false);
 
 function initalAuth() {
   window.location.href = `https://www.strava.com/oauth/authorize?client_id=97652&redirect_uri=http://localhost:3000/fitness&response_type=code&scope=activity:read_all,profile:read_all`;
@@ -85,7 +86,6 @@ function postAuthorize() {
       expiresAt = expires_at;
       console.log("Successfull POST Authorize");
       postTokenToDB();
-      authorizationDone=true;
     })
     .catch((error) => {
       // Handle the error
@@ -112,10 +112,12 @@ function postTokenToDB() {
       console.log("ERROR Store Token to DB");
     });
 }
+var token
 
 
-getTokenfromDB();
-
+ useEffect(() => {
+    getTokenfromDB();
+  }, []);
 function getTokenfromDB() {
   axios
     .get("http://localhost:3001/fitness/get")
@@ -126,6 +128,7 @@ function getTokenfromDB() {
       refreshToken = response.data.refreshToken;
       accessToken = response.data.accessToken;
       expiresAt = response.data.expires_at;
+      token=accessToken;
       //console.log(refreshToken)
       if (expiresAt < Date.now() / 1000) {
         // Dah expired token
@@ -133,9 +136,12 @@ function getTokenfromDB() {
         reAuthorize();
       }
       
+         getLoggedInAthlete();
+         getActivities();
+         
     })
     .catch((error) => {
-      // Handle the error
+      //Handle the error
       console.log(error, "ERROR to Get Token From DB");
     });
 }
@@ -172,8 +178,8 @@ const reAuthorize = () => {
     });
 };
 
-function Fitness() {
-  var token = accessToken;
+
+  
   const [athleteActivity, setathleteActivity] = useState([]);
   const [athleteFirstname, setathleteFirstname] = useState("");
   const [athleteLastName, setathleteLastName] = useState("");
@@ -184,10 +190,10 @@ function Fitness() {
   //console.log(token);
 
 
-  useEffect(() => {
-    getLoggedInAthlete();
-    getActivities();
-  }, []);
+  // useEffect(() => {
+  //   getLoggedInAthlete();
+  //   getActivities();
+  // }, []);
 
   async function getLoggedInAthlete() {
     const getLoggedInAthlete = `https://www.strava.com/api/v3/athlete?access_token=${token}`;
@@ -200,11 +206,12 @@ function Fitness() {
         setathleteLastName(res.data.lastname);
         setathleteFollowers(res.data.follower_count);
         friend = res.data.friend_count;
-        authorizationDone = true;
+        setauthorizationDone(true);
+        
       })
       .catch((error) => {
         console.log("ERROR TO GET LOGIN", error);
-        authorizationDone=false;
+        setauthorizationDone(false);
       });
     getAthleteStats();
   }
@@ -215,7 +222,6 @@ function Fitness() {
       .get(getActivityLink)
       .then((res) => {
         //console.log(res.data);
-
         setathleteActivity(
           res.data.map((element) => {
             return {
@@ -231,7 +237,6 @@ function Fitness() {
       })
       .catch((error) => {
         console.log("ERROR TO GET ATHLETE ACTIVITIES", error);
-        authorizationDone=false;
       });
   }
 
@@ -257,48 +262,49 @@ function Fitness() {
           setathleteRecentRunStats(res.data.recent_run_totals),
           setathleteRecentCycleStats(res.data.recent_ride_totals)
         );
+        authorizationDone=true;
       })
       .catch((error) => {
         console.log("ERROR TO GET ATHLETE STATS", error);
       });
   }
-  //getAthleteStats();
+  //getAthleteStats();parseInt(athleteRecentCycleStats)
   //athleteRecentRunStats.count+athleteRecentCycleStats.count
-  var weeklyactivity = athleteRecentRunStats + athleteRecentCycleStats;
-  function postActivities() {
-    const Activities = {
-      id: athleteId,
-      athleteName: athleteFirstname,
-      weeklyactivities: weeklyactivity,
-    };
-    axios
-      .post("http://localhost:3001/fitness/data", Activities)
-      .then((response) => {
-        // Handle the response
-        console.log("Successfull Store FitnessData to DB");
-      })
-      .catch((error) => {
-        // Handle the error
-        console.log("ERROR Store FitnessData to DB");
-      });
-  }
+  //setweeklyactivity(parseInt(athleteRecentRunStats.count) + parseInt(athleteRecentCycleStats.count))
+  // console.log(athleteFirstname)
+  // console.log(weeklyactivity)
+  var weekActivityCount =
+    Number(athleteRecentRunStats.count) + Number(athleteRecentCycleStats.count);
 
+  async function postActivities() {
+    const fitnessData = {
+      athleteName: athleteFirstname,
+      weeklyactivities: weekActivityCount
+    };
+  
+    try {
+      const response = await axios.patch(`http://localhost:3001/fitness/patchdata/63cf6a91c5efc3bba5f8f88f`, 
+      {data : fitnessData});
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  
   function deAuthorize() {
     try {
       const response = axios.post(
         `https://www.strava.com/oauth/deauthorize?access_token=${token}`
       );
       console.log(response);
-      authorizationDone=false;
+      setauthorizationDone(false);
     } catch (error) {
       console.error(error);
     }
   }
 
   //postActivities();
-  var weekActivityCount =
-    Number(athleteRecentRunStats.count) + Number(athleteRecentCycleStats.count);
-
+  
   var activityCount = athleteActivity.length;
   var Distance = athleteActivity.map((value) => {
     return value.distance;
@@ -444,8 +450,7 @@ function Fitness() {
   return (
     <div>
       <div class="content-wrapper">
-        <div class="container-xxl flex-grow-1 container-p-y mt-2">
-          {authorizationDone ? (
+      {authorizationDone ? (
             <div className="row">
               <div className="col-md-2">
                 <h5>Connected to Strava</h5>
@@ -457,7 +462,7 @@ function Fitness() {
               </div>
             </div>
           ) : (
-            <div className="row">
+            <div className="container-xxl flex-grow-1 container-p-y mt-3">
             <div className="col-md-4">
               <h5>You are not connected to Strava</h5>
             </div>
@@ -468,6 +473,8 @@ function Fitness() {
             </div>
           </div>
           )}
+          <div className={`${!authorizationDone ? 'blur' : ''}`}>
+        <div class="container-xxl flex-grow-1 container-p-y mt-2">
           <div class="row">
             <div class="col-lg-8 mb-4 order-0">
               <div class="card">
@@ -1044,6 +1051,7 @@ function Fitness() {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
       <footer class="content-footer footer bg-footer-theme">

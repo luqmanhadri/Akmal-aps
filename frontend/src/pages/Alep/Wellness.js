@@ -39,26 +39,26 @@ import righthand from "../../utils/BodyMapPictures/righthand.png";
 import rightLeg from "../../utils/BodyMapPictures/rightLeg.png";
 import rightThigh from "../../utils/BodyMapPictures/rightThigh.png";
 import noinjury from "../../utils/BodyMapPictures/no injury.png";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
 
-const token = Cookies.get('access_token');
+const token = Cookies.get("access_token");
 if (token) {
   const data = JSON.parse(token);
   // console.log(data);
 } else {
-  console.log("Failed")
+  console.log("Failed");
 }
 
-let datatoken
+let datatoken;
 
-if (token && typeof token !== 'undefined') {
+if (token && typeof token !== "undefined") {
   datatoken = JSON.parse(token);
   // use datatoken here
 }
 
 function Wellness() {
-  var wellnessmood
+  const [wellnessmood, setwellnessmood] = useState("N/A");
 
   const validationSchema = Yup.object({
     trainingInput: Yup.number(),
@@ -69,10 +69,10 @@ function Wellness() {
     injuryInput: Yup.number(),
     injuryPart: Yup.string(),
   });
-
+  //console.log(datatoken._id);
   const formik = useFormik({
     initialValues: {
-      userId:"1234",
+      userId: `${datatoken._id}`,
       trainingInput: 0,
       inBedStart: "",
       inBedEnd: "",
@@ -84,7 +84,8 @@ function Wellness() {
     validationSchema: validationSchema,
     onSubmit: (data) => {
       axios.post("http://localhost:3001/wellness", data).then((response) => {
-        alert(JSON.stringify(data, null, 2));
+        alert(JSON.stringify("Input Data Successfull", null, 2));
+        //postMood()
       });
     },
   });
@@ -97,13 +98,14 @@ function Wellness() {
   let fromDBsleepDataEnd;
   useEffect(() => {
     async function getInjury() {
-      const request = await axios.get("http://localhost:3001/wellness/date");
+      const request = await axios.get(
+        `http://localhost:3001/wellness/date/${datatoken._id}`
+      );
       request.data.map((element) => {
         setInjuryData(element.injuryPart);
         setstressData(element.stressInput);
       });
-      calculateMood()
-      postMood();
+      calculateMood();
       return request;
     }
     getInjury();
@@ -116,7 +118,9 @@ function Wellness() {
 
   useEffect(() => {
     async function getSleep() {
-      const request = await axios.get("http://localhost:3001/wellness/sleep");
+      const request = await axios.get(
+        `http://localhost:3001/wellness/sleep/${datatoken._id}`
+      );
 
       setGetSleepDataStart(
         request.data.map((element) => {
@@ -139,28 +143,31 @@ function Wellness() {
 
   useEffect(() => {
     async function checkForm() {
-      await axios.get("http://localhost:3001/wellness/form").then((res) => {
-        setcheckForm(res.data.map((element) => {
-          return element.createdAt
-        }))
-      });
+      await axios
+        .get(`http://localhost:3001/wellness/form/${datatoken._id}`)
+        .then((res) => {
+          setcheckForm(
+            res.data.map((element) => {
+              return element.createdAt;
+            })
+          );
+        });
     }
     checkForm();
   }, []);
 
-  
-  function checkFormDone(object){
+  function checkFormDone(object) {
     let currentDate = new Date();
-    let inputDate = new Date(object)
+    let inputDate = new Date(object);
     if (currentDate.toDateString() === inputDate.toDateString()) {
-      var index=true
+      var index = true;
     } else {
-      var index=false
+      var index = false;
     }
 
-    return index
+    return index;
   }
-  checkFormDone(checkForm)
+  checkFormDone(checkForm);
   let count = 0;
   const chart = getSleepDataStart.map((item) => {
     let current = new Date(getSleepDataEnd[count]).valueOf(); //end
@@ -174,13 +181,15 @@ function Wellness() {
     count++;
     return hours;
   });
-  var chartlength=chart.length;
-  function calculateMood(){
-    if (injuryData>0) {
-      wellnessmood=false
+  var chartlength = chart.length;
+  function calculateMood() {
+    if (injuryData > 0) {
+      setwellnessmood("Bad");
+    } else {
+      setwellnessmood("Good");
     }
-   
   }
+  postMood();
   function postMood() {
     const PostMood = {
       userid: datatoken._id,
@@ -188,13 +197,13 @@ function Wellness() {
     };
     console.log(PostMood);
     axios
-      .post("http://localhost:3001/wellness/mood", PostMood)
+      .post(`http://localhost:3001/wellness/mood/${datatoken._id}`, PostMood)
       .then((response) => {
         // Handle the response
         console.log("Successfull Store Mood to DB");
       })
       .catch((error) => {
-        // Handle the error 
+        // Handle the error
         console.log("ERROR Store Mood to DB");
       });
   }
@@ -297,16 +306,7 @@ function Wellness() {
     } else return noinjury;
   }
 
-  const onSubmit = (data) => {
-    //console.log(data);
-    axios.post("http://localhost:3001/wellness", data).then((response) => {
-      alert("Data Input");
-    });
-  };
-
-
   return (
-    
     <div class="content-wrapper">
       <div class="container-xxl flex-grow-1 container-p-y mt-5">
         <div class="row">
@@ -317,10 +317,19 @@ function Wellness() {
                   <div class="card-body">
                     <h4 class="card-title text-primary">Athlete Wellness</h4>
                     <p class="mb-4">
-                      You have {checkFormDone(checkForm) ?<span class="fw-bold">done</span> : <span class="fw-bold">not</span> } submit wellness
-                      form today. Check your new badge in your profile.
+                      You have{" "}
+                      {checkFormDone(checkForm) ? (
+                        <span class="fw-bold">done</span>
+                      ) : (
+                        <span class="fw-bold">not</span>
+                      )}{" "}
+                      submit wellness form today. Check your new badge in your
+                      profile.
                     </p>
-                    <Link to={`/profile/${datatoken._id}`} className="btn btn-sm btn-outline-primary">
+                    <Link
+                      to={`/profile/${datatoken._id}`}
+                      className="btn btn-sm btn-outline-primary"
+                    >
                       View Badges
                     </Link>
                   </div>
@@ -373,9 +382,7 @@ function Wellness() {
                     </div>
 
                     <span class="fw-semibold d-block mb-1">Wellness</span>
-                    <h3 class="card-title mb-2">
-                      {wellnessmood ? <div>Good</div> : <div>Bad</div>}
-                    </h3>
+                    <h3 class="card-title mb-2">{wellnessmood}</h3>
                     <small class="text-success fw-semibold">
                       <i class="bx bx-up-arrow-alt"></i> +72.80%
                     </small>
@@ -651,11 +658,19 @@ function Wellness() {
                             <div></div>
                           )}
                         </div>
-                        {checkFormDone(checkForm)?<button type="button" class="btn btn-secondary" disabled>Send</button>:<button type="submit" class="btn btn-primary">
-                          Send
-                        </button>}
-                        
-                        
+                        {checkFormDone(checkForm) ? (
+                          <button
+                            type="button"
+                            class="btn btn-secondary"
+                            disabled
+                          >
+                            Send
+                          </button>
+                        ) : (
+                          <button type="submit" class="btn btn-primary">
+                            Send
+                          </button>
+                        )}
                       </Form>
                     </Formik>
                   </div>
@@ -748,7 +763,7 @@ function Wellness() {
                       </div>
                     </div>
                     <span class="fw-semibold d-block mb-1">Sleep Time</span>
-                    <h3 class="card-title mb-2">{chart[chartlength-1]} h</h3>
+                    <h3 class="card-title mb-2">{chart[chartlength - 1]} h</h3>
                     <small class="text-success fw-semibold">
                       <i class="bx bx-up-arrow-alt"></i> +28.14%
                     </small>
@@ -794,12 +809,12 @@ function Wellness() {
               />
 
               <div class="card-footer">
-                {injuryData >0 ?<p class="card-text">
-                  Rest to recover from injury
-                </p>:<p class="card-text">
-                  Your body is in good condition
-                </p>}
-                
+                {injuryData > 0 ? (
+                  <p class="card-text">Rest to recover from injury</p>
+                ) : (
+                  <p class="card-text">Your body is in good condition</p>
+                )}
+
                 <a href="javascript:void(0);" class="card-link">
                   Card link
                 </a>
@@ -816,13 +831,14 @@ function Wellness() {
                 <h6 class="card-subtitle text-muted">Your Latest Schedule</h6>
               </div>
               <div class="card-body ">
-              <div className="sleepChartJS">
-                <SleepChart chartData={myChart} />
-              </div>
+                <div className="sleepChartJS">
+                  <SleepChart chartData={myChart} />
+                </div>
               </div>
               <div class="card-footer">
                 <p class="card-text">
-                  The "In Bed" period reflects the time period you are lying in bed
+                  The "In Bed" period reflects the time period you are lying in
+                  bed
                 </p>
                 <a href="javascript:void(0);" class="card-link">
                   Card link
