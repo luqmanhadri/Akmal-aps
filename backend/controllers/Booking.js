@@ -202,9 +202,27 @@ const returnBooking = async (req, res, next) => {
   }
 };
 
+const getNearestFutureBookingByUser = async (req, res, next) => {
+  try {
+  const userId = req.params.id;
+  const now = new Date();
+  const booking = await Booking.findOne({
+  userId: userId,
+  startDate: { $gte: now }
+  }).sort({ startDate: 1 });
+  if (!booking) {
+  res.json({ message: 'No upcoming bookings found for this user' });
+  } else {
+  res.json(booking);
+  }
+  } catch (error) {
+  next(error);
+  }
+  };
+
 
 
 
 module.exports = { bookItem, approveBooking, returnBooking, getUnapprovedBooking, 
 getApprovedBooking, getReturnedBooking, getUnreturnedBooking, getBooking,
-deleteBooking, rejectBooking, pickedBooking, getBookingbyId}
+deleteBooking, rejectBooking, pickedBooking, getBookingbyId, getNearestFutureBookingByUser}

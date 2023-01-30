@@ -3,7 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 
-import './Register.css'
+// import './Register.css'
+// import './SignUp.css'
 import {
   MDBCol,
   MDBContainer,
@@ -25,7 +26,7 @@ import {
 } from 'mdb-react-ui-kit';
 import imageReg from '../../images/lcw (1).png'
 import SignUp from './SignUp';
-import AthleteInfo from './AthleteInfo';
+import PersonalInfo from './PersonalInfo';
 import StorekeeperInfo from './StorekeeperInfo';
 
 function RegisterOthers() {
@@ -48,7 +49,8 @@ function RegisterOthers() {
     sport: "",
     email: "",
     imgUrl: "",
-    role: ""
+    role: "",
+    contact: ""
    
   });
 
@@ -61,7 +63,7 @@ function RegisterOthers() {
       x={x}
       setX={setX}
     />,
-    <AthleteInfo
+    <PersonalInfo
       formData={formData}
       setFormData={setFormData}
       page={page}
@@ -80,7 +82,7 @@ function RegisterOthers() {
   ];
 
   return (
-    <div>
+    <div >
       <div className='register_body' >
         <div className="progress-bar">
           {

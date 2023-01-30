@@ -11,6 +11,7 @@ const bookingRouter = require('./routes/Booking');
 // const commentRouter = require('./routes/Comment');
 const accountRouter = require('./routes/Account');
 const teamRouter = require('./routes/Team');
+const fitnessRouter = require('./routes/Fitness');
 const announcementRouter = require('./routes/Announcement');
 const cookieParser = require("cookie-parser")
 // const session = require("express-session")

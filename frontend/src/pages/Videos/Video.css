@@ -9,10 +9,13 @@
 
 
 .video_title {
+  margin: 50px auto 0; 
   font-size: 18px;
   font-weight: 400;
   margin-top: 20px;
   margin-bottom: 10px;
+  justify-content: center;
+  display: flex;
   /* color: ${({ theme }) => theme.text}; */
 }
 
@@ -93,9 +96,12 @@
 }
 
 .video_videoFrame {
-  max-height: 720px;
-  width: 80%;
+  margin: 50px auto 0; 
+  margin-top: 50px;
+  max-height: 1080px;
+  width: 70%;
+  height: 700px;
   object-fit: cover;
-  /* justify-content: center;
-  display: flex; */
+  justify-content: center;
+  display: flex;
 }

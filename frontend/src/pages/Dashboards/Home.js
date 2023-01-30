@@ -21,6 +21,7 @@ function Home() {
   let dispatch = useDispatch();
 
   const [profileDetails, setProfileDetails] = useState({});
+  const [booking, setBooking] = useState([]);
   const [announcementDetails, setAnnouncementDetails] = useState("");
   // const { datatoken } = useSelector((state) => state.user);
   const [announcement, setAnnouncement] = useState([]);
@@ -36,7 +37,14 @@ function Home() {
     console.log("Failed")
   }
 
-  const datatoken = JSON.parse(token)
+  
+  let datatoken
+  
+  if (token && typeof token !== 'undefined') {
+    datatoken = JSON.parse(token);
+    console.log(datatoken._id)
+    // use datatoken here
+  }
   // useEffect(() => {
   //   const accountRes = axios.get(`http://localhost:3001/account/find/${datatoken._id}`);
   //   // axios.get(`http://localhost:3001/account/${id}`).then((response) => {
@@ -54,21 +62,15 @@ function Home() {
     const fetchData = async () => {
       try {
         const accountRes = await axios.get(`http://localhost:3001/account/find/${datatoken._id}`);
-        // const profileRes = await axios.get(`/profile/${accountRes.data._id}`);
-        // const videoRes = await axios.get(`http://localhost:3001/videos/${path}`);
-
-        // const channelRes = await axios.get(
-        //   `/users/find/${videoRes.data.userId}`
-        // );
         setProfileDetails(accountRes.data);
+        const bookingRes = await axios.get(`http://localhost:3001/booking/nearest/${datatoken._id}`);
+        setBooking(bookingRes.data)
         console.log("Success")
-        // setAchievements(accountRes.data.achievement)
-        // setVideos(videoRes.data);
-        // dispatch(loginSuccess(accountRes.data));
+       
       } catch (err) { }
     };
     fetchData();
-  }, []);
+  }, [datatoken._id]);
 
   // if(token) {
   //   console.log(token)
@@ -77,28 +79,29 @@ function Home() {
   // }
 
 
-  const addAnnouncement = async () => {
-    await axios.post("http://localhost:3001/announcement",
-      {
-        announcementBody: newAnnouncement
-        // , ProfileId: _id
-      }
-      , { withCredentials: true }
 
-    )
-      .then((response) => {
-        if (response.data.error) {
-          console.log(response.data.error);
-        } else {
-          const announcementToAdd = {
-            announcementBody: newAnnouncement,
-            // username: response.data.username,
-          };
-          setAnnouncement([...announcement, announcementToAdd]);
-          setNewAnnouncement("");
-        }
-      });
-  };
+  // const addAnnouncement = async () => {
+  //   await axios.post("http://localhost:3001/announcement",
+  //     {
+  //       announcementBody: newAnnouncement
+  //       // , ProfileId: _id
+  //     }
+  //     , { withCredentials: true }
+
+  //   )
+  //     .then((response) => {
+  //       if (response.data.error) {
+  //         console.log(response.data.error);
+  //       } else {
+  //         const announcementToAdd = {
+  //           announcementBody: newAnnouncement,
+  //           // username: response.data.username,
+  //         };
+  //         setAnnouncement([...announcement, announcementToAdd]);
+  //         setNewAnnouncement("");
+  //       }
+  //     });
+  // };
 
 
   return (
@@ -154,7 +157,20 @@ function Home() {
               <h1>Bookings</h1>
             </div>
             <div className="home-card-body">
-              <p className="name" >No Bookings As Of Now</p>
+             
+             {booking ? 
+             (<div>
+             <p className="name" >Nearest Booking Details</p>
+             <p>Item : {booking.item_name}</p>
+             <p>Amount : {booking.item_amount}</p>
+             <p>Store : {booking.store}</p>
+             <p>Start Date : {booking.startDate}</p>
+             <p>Start Time : {booking.startTime}</p>
+             <p>End Date : {booking.startDate}</p>
+             <p>End Time : {booking.endTime}</p>
+             </div> )
+             :(<p className="name" >No Bookings As Of Now</p>)}
+              
 
             </div>
 
@@ -192,6 +208,8 @@ function Home() {
 
 
       </Grid>
+
+    
     </div>
   )
 }

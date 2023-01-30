@@ -2,7 +2,7 @@ const express = require("express");
 const { bookItem, approveBooking, returnBooking, getUnapprovedBooking,
     getBooking,
     getUnreturnedBooking, getApprovedBooking, getReturnedBooking,
-    rejectBooking, deleteBooking, pickedBooking, getBookingbyId }
+    rejectBooking, deleteBooking, pickedBooking, getBookingbyId, getNearestFutureBookingByUser }
     = require("../controllers/Booking");
 // const { verifyToken } = require("../middlewares/verifyToken");
 const router = express.Router();
@@ -12,6 +12,8 @@ const router = express.Router();
 router.get("/", getBooking)
 
 router.get("/:id", getBookingbyId)
+
+router.get("/nearest/:id", getNearestFutureBookingByUser)
 
 router.get("/unapprovebook", getUnapprovedBooking)
 

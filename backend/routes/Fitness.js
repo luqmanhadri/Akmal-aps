@@ -111,10 +111,10 @@ router.post("/token", async (req, res, next) => {
     });
 });
 
-router.get("/get", async (req, res, next) => {
+router.get("/get/:id", async (req, res, next) => {
   clientid = req.body.id;
   const stravaToken = await stravaTokenSchema
-    .findOne({ id: clientid })
+    .findOne({ userid: clientid })
     .sort({ createdAt: -1 })
     .limit(1);
   res.json(stravaToken);

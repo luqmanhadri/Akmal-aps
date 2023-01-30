@@ -16,6 +16,7 @@ import {
 import Cookies from 'js-cookie';
 import { Grid } from '@mui/material';
 import axios from 'axios';
+import {toast} from 'react-toastify';
 
 const ItemCard = ({ item, startDate, endDate, endTime, startTime }) => {
     const token = Cookies.get('access_token');
@@ -46,7 +47,8 @@ const ItemCard = ({ item, startDate, endDate, endTime, startTime }) => {
                 {
                 // Check if the quantity exceeds the item amount
                 if (cartItems[i].quantity + quantity > itemAmount) {
-                    console.log("Quantity exceeds item amount. Cannot add to cart.");
+                    toast.error("Quantity exceeds item amount. Cannot add to cart.", {position: toast.POSITION.TOP_CENTER});
+                    // console.log("Quantity exceeds item amount. Cannot add to cart.");
                     return;
                 }
                 // cartItems[i].quantity += quantity;
@@ -72,6 +74,9 @@ const ItemCard = ({ item, startDate, endDate, endTime, startTime }) => {
         // Save the updated cart items to local storage
         localStorage.setItem('cartItems', JSON.stringify(cartItems));
         // Add item to cart with the selected quantity
+        toast.success("Your item has been added to cart!", {
+            position: toast.POSITION.TOP_CENTER
+          });
         console.log("Adding ", quantity, item.item_name, " to cart")
     }
 
@@ -163,11 +168,14 @@ const ItemCard = ({ item, startDate, endDate, endTime, startTime }) => {
 
                                                         <button className='btn btn-primary'
                                                             onClick={() => {
-                                                                if (!startDate || !endDate) {
-                                                                    console.log("Please select a start and end date.")
+                                                                if (!quantity || !startDate || !endDate || !startTime || !endTime) {
+                                                                    toast.error("Please fill all fields", {position: toast.POSITION.TOP_CENTER});
                                                                     return;
                                                                 }
-                                                                handleAddToCart(quantity, item, user_id, startDate, endDate, startTime, endTime)
+                                                                handleAddToCart(quantity, item, user_id, 
+                                                                    startDate, endDate, startTime, endTime)
+                                                               
+
                                                             }
                                                             }>Add to Cart</button>
                                                     </MDBCol>

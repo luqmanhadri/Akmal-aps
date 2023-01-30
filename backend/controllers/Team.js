@@ -56,6 +56,17 @@ const randomTeam = async (req, res, next) => {
   }
 };
 
+const randomTeamHome = async (req, res, next) => {
+  try {
+    const team = await Team.aggregate([
+      
+      { $sample: { size: 2 } }]);
+    res.json(team);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const addManager = async (req, res, next) => {
   const team = req.params.name;
   const managerDetails = req.body
@@ -158,4 +169,4 @@ const createSheet = async (req, res, next) => {
   
 
 module.exports = {createTeam, updateTeam, getTeam, createAchievement, randomTeam, 
-  createSheet, addManager, addCoach, deleteAchievement}
+  createSheet, addManager, addCoach, deleteAchievement, randomTeamHome}

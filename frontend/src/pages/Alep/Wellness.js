@@ -110,7 +110,6 @@ function Wellness() {
     }
     getInjury();
   }, []);
-
   //console.log(stressData);
 
   const [getSleepDataStart, setGetSleepDataStart] = useState([]);
@@ -181,12 +180,11 @@ function Wellness() {
     count++;
     return hours;
   });
-  var chartlength = chart.length;
+  var chartlength=chart.length;
+
   function calculateMood() {
     if (injuryData > 0) {
       setwellnessmood("Bad");
-    } else {
-      setwellnessmood("Good");
     }
   }
   postMood();

@@ -20,6 +20,8 @@ import ItemCard from './ItemCard';
 import DateTimePicker from 'react-datetime';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import Cookies from 'js-cookie';
+import {toast,ToastContainer,Slide,Bounce, Flip, Zoom} from 'react-toastify';
+
 
 
 function Booking() {
@@ -75,85 +77,108 @@ function Booking() {
     }
   }, [])
 
- 
+  // const handleStartTimeChange = (e) => {
+  //   setStartTime(e.target.value);
+  
+  //   const date = startDate.toDateString();
+  //   const updatedStartDate = new Date(`${date} ${startTime}`);
+  //   setStartDate(updatedStartDate);
+  //   console.log(startDate)
+  // }
+
+  
 
   const handleChange = (event) => {
     setSelectedStore(event.target.value);
   };
 
+  
+
 
   return (
     <div className='Inventory'>
+    
 
-      <ShoppingCartIcon style={{ cursor: 'pointer' }} onClick={() => navigate("/cart")} />
-      <NotificationsActiveIcon style={{ cursor: 'pointer' }} onClick={() => navigate(`/bookingstatus/${datatoken._id}`)}/>
+    <div style={{display: "flex", justifyContent: "center"}}>
+      <button className='btn btn-primary m-2' onClick={() => navigate("/cart")}>
+    <ShoppingCartIcon style={{ cursor: 'pointer' }} />
+    Cart
+    </button>
+    <button className='btn btn-success m-2' onClick={() => navigate(`/bookingstatus/${datatoken._id}`)}>
+    <NotificationsActiveIcon style={{ cursor: 'pointer' }} />
+    Booking Status
+    </button>
+</div>
 
       <Grid container spacing={0}>
         <Grid className="header-container">
-          <Row className="header-row">
-            <Col xs={12} sm={6} lg={6} xl={4}>
-              <p className='mb-0'>Item name:</p>
+          <Row className="header-row" >
+            <Col xs={12} sm={6} lg={6} xl={4} style={{marginTop: '15px' }}>
+              <label style={{color: 'white'}}>Item name:</label>
               <input
                 type="text"
                 placeholder="Enter item name"
                 // className="search-input"
-                className="auth_input"
+                className="search-input"
                 onChange={(e) => setItemBook(e.target.value)}
               />
             </Col>
-            <Col xs={12} sm={6} lg={6} xl={4}>
-            <p className='mb-0'>Start Date:</p>
+            <Col xs={12} sm={6} lg={6} xl={4} style={{marginTop: '15px' }}>
+            <label style={{color: 'white'}}>Start Date:</label>
               <DatePicker
                 selected={startDate}
                 onChange={date => setStartDate(date)}
-                // className="check-in"
-                className="auth_input"
+                className="check-in"
+                
                 placeholderText='Start date'
                 dateFormat="dd/MM/yyyy"
               />
+              
             </Col>
 
-            <Col xs={12} sm={6} lg={6} xl={4}>
-            <p className='mb-0'>Start Time:</p>
+            <Col xs={12} sm={6} lg={6} xl={4} style={{marginTop: '15px' }}>
+            <label style={{color: 'white'}}>Start Time :</label>
               <input
                 type="time"
                 placeholder="Enter time (HH:MM)"
-                // className="time-start"
-                className="auth_input"
+                className="time-start"
+                // className="auth_input"
                 pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
                 onChange={(e) => setStartTime(e.target.value)}
+                // onChange={handleStartTimeChange}
               />
+              
             </Col>
 
   
-            <Col xs={12} sm={6} lg={6} xl={4}>
-            <p className='mb-0'>End Date:</p>
+            <Col xs={12} sm={6} lg={6} xl={4} >
+            <label style={{color: 'white'}}>End Date:</label>
               <DatePicker selected={endDate}
                 onChange={date => setEndDate(date)}
-                // className="check-out"
-                className="auth_input"
+                className="check-out"
+                // className="auth_input"
                 placeholderText='End date'
                 dateFormat="dd/MM/yyyy" />
             </Col>
 
             <Col xs={12} sm={6} lg={6} xl={4}>
-            <p className='mb-0'>End Time:</p>
+            <label style={{color: 'white'}}>End Time:</label>
               <input
                 type="time"
                 placeholder="Enter time (HH:MM)"
-                // className="time-end"
-                className="auth_input"
+                className="time-end"
+                // className="auth_input"
                 
                 onChange={(e) => setEndTime(e.target.value)}
               />
             </Col>
 
             <Col xs={12} sm={6} lg={6} xl={4}>
-            <p className='mb-0'>Select Store:</p>
+            <label style={{color: 'white'}}>Select Store:</label>
               <select placeholder='Select store'
                 value={selectedStore}
-                // className='store-select'
-                className="auth_input"
+                className='store-select'
+                // className="auth_input"
                 onChange={handleChange}>
                 {storeDropdown.map(store => (
                   <option key={store} value={store}>{store}</option>
@@ -167,6 +192,8 @@ function Booking() {
           </Row>
         </Grid>
       </Grid>
+
+     
 
 
 

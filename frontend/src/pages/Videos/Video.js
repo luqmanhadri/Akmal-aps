@@ -17,6 +17,7 @@ function Video() {
 
   const { currentUser } = useSelector((state) => state.user);
   const { currentVideo } = useSelector((state) => state.video);
+  
   // const dispatch = useDispatch();
 
   const path = useLocation().pathname.split("/")[2];
@@ -26,7 +27,9 @@ function Video() {
   const [video, setVideo] = useState({});
 
   useEffect(() => {
+   
     const fetchData = async () => {
+     
       try {
         const videoRes = await axios.get(`http://localhost:3001/videos/find/${path}`);
         const channelRes = await axios.get(
@@ -35,10 +38,12 @@ function Video() {
         const addViews = await axios.put(
           `http://localhost:3001/videos/view/${path}`
         );
+        
         setUser(channelRes.data);
         setVideo(videoRes.data);
+        
         console.log(addViews)
-        // dispatch(fetchSuccess(videoRes.data));
+       
       } catch (err) {}
     };
     fetchData();

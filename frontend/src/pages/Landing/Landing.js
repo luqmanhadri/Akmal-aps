@@ -3,13 +3,16 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './Landing.css';
-import { Container } from "react-bootstrap"
+import { Container, Row } from "react-bootstrap"
 import Slider from './Slider';
 import Search_Profile from '../Profile/Search_Profile';
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { userRequest } from '../../requestMethod';
 import { publicRequest } from '../../requestMethod';
 import { Grid } from '@mui/material';
+import AnnouncementSlider from './AnnouncementSlider';
+import {MDBCard,MDBCardBody,MDBCardImage,MDBCardLink} from 'mdb-react-ui-kit';
+// import Slider from "react-slick";
 
 
 function Landing() {
@@ -19,6 +22,7 @@ function Landing() {
   const [announcements, setAnnouncements] = useState([]);
 
   const [listofProfiles, setListofProfiles] = useState([]);
+  const [listofTeams, setListofTeams] = useState([]);
 
   // useEffect( () => {
   //     axios.get("http://localhost:3001/announcement").then((response) => {
@@ -33,30 +37,43 @@ function Landing() {
   useEffect(() => {
     const getAnnouncement = async () => {
       try {
-        const res = await publicRequest.get("/announcement");
+        const res = await axios.get("http://localhost:3001/announcement");
         axios.get("http://localhost:3001/account/random").then((response) => {
           // retrieve sport name data from other table
           setListofProfiles(response.data);
         });
+        axios.get("http://localhost:3001/team/randomhome").then((response) => {
+      setListofTeams(response.data);
+    });
         setAnnouncements(res.data);
       } catch { }
     };
     getAnnouncement();
   }, []);
 
+
   return (
     <div>
-      <Grid container>
+      <Grid container >
         <Grid item xl={6}>
           <Slider />
         </Grid>
 
-        {/* <Grid item xl={6}>
-          <div>
-            {listofProfiles.map((value, key) => {
+
+        <Grid item xl={6}>
+          <h1 className='announcement_title'> Latest Announcements </h1>
+
+          <AnnouncementSlider announcements={announcements} />
+
+        </Grid>
+
+       
+          {/* <h1> Meet Our Athletes! </h1> */}
+          
+          {listofProfiles.map((value, key) => {
               return (
-                
-                <Grid item xs={12} lg={6} key={key}>
+                // <Row xl={12} style={{marginLeft: '2px'}}>
+                <Grid item xs={12} lg={3}>
               <div className="profile-card-container" key={key}>
                 <div className="card" onClick={() => navigate(`/profile/${value._id}`)}>
                   <div className="imgBx">
@@ -84,30 +101,46 @@ function Landing() {
               </div>
 
 
-            </Grid>
+           
+              </Grid>
               )
             })}
-          </div>
-        </Grid> */}
+             
 
-        <h1 className='announcement_title'> Latest Announcements </h1>
-        {/* <div classname="name">{announcements.announcementBody}
-      </div> */}
 
-        <div>
+             {listofTeams.length > 0 && listofTeams
+      
+      .map((team,key )=> (
+         <Grid item xl={3} sm={6} xs={12} key={key}>
 
-          {announcements.map((value, key) => {
-            return (
+            <MDBCard className="m-2 card-hover">
+              <MDBCardBody className="text-center">
+                <MDBCardImage
+                  src={team.logoUrl}
+                  alt="avatar"
+                  className="rounded-circle mt-4 mb-4"
+                  style={{ width: '150px', height: '150px' }}
+                  fluid />
+                <p className="text-muted mb-4">{team.name}</p>
+                <MDBCardLink onClick={() => navigate(`/team/${team.name}`)} 
+                style={{ cursor: 'pointer', ':hover': { cursor: 'pointer' } }}
+                >View Profile</MDBCardLink>
+                
+              </MDBCardBody>
+            </MDBCard>
 
-              <div className='announcement' key={key}>
-                <div className='name' > {value.announcementBody} </div>
-              </div>
+         </Grid>
+      ))}
+            </Grid>
 
-            )
+       
 
-          })}
-        </div>
-      </Grid>
+
+
+      
+
+
+
     </div>
 
   )
