@@ -3,6 +3,11 @@ const mongoose = require("mongoose")
 
 const AnnouncementSchema = new mongoose.Schema({
 
+    announcementTitle: {
+        type: String,
+        required: true
+    },
+
     announcementBody: {
         type: String,
         required: true

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const nodeCron = require("node-cron");
+// const nodeCron = require("node-cron");
 const fitnessModel=require("../models/fitnessData.js");
 
 const stravaTokenSchema = require("../models/stravaToken.js");
@@ -74,10 +74,10 @@ router.post("/token", async (req, res, next) => {
     });
 });
 
-router.get("/get", async (req, res, next) => {
+router.get("/get/:id", async (req, res, next) => {
   clientid = req.body.id;
   const stravaToken = await stravaTokenSchema
-    .findOne({ id: 12345 })
+    .findOne({ userid: clientid })
     .sort({ createdAt: -1 })
     .limit(1);
   res.json(stravaToken);

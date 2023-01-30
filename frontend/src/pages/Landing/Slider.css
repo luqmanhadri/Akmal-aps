@@ -1,19 +1,42 @@
 .slider {
-  width: 1024px; /*asalnya 100%*/
-  height: 60vh;
+  width: 1024px; 
+  height: 53vh;
   position: relative;
   overflow: hidden;
+}
+
+/* .slider {
+  width: 100%;
+  height: 500px;
+} */
+
+@media only screen and (max-width: 576px) {
+  .slider {
+    height: 220px;
+    width: 320px; 
+    /* justify-content: center;
+    display: flex;
+    align-items: center; */
+    
+  }
 }
 
 .slide {
   position: absolute;
   top: 0;
   left: 0;
-  width: 85%;
+  width: 93%;
   height: 80%;
   opacity: 0;
   transform: translateX(-50%);
   transition: all 0.5s ease;
+}
+
+@media only screen and (max-width: 576px) {
+  .slider img {
+    width: 50%;
+    height: 50%;
+  }
 }
 
 @media screen and (min-width: 600px) {
@@ -55,13 +78,55 @@
   }
   100% {
     visibility: visible;
-    top: 17rem;
+    top: 14rem;
+  }
+}
+
+@media only screen and (max-width: 575px) {
+  @keyframes slide-up {
+    0% {
+      visibility: visible;
+      top: 5rem;
+    }
+    100% {
+      visibility: visible;
+      top: 3rem;
+    }
   }
 }
 
 @media screen and (max-width: 600px) {
   .content {
-    width: 80%;
+    width: 70%;
+    height: 60%;
+    position: absolute;
+    top: 0rem;
+    left: 2rem;
+    padding: 1rem;
+  }
+
+  .content h2 {
+    font-size: 15px;
+    top: 0;
+  }
+
+  .content p {
+    font-size: 12px;
+    top: 0;
+  }
+
+  .content hr {
+   margin-bottom: 2px;
+    top: 0;
+    
+  }
+
+  .content button {
+    width: 50%;
+    height: 30%;
+    top: 0;
+    padding: 0;
+    font-size: 10px;
   }
 }
 
@@ -94,11 +159,24 @@
 
 .next {
   top: 35%;
-  right: 1.5rem;
+  right: 6.0rem;
 }
 .prev {
   top: 35%;
   left: 1.5rem;
+}
+
+@media screen and (max-width: 600px) {
+  .next {
+    top: 35%;
+    right: 2.5rem;
+  }
+
+  .prev {
+    top: 35%;
+    left: 1.0rem;
+  }
+
 }
 
 hr {

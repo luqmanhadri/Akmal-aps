@@ -77,11 +77,22 @@ function Booking() {
     }
   }, [])
 
- 
+  // const handleStartTimeChange = (e) => {
+  //   setStartTime(e.target.value);
+  
+  //   const date = startDate.toDateString();
+  //   const updatedStartDate = new Date(`${date} ${startTime}`);
+  //   setStartDate(updatedStartDate);
+  //   console.log(startDate)
+  // }
+
+  
 
   const handleChange = (event) => {
     setSelectedStore(event.target.value);
   };
+
+  
 
 
   return (
@@ -118,7 +129,7 @@ function Booking() {
                 selected={startDate}
                 onChange={date => setStartDate(date)}
                 className="check-in"
-                // className="auth_input"
+                
                 placeholderText='Start date'
                 dateFormat="dd/MM/yyyy"
               />
@@ -134,6 +145,7 @@ function Booking() {
                 // className="auth_input"
                 pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
                 onChange={(e) => setStartTime(e.target.value)}
+                // onChange={handleStartTimeChange}
               />
               
             </Col>

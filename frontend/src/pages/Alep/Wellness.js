@@ -58,7 +58,7 @@ if (token && typeof token !== 'undefined') {
 }
 
 function Wellness() {
-  var wellnessmood
+  const [wellnessmood, setwellnessmood] = useState("N/A");
 
   const validationSchema = Yup.object({
     trainingInput: Yup.number(),
@@ -72,7 +72,7 @@ function Wellness() {
 
   const formik = useFormik({
     initialValues: {
-      userId:"1234",
+      userId: `${datatoken._id}`,
       trainingInput: 0,
       inBedStart: "",
       inBedEnd: "",
@@ -84,7 +84,8 @@ function Wellness() {
     validationSchema: validationSchema,
     onSubmit: (data) => {
       axios.post("http://localhost:3001/wellness", data).then((response) => {
-        alert(JSON.stringify(data, null, 2));
+        alert(JSON.stringify("Input Data Successfull", null, 2));
+        //postMood()
       });
     },
   });
@@ -97,18 +98,18 @@ function Wellness() {
   let fromDBsleepDataEnd;
   useEffect(() => {
     async function getInjury() {
-      const request = await axios.get("http://localhost:3001/wellness/date");
+      const request = await axios.get(
+        `http://localhost:3001/wellness/date/${datatoken._id}`
+      );
       request.data.map((element) => {
         setInjuryData(element.injuryPart);
         setstressData(element.stressInput);
       });
-      calculateMood()
-      postMood();
+      calculateMood();
       return request;
     }
     getInjury();
   }, []);
-
   //console.log(stressData);
 
   const [getSleepDataStart, setGetSleepDataStart] = useState([]);
@@ -116,7 +117,9 @@ function Wellness() {
 
   useEffect(() => {
     async function getSleep() {
-      const request = await axios.get("http://localhost:3001/wellness/sleep");
+      const request = await axios.get(
+        `http://localhost:3001/wellness/sleep/${datatoken._id}`
+      );
 
       setGetSleepDataStart(
         request.data.map((element) => {
@@ -139,11 +142,15 @@ function Wellness() {
 
   useEffect(() => {
     async function checkForm() {
-      await axios.get("http://localhost:3001/wellness/form").then((res) => {
-        setcheckForm(res.data.map((element) => {
-          return element.createdAt
-        }))
-      });
+      await axios
+        .get(`http://localhost:3001/wellness/form/${datatoken._id}`)
+        .then((res) => {
+          setcheckForm(
+            res.data.map((element) => {
+              return element.createdAt;
+            })
+          );
+        });
     }
     checkForm();
   }, []);
@@ -175,11 +182,11 @@ function Wellness() {
     return hours;
   });
   var chartlength=chart.length;
-  function calculateMood(){
-    if (injuryData>0) {
-      wellnessmood=false
+
+  function calculateMood() {
+    if (injuryData > 0) {
+      setwellnessmood("Bad");
     }
-   
   }
   function postMood() {
     const PostMood = {
@@ -188,13 +195,13 @@ function Wellness() {
     };
     console.log(PostMood);
     axios
-      .post("http://localhost:3001/wellness/mood", PostMood)
+      .post(`http://localhost:3001/wellness/mood/${datatoken._id}`, PostMood)
       .then((response) => {
         // Handle the response
         console.log("Successfull Store Mood to DB");
       })
       .catch((error) => {
-        // Handle the error 
+        // Handle the error
         console.log("ERROR Store Mood to DB");
       });
   }
@@ -374,7 +381,7 @@ function Wellness() {
 
                     <span class="fw-semibold d-block mb-1">Wellness</span>
                     <h3 class="card-title mb-2">
-                      {wellnessmood ? <div>Good</div> : <div>Bad</div>}
+                      {wellnessmood}
                     </h3>
                     <small class="text-success fw-semibold">
                       <i class="bx bx-up-arrow-alt"></i> +72.80%

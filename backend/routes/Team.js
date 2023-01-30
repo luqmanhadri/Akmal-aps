@@ -1,7 +1,7 @@
 const express = require("express");
 const { createTeam, createAchievement, randomTeam, 
     getTeam, createSheet, updateTeam, addManager, 
-    addCoach, deleteAchievement } = require("../controllers/Team");
+    addCoach, deleteAchievement, randomTeamHome } = require("../controllers/Team");
 // const { verifyToken } = require("../middlewares/verifyToken");
 const router = express.Router();
 
@@ -14,6 +14,9 @@ router.post("/achievement/:name", createAchievement)
 
 //get random teams
 router.get("/random", randomTeam)
+
+//get random teams
+router.get("/randomhome", randomTeamHome)
 
 //get team by id
 router.get("/find/:name", getTeam)
