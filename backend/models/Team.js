@@ -36,12 +36,12 @@ const TeamSchema = new mongoose.Schema({
         default: [],
     },
 
-    players: {
-        type: [{
-            userId: String,
-        }],
-        default: [],
-    },
+    // players: {
+    //     type: [{
+    //         userId: String,
+    //     }],
+    //     default: [],
+    // },
 
     achievement: {
         type: [{

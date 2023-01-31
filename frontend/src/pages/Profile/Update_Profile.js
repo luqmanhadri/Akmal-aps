@@ -64,11 +64,7 @@ const Update_Profile = () => {
   const [sportDropdown, setSportDropdown] = useState([]);
 
   const [image, setImage] = useState(undefined);
-  
 
-
-  
-  
 
   const token = Cookies.get('access_token');
   if (token) {
@@ -86,7 +82,7 @@ const Update_Profile = () => {
   }
 
 
-  
+
   const [imageUrl, setImageUrl] = useState("");
   const [sports, setSports] = useState(profileDetails.sport);
 
@@ -114,7 +110,7 @@ const Update_Profile = () => {
 
   const handleChange = (event) => {
     setImageUrl(URL.createObjectURL(event.target.files[0]));
-    
+
     console.log(imageUrl)
   };
 
@@ -128,39 +124,39 @@ const Update_Profile = () => {
     const storageRef = ref(storage, fileName);
     // const uploadTask = storageRef.put(file);
     const uploadTask = uploadBytesResumable(storageRef, file);
-   
+
     return new Promise((resolve, reject) => {
-        uploadTask.on(
-            "state_changed",
-            (snapshot) => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log("Upload is " + progress + "% done");
-                switch (snapshot.state) {
-                    case "paused":
-                        console.log("Upload is paused");
-                        break;
-                    case "running":
-                        console.log("Upload is running");
-                        break;
-                    default:
-                        break;
-                }
-            },
-            (error) => {
-                reject(error);
-            },
-            // async () => {
-            //     const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-            //     resolve(downloadURL);
-            // }
-            () => {
-                      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                        // setImageUrl(downloadURL);
-                        resolve(downloadURL);
-                      });
-                      
-                    }
-        );
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+            default:
+              break;
+          }
+        },
+        (error) => {
+          reject(error);
+        },
+        // async () => {
+        //     const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+        //     resolve(downloadURL);
+        // }
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            // setImageUrl(downloadURL);
+            resolve(downloadURL);
+          });
+
+        }
+      );
     });
   }
 
@@ -168,25 +164,25 @@ const Update_Profile = () => {
     const storage = getStorage();
     // const fileName = url.split('/').pop();
     // console.log(fileName)
-  
-  // Create a reference to the file to delete
-  const desertRef = ref(storage, url);
-  
-  // Delete the file
-  deleteObject(desertRef).then(() => {
-    // File deleted successfully
-  }).catch((error) => {
-    // Uh-oh, an error occurred!
-  });
+
+    // Create a reference to the file to delete
+    const desertRef = ref(storage, url);
+
+    // Delete the file
+    deleteObject(desertRef).then(() => {
+      // File deleted successfully
+    }).catch((error) => {
+      // Uh-oh, an error occurred!
+    });
   };
 
- 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const previousImageUrl = datatoken.imgUrl;
     let imageUrl = previousImageUrl;
     if (image) {
-        imageUrl = await uploadFile(image, "imgUrl");
+      imageUrl = await uploadFile(image, "imgUrl");
     }
 
     const res = await axios.patch(`http://localhost:3001/account/${datatoken._id}`,
@@ -208,7 +204,7 @@ const Update_Profile = () => {
     const token = JSON.stringify(res.data)
     Cookies.set('access_token', token, { expires: 7 });
     if (image) {
-        await deleteFileFromStorage(previousImageUrl);
+      await deleteFileFromStorage(previousImageUrl);
     }
     navigate(`/profile/${datatoken._id}`)
   };
@@ -219,121 +215,121 @@ const Update_Profile = () => {
     <div >
 
 
-<div className="login-box-container" style={{marginTop: '20px'}}>
+      <div className="login-box-container" style={{ marginTop: '20px' }}>
 
-<div className="login-box">
+        <div className="login-box">
 
-    <h2>Personal Info</h2>
-    
-    <div className="signup_form">
+          <h2>Personal Info</h2>
 
-    <label style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <input
+          <div className="signup_form">
+
+            <label style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <input
                 accept="image/*"
                 id="profilePhoto"
                 type="file"
                 style={{ display: 'none' }}
-              //  value={profileDetails.imgUrl}
-                onChange={(event) => 
-                  {
-                    setImage(event.target.files[0]);
-                    handleChange(event)}
-                  }
+                //  value={profileDetails.imgUrl}
+                onChange={(event) => {
+                  setImage(event.target.files[0]);
+                  handleChange(event)
+                }
+                }
 
-            />
-            <Avatar
+              />
+              <Avatar
                 // src={imageUrl}
                 src={profileDetails.imgUrl}
                 sx={{ width: 100, height: 100, cursor: 'pointer' }}
-            />
-        </label>
-        
-    <div className="row" style={{marginTop: '50px'}}>
-<div className="col-lg-6 col-xs-12" >
-        
-        <div className="user-box">
+              />
+            </label>
 
+            <div className="row" style={{ marginTop: '50px' }}>
+              <div className="col-lg-6 col-xs-12" >
 
-            <input className='signup_input'
-                type="text"
-                defaultValue={profileDetails.name}
-                onChange={(e) => setName(e.target.value )}
-
-            />
-            <label >Full Name : </label>
-        </div>
-
-        <div className="user-box">
-
-
-            <input className='signup_input'
-                type="number"
-                defaultValue={profileDetails.age}
-                onChange={(e) => setAge( e.target.value )}
-            />
-            <label >Age: </label>
-        </div>
-
-        <div className="user-box">
-
-
-            <input className='signup_input'
-                type="number"
-                defaultValue={profileDetails.contact}
-                onChange={(e) => setContact(e.target.value )}
-            />
-            <label >Contact Number: </label>
-        </div>
-
-        
-
-        
                 <div className="user-box">
 
 
-                    <input className='signup_input'
-                        type="date"
-                        defaultValue={profileDetails.birthday}
-                        onChange={(e) => setBirthday(e.target.value )}
-                    />
-                    <label>Birthday : </label>
+                  <input className='signup_input'
+                    type="text"
+                    defaultValue={profileDetails.name}
+                    onChange={(e) => setName(e.target.value)}
+
+                  />
+                  <label >Full Name : </label>
                 </div>
-        
+
                 <div className="user-box">
 
 
-                    <input className='signup_input'
-                        type="number"
-                        defaultValue={profileDetails.height}
-                        onChange={(e) => setHeight(e.target.value )}
-                    />
-                    <label>Height : </label>
+                  <input className='signup_input'
+                    type="number"
+                    defaultValue={profileDetails.age}
+                    onChange={(e) => setAge(e.target.value)}
+                  />
+                  <label >Age: </label>
+                </div>
+
+                <div className="user-box">
+
+
+                  <input className='signup_input'
+                    type="number"
+                    defaultValue={profileDetails.contact}
+                    onChange={(e) => setContact(e.target.value)}
+                  />
+                  <label >Contact Number: </label>
                 </div>
 
 
-           
-
-       
-
-            </div>
 
 
-            <div className="col-lg-6 col-xs-12" >
-        <div className="user-box">
+                <div className="user-box">
 
-            <select
-                className='signup_input'
-                value={gender || profileDetails.gender}
-                onChange={(e) => setGender(e.target.value)}>
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
 
-            </select>
-            <label>Gender : </label>
-        </div>
+                  <input className='signup_input'
+                    type="date"
+                    defaultValue={profileDetails.birthday}
+                    onChange={(e) => setBirthday(e.target.value)}
+                  />
+                  <label>Birthday : </label>
+                </div>
 
-       
+                <div className="user-box">
+
+
+                  <input className='signup_input'
+                    type="number"
+                    defaultValue={profileDetails.height}
+                    onChange={(e) => setHeight(e.target.value)}
+                  />
+                  <label>Height : </label>
+                </div>
+
+
+
+
+
+
+              </div>
+
+
+              <div className="col-lg-6 col-xs-12" >
+                <div className="user-box">
+
+                  <select
+                    className='signup_input'
+                    value={gender || profileDetails.gender}
+                    onChange={(e) => setGender(e.target.value)}>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+
+                  </select>
+                  <label>Gender : </label>
+                </div>
+
+
                 <div className="user-box">
                  
                   <select placeholder='Select store'
@@ -352,83 +348,84 @@ const Update_Profile = () => {
                   </select>
                   <label>Sport : </label>
                 </div>
-         
-
-        
-
-        <div className="user-box">
-
-        <input className='signup_input'
-                type="text"
-                
-                defaultValue={profileDetails.email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-             <label>Email : </label>
-        </div>
 
 
-        <div className="user-box">
 
-            <select
-                className='signup_input'
-                value={state || profileDetails.state}
-                // defaultValue={profileDetails.state}
-                onChange={(e) => setState(e.target.value)}>
-                <option value="">Select State</option>
-                <option value="Kelantan">Kelantan</option>
-                <option value="Johor">Johor</option>
-                <option value="Melaka">Melaka</option>
-                <option value="Negeri Sembilan">Negeri Sembilan</option>
-                <option value="Selangor">Selangor</option>
-                <option value="WP Kuala Lumpur">WP Kuala Lumpur</option>
-                <option value="Perak">Perak</option>
-                <option value="Pulau Pinang">Pulau Pinang</option>
-                <option value="Kedah">Kedah</option>
-                <option value="Perlis">Perlis</option>
-                <option value="Terengganu">Terengganu</option>
-                <option value="Pahang">Pahang</option>
-                <option value="Sabah">Sabah</option>
-                <option value="Sarawak">Sarawak</option>
-            </select>
-            <label>State : </label>
-        </div>
 
-        
                 <div className="user-box">
 
+                  <input className='signup_input'
+                    type="text"
 
-                    <input className='signup_input'
-                        type="number"
-                        defaultValue={profileDetails.weight}
-                        onChange={(e) => setWeight(e.target.value )}
-                    />
-                    <label>Weight : </label>
+                    defaultValue={profileDetails.email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <label>Email : </label>
                 </div>
 
 
+                <div className="user-box">
+
+                  <select
+                    className='signup_input'
+                    value={state || profileDetails.state}
+                    // defaultValue={profileDetails.state}
+                    onChange={(e) => setState(e.target.value)}>
+                    <option value="">Select State</option>
+                    <option value="Kelantan">Kelantan</option>
+                    <option value="Johor">Johor</option>
+                    <option value="Melaka">Melaka</option>
+                    <option value="Negeri Sembilan">Negeri Sembilan</option>
+                    <option value="Selangor">Selangor</option>
+                    <option value="WP Kuala Lumpur">WP Kuala Lumpur</option>
+                    <option value="Perak">Perak</option>
+                    <option value="Pulau Pinang">Pulau Pinang</option>
+                    <option value="Kedah">Kedah</option>
+                    <option value="Perlis">Perlis</option>
+                    <option value="Terengganu">Terengganu</option>
+                    <option value="Pahang">Pahang</option>
+                    <option value="Sabah">Sabah</option>
+                    <option value="Sarawak">Sarawak</option>
+                  </select>
+                  <label>State : </label>
+                </div>
+
+
+                <div className="user-box">
+
+
+                  <input className='signup_input'
+                    type="number"
+                    defaultValue={profileDetails.weight}
+                    onChange={(e) => setWeight(e.target.value)}
+                  />
+                  <label>Weight : </label>
+                </div>
+
+
+              </div>
+
+
+
+              <div style={{ justifyContent: 'center', display: 'flex' }}>
+                <button className="signup_button"
+
+                  onClick={handleSubmit}
+                >
+
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  Submit
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
+      </div>
 
-
-
-        <button className="signup_button"
-           
-            onClick={handleSubmit}
-        >
-
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            Submit
-        </button>
-        </div>
-    </div>
-</div>
-
-</div>
-      
 
 
     </div>

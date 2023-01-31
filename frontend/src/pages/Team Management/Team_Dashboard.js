@@ -2,7 +2,7 @@ import React from 'react'
 import { Grid } from '@mui/material';
 import { Link } from 'react-router-dom';
 import './Team_Dashboard.css'
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Cookies from 'js-cookie';
 import Team_Navbar from './Team_Navbar';
 
@@ -11,10 +11,11 @@ function Team_Dashboard() {
 
     const token = Cookies.get('access_token');
     const datatoken = JSON.parse(token)
+    const path = useLocation().pathname.split("/")[2];
     return (
         <div>
-            <Team_Navbar/>
-
+            
+        
             <div className='dashboard '>
 
                 <Grid container justify="center" alignItems="center">

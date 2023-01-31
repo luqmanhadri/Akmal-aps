@@ -46,6 +46,15 @@ const getTeam = async (req, res, next) => {
   }
 };
 
+const getAllTeams = async (req, res, next) => {
+  try {
+    const team = await Team.find();
+    res.json(team);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const randomTeam = async (req, res, next) => {
   try {
     const teams = await Team.aggregate([
@@ -133,23 +142,6 @@ const deleteAchievement = async (req, res, next) => {
   }
 };
 
-// const createSheet = async (req, res, next) => {
-//   const teamId = req.params.id;
-//   const players= req.body.players
-//   try {
-//     await Team.findByIdAndUpdate(teamId, {
-//       $push: { 
-//         // players:
-//         // players
-//         players: { $each: players } 
-//       },
-//     });
-//   } catch (err) {
-//     next(err);
-//   }
-// const team = new Team()
-// await team.save()
-// }
 
 const createSheet = async (req, res, next) => {
   const teamName = req.params.name;
@@ -169,4 +161,4 @@ const createSheet = async (req, res, next) => {
   
 
 module.exports = {createTeam, updateTeam, getTeam, createAchievement, randomTeam, 
-  createSheet, addManager, addCoach, deleteAchievement, randomTeamHome}
+  createSheet, addManager, addCoach, deleteAchievement, randomTeamHome, getAllTeams}

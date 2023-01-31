@@ -15,6 +15,7 @@ import axios from 'axios';
 import './Inventory.css'
 import { Grid } from '@mui/material';
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 function Inventory() {
 
@@ -48,6 +49,8 @@ function Inventory() {
           // setNewComment("");
         }
       });
+      toast.success("Item added successfully!", {position: toast.POSITION.TOP_CENTER});
+      window.location.reload()
   };
 
 
@@ -78,17 +81,25 @@ function Inventory() {
         <input className='inventory_input' type={'text'} onChange={(event) => { setItem(event.target.value) }} />
         <label>Amount :</label>
         <input className='inventory_input' type={'text'} onChange={(event) => { setAmount(event.target.value) }} />
-        <label>Item cost :</label>
+        <label>Item cost (RM):</label>
         <input className='inventory_input' type={'text'} onChange={(event) => { setCost(event.target.value) }} />
 
-        <label htmlFor="color-select">Select a store:</label>
-        <select id="color-select" value={selectedStore} onChange={handleChange}>
+        <label>Store name:</label>
+        {/* <select id="color-select" value={selectedStore} onChange={handleChange}>
         <option value="Pusat Sukan UM">Pusat Sukan UM</option>
           <option value="Stadium UM">Stadium UM</option>
           <option value="Tepi tasik">Tepi tasik</option>
-        </select>
+        </select> */}
 
-        <button className='in_button btn btn-primary' onClick={addItem}> Add to inventory </button>
+        <input className='inventory_input' onChange={(event) => { setSelectedStore(event.target.value) }}></input>
+
+        <button className='in_button btn btn-primary' onClick={
+          () => {
+            if (!item || !amount || !cost || !selectedStore) {
+              toast.error("Please fill all fields", {position: toast.POSITION.TOP_CENTER});
+              return;
+          };
+          addItem()}}> Add to inventory </button>
 
         
       </div>
