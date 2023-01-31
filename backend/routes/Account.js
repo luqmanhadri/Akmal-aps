@@ -12,7 +12,9 @@ const {createAccount, updateAccount, signin,
   getAccountBySport,
   approveUser,
   randomAccountHome,
-  getAccountUnapproved} = require("../controllers/Account");
+  getAccountUnapproved,
+  getAccountFP,
+  updatePassword} = require("../controllers/Account");
 // const { verifyToken } = require("../middlewares/verifyToken");
 const router = express.Router();
 const {
@@ -87,6 +89,10 @@ router.delete("/comment/:id/:commentid", deleteComment)
 
 //update account
 router.patch("/request/:id", approveUser)
+
+router.patch("/forgotpassword/:email", updatePassword)
+
+// router.get("/findemail/:email", getAccountFP);
 
 
 

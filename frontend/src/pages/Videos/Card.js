@@ -34,7 +34,9 @@ function Card({video}) {
           <div className='videoCard_Texts'>
             <h1 className="videoCard_Title">{video.title}</h1>
             {/* <h2 className="videoCard_ChannelName">{channel.name}</h2> */}
-            <div className="videoCard_Info" >{video.views} views • {format(video.createdAt)}</div>
+            <div className="videoCard_Info" >
+              {/* {video.views} views • */}
+               {format(video.createdAt)}</div>
           </div>
           
         </div>
