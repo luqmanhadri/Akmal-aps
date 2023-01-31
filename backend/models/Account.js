@@ -71,6 +71,11 @@ const AccountSchema = new mongoose.Schema({
         
     },
 
+    contact: {
+        type: String,
+        
+    },
+
     achievement: {
         type: [{
             year: {

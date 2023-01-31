@@ -18,6 +18,7 @@ import {
     MDBContainer,
     MDBRow
 } from 'mdb-react-ui-kit';
+import {toast} from 'react-toastify';
 
 import './PersonalInfo.css'
 
@@ -114,8 +115,40 @@ const PersonalInfo = ({ formData, setFormData, page, setPage, x, setX }) => {
     // }, [image]);
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); 
+
+        switch (formData.role) {
+            case "coach":
+              if (image === "" || formData.name === "" || formData.age === "" || formData.gender === "" || formData.state === "" || formData.contact === "" || formData.sport === "" || formData.email === "") {
+                toast.error("Please fill in all the fields!", { position: toast.POSITION.TOP_CENTER });
+                return;
+              }
+              break;
+            case "athlete":
+              if (image === "" || formData.name === "" || formData.age === "" || formData.birthday === "" || formData.height === "" || formData.weight === "" || formData.gender === "" || formData.state === "" || formData.contact === "" || formData.sport === "" || formData.email === "") {
+                toast.error("Please fill in all the fields!", { position: toast.POSITION.TOP_CENTER });
+                return;
+              }
+              break;
+           case "manager":
+              if (image === "" || formData.name === "" || formData.age === "" || formData.gender === "" || formData.state === "" || formData.contact === "" || formData.sport === "" || formData.email === "") {
+                toast.error("Please fill in all the fields!", { position: toast.POSITION.TOP_CENTER });
+                return;
+              }
+              break;
+          case "storekeeper":
+              if (image === "" || formData.name === "" || formData.age === "" || formData.gender === "" || formData.state === "" || formData.contact === "" || formData.email === "" || formData.store === "") {
+                toast.error("Please fill in all the fields!", { position: toast.POSITION.TOP_CENTER });
+                return;
+              }
+              break;
+             
+            default:
+              break;
+          }
+
         const imageUrl = (image && await uploadFile(image, "imgUrl"));
+        
         try {
         
             const res = await axios.post("http://localhost:3001/account",
@@ -377,8 +410,8 @@ const PersonalInfo = ({ formData, setFormData, page, setPage, x, setX }) => {
                                     className='signup_input'
                                     placeholder="Store"
                                     onChange={(e) => setFormData({ ...formData, sport: e.target.value })}>
-                                    <option value="Pusat Sukan UM">Pusat Sukan UM</option>
-                                    <option value="Tasik Universiti">Tasik Universiti</option>
+                                    <option value="Pusat Sukan UM" style={{ color: 'black' }}>Pusat Sukan UM</option>
+                                    <option value="Tasik Universiti" style={{ color: 'black' }}>Tasik Universiti</option>
                                 </select>
                                 <label>Store : </label>
                             </div>
@@ -443,8 +476,8 @@ const PersonalInfo = ({ formData, setFormData, page, setPage, x, setX }) => {
 
                             onChange={(e) => setFormData({ ...formData, gender: e.target.value })}>
                             <option value="">Select Gender</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
+                            <option value="Male" style={{ color: 'black' }}>Male</option>
+                            <option value="Female" style={{ color: 'black' }}>Female</option>
 
                         </select>
                         <label>Gender : </label>
@@ -484,20 +517,20 @@ const PersonalInfo = ({ formData, setFormData, page, setPage, x, setX }) => {
                             placeholder="State"
                             onChange={(e) => setFormData({ ...formData, state: e.target.value })}>
                             <option value="">Select State</option>
-                            <option value="Kelantan">Kelantan</option>
-                            <option value="Johor">Johor</option>
-                            <option value="Melaka">Melaka</option>
-                            <option value="Negeri Sembilan">Negeri Sembilan</option>
-                            <option value="Selangor">Selangor</option>
-                            <option value="WP Kuala Lumpur">WP Kuala Lumpur</option>
-                            <option value="Perak">Perak</option>
-                            <option value="Pulau Pinang">Pulau Pinang</option>
-                            <option value="Kedah">Kedah</option>
-                            <option value="Perlis">Perlis</option>
-                            <option value="Terengganu">Terengganu</option>
-                            <option value="Pahang">Pahang</option>
-                            <option value="Sabah">Sabah</option>
-                            <option value="Sarawak">Sarawak</option>
+                            <option value="Kelantan" style={{ color: 'black' }}>Kelantan</option>
+                            <option value="Johor" style={{ color: 'black' }}>Johor</option>
+                            <option value="Melaka" style={{ color: 'black' }}>Melaka</option>
+                            <option value="Negeri Sembilan" style={{ color: 'black' }}>Negeri Sembilan</option>
+                            <option value="Selangor" style={{ color: 'black' }}>Selangor</option>
+                            <option value="WP Kuala Lumpur" style={{ color: 'black' }}>WP Kuala Lumpur</option>
+                            <option value="Perak" style={{ color: 'black' }}>Perak</option>
+                            <option value="Pulau Pinang" style={{ color: 'black' }}>Pulau Pinang</option>
+                            <option value="Kedah" style={{ color: 'black' }}>Kedah</option>
+                            <option value="Perlis" style={{ color: 'black' }}>Perlis</option>
+                            <option value="Terengganu" style={{ color: 'black' }}>Terengganu</option>
+                            <option value="Pahang" style={{ color: 'black' }}>Pahang</option>
+                            <option value="Sabah" style={{ color: 'black' }}>Sabah</option>
+                            <option value="Sarawak" style={{ color: 'black' }}>Sarawak</option>
                         </select>
                         <label>State : </label>
                     </div>
@@ -521,7 +554,19 @@ const PersonalInfo = ({ formData, setFormData, page, setPage, x, setX }) => {
                     </div>
 
 
-
+                    <button className='previous_button'
+                    // style={{width: '50%'}}
+                onClick={() => {
+                    setPage(0);
+                    setX(-1000);
+                }}
+            >
+                <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        Previous
+            </button>
 
                     <button className="signup_button"
                         // onClick={() => {
@@ -543,6 +588,8 @@ const PersonalInfo = ({ formData, setFormData, page, setPage, x, setX }) => {
                         <span></span>
                         Submit
                     </button>
+
+
                     </div>
                 </div>
             </div>

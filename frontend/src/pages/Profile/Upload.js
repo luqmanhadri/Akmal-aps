@@ -22,8 +22,8 @@ const Upload = ({ setOpen }) => {
   const [videoPerc, setVideoPerc] = useState(0);
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState([]);
-  const [imgUrl1, setImgUrl] = useState("");
-  const [videoUrl1, setVideoUrl] = useState("");
+  // const [imgUrl1, setImgUrl] = useState("");
+  // const [videoUrl1, setVideoUrl] = useState("");
   const [openMB, setOpenMB] = useState(false);
 
   const token = Cookies.get('access_token');
@@ -47,60 +47,104 @@ const Upload = ({ setOpen }) => {
 
   const navigate = useNavigate()
 
-  const uploadFile = (file, urlType) => {
+  // const uploadFile = (file, urlType) => {
+  //   const storage = getStorage(app);
+  //   const fileName = new Date().getTime() + file.name;
+  //   const storageRef = ref(storage, fileName);
+  //   const uploadTask = uploadBytesResumable(storageRef, file);
+
+  //   uploadTask.on(
+  //     "state_changed",
+  //     (snapshot) => {
+  //       const progress =
+  //         (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  //       urlType === "imgUrl" ? setImgPerc(Math.round(progress)) : setVideoPerc(Math.round(progress));
+  //       switch (snapshot.state) {
+  //         case "paused":
+  //           console.log("Upload is paused");
+  //           break;
+  //         case "running":
+  //           console.log("Upload is running");
+  //           break;
+  //         default:
+  //           break;
+  //       }
+  //     },
+  //     (error) => { },
+  //     () => {
+  //       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+  //         // Set the download URL for the image or video based on the 'urlType' argument
+  //         if (urlType === "imgUrl") {
+  //           setImgUrl(downloadURL);
+  //         } else if (urlType === "videoUrl") {
+  //           setVideoUrl(downloadURL);
+  //         }
+  //       });
+  //     }
+  //   );
+  // }
+
+  const uploadFile = async (file) => {
     const storage = getStorage(app);
     const fileName = new Date().getTime() + file.name;
+    // const storageRef = storage.ref(fileName);
     const storageRef = ref(storage, fileName);
+    // const uploadTask = storageRef.put(file);
     const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        urlType === "imgUrl" ? setImgPerc(Math.round(progress)) : setVideoPerc(Math.round(progress));
-        switch (snapshot.state) {
-          case "paused":
-            console.log("Upload is paused");
-            break;
-          case "running":
-            console.log("Upload is running");
-            break;
-          default:
-            break;
-        }
-      },
-      (error) => { },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          // Set the download URL for the image or video based on the 'urlType' argument
-          if (urlType === "imgUrl") {
-            setImgUrl(downloadURL);
-          } else if (urlType === "videoUrl") {
-            setVideoUrl(downloadURL);
-          }
-        });
-      }
-    );
+   
+    return new Promise((resolve, reject) => {
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log("Upload is " + progress + "% done");
+                switch (snapshot.state) {
+                    case "paused":
+                        console.log("Upload is paused");
+                        break;
+                    case "running":
+                        console.log("Upload is running");
+                        break;
+                    default:
+                        break;
+                }
+            },
+            (error) => {
+                reject(error);
+            },
+            // async () => {
+            //     const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+            //     resolve(downloadURL);
+            // }
+            () => {
+                      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                        // setImageUrl(downloadURL);
+                        resolve(downloadURL);
+                      });
+                      
+                    }
+        );
+    });
   }
 
 
-  useEffect(() => {
-    video && uploadFile(video, "videoUrl");
-  }, [video]);
+  // useEffect(() => {
+  //   video && uploadFile(video, "videoUrl");
+  // }, [video]);
 
-  useEffect(() => {
-    img && uploadFile(img, "imgUrl");
-  }, [img]);
+  // useEffect(() => {
+  //   img && uploadFile(img, "imgUrl");
+  // }, [img]);
 
   const handleUpload = async (e) => {
     e.preventDefault();
+    const videoUrl = (video && await uploadFile(video, "videoUrl"));
     const res = 
     await axios.post("http://localhost:3001/videos",
       {
         userId: id,
-         imgUrl : imgUrl1,
-         videoUrl : videoUrl1,
+        //  imgUrl : imgUrl1,
+         videoUrl : videoUrl,
         title: title,
         desc: desc
       })
@@ -138,7 +182,7 @@ const Upload = ({ setOpen }) => {
           onChange={(e) => setDesc(e.target.value)}
         />
 
-        <label className="Label">Image:</label>
+        {/* <label className="Label">Image:</label>
         {imgPerc > 0 ? (
           "Uploading:" + imgPerc + "%"
         ) : (
@@ -147,7 +191,7 @@ const Upload = ({ setOpen }) => {
             accept="image/*"
             onChange={(e) => setImg(e.target.files[0])}
           />
-        )}
+        )} */}
         <button className="Button" onClick={handleUpload}>Upload</button>
       </div>
     </div>

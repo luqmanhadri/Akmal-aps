@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { ToastContainer } from "react-bootstrap";
 import './SignUp.css'
+import { toast } from "react-toastify";
 // import { motion } from "framer-motion";
 
 const SignUp = ({ formData, setFormData, page, setPage, x, setX }) => {
@@ -137,7 +138,9 @@ const SignUp = ({ formData, setFormData, page, setPage, x, setX }) => {
                                 setX(1000);
                                 console.log(formData)
                             } else {
-                                alert("Please fill all the fields")
+                                toast.error("Please fill in all the fields!", 
+                                {position: toast.POSITION.TOP_CENTER});
+                            
                             }
                         }}
                     >
@@ -222,3 +225,4 @@ const SignUp = ({ formData, setFormData, page, setPage, x, setX }) => {
 };
 
 export default SignUp;
+ 

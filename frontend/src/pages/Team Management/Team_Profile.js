@@ -14,7 +14,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import { Avatar, IconButton } from '@mui/material';
-import { Modal, Button } from 'react-bootstrap';
+
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -22,6 +22,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
 
 import {
   MDBCol,
@@ -43,6 +46,14 @@ import {
 import Team_Navbar from './Team_Navbar';
 import badge from '../../images/gold-shield-icon-vector-18193912 (3).png'
 import Add_Team_Achievement from './Add_Team_Achievement';
+import app from '../../firebase/firebase';
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject
+} from "firebase/storage";
 
 
 
@@ -70,6 +81,8 @@ const toggleDialog = () => setShowDialog(!showDialog);
   const path = useLocation().pathname.split("/")[2];
   const token = Cookies.get('access_token');
   const [players, setPlayers] = useState([]);
+  const [logo, setLogo] = useState(teamDetails.logoUrl);
+  const [avatarLogo, setAvatarLogo] = useState(teamDetails.logoUrl);
 
   // if (token) {
   //   const data = JSON.parse(token);
@@ -107,7 +120,66 @@ const toggleDialog = () => setShowDialog(!showDialog);
     
   }, []);
 
-  const athletes = players.filter((player) => player.role === "athlete");
+  const uploadFile = async (file) => {
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + file.name;
+    // const storageRef = storage.ref(fileName);
+    const storageRef = ref(storage, fileName);
+    // const uploadTask = storageRef.put(file);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+   
+    return new Promise((resolve, reject) => {
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log("Upload is " + progress + "% done");
+                switch (snapshot.state) {
+                    case "paused":
+                        console.log("Upload is paused");
+                        break;
+                    case "running":
+                        console.log("Upload is running");
+                        break;
+                    default:
+                        break;
+                }
+            },
+            (error) => {
+                reject(error);
+            },
+            // async () => {
+            //     const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+            //     resolve(downloadURL);
+            // }
+            () => {
+                      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                        // setImageUrl(downloadURL);
+                        resolve(downloadURL);
+                      });
+                      
+                    }
+        );
+    });
+  }
+
+  const deleteFileFromStorage = async (url) => {
+    const storage = getStorage();
+    // const fileName = url.split('/').pop();
+    // console.log(fileName)
+  
+  // Create a reference to the file to delete
+  const desertRef = ref(storage, url);
+  
+  // Delete the file
+  deleteObject(desertRef).then(() => {
+    // File deleted successfully
+  }).catch((error) => {
+    // Uh-oh, an error occurred!
+  });
+  };
+
+  const athletes = players.filter((player) => player.role === "athlete" && player.approved === true);
 
   useEffect(() => {
     const fetchManagerImages = async () => {
@@ -144,6 +216,32 @@ const getCoachImage = async (coachId) => {
   return response.data.imgUrl;
   
 }
+const [openLogo, setOpenLogo] = useState(false);
+const handleOpenLogo = () => setOpenLogo(true);
+  const handleCloseLogo = () => setOpenLogo(false);
+
+  const handleChange = (event) => {
+    setAvatarLogo(URL.createObjectURL(event.target.files[0]));
+  };
+  const handleLogoUpload = async (e) => {
+    e.preventDefault();
+    const previousLogo = teamDetails.logoUrl;
+    
+    const newLogo = await uploadFile(logo, "logoUrl");
+  
+    await axios.put(`http://localhost:3001/team/${path}`,
+      {
+        logoUrl: newLogo,
+        
+      }
+    )
+
+    await deleteFileFromStorage(previousLogo)
+    setOpenLogo(false)
+    window.location.reload()
+  }
+
+
 
   const deleteAchievement = async (achievementId) => {
     await axios.delete(`http://localhost:3001/team/achievement/${path}/${achievementId}`)
@@ -153,6 +251,60 @@ const getCoachImage = async (coachId) => {
   return (
     <div>
       {datatoken && datatoken.sport == path ? (<Team_Navbar />) : (<div></div>)}
+
+      <Modal
+        open={openLogo}
+        onClose={handleCloseLogo}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          padding: '10px',
+          width: 400,
+          background: 'white',
+          border: '2px solid #000',
+          borderRadius: '10px',
+          boxShadow: 24,
+          p: 4,
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+          display: 'flex'
+        }}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Update Team Logo
+          </Typography>
+          <label>
+          <input
+                accept="image/*"
+                id="profilePhoto"
+                type="file"
+                style={{ display: 'none' }}
+              //  value={profileDetails.imgUrl}
+                onChange={(event) => 
+                  {handleChange(event);
+                    setLogo(event.target.files[0])}}
+            />
+          <Avatar 
+          // src={URL.createObjectURL(logo)}
+          src={avatarLogo}
+          style={{height: '100px', width: '100px', marginTop: '10px', cursor: 'pointer'}}/>
+          </label>
+          {}
+          <button className='btn btn-primary mt-4'
+          onClick={handleLogoUpload}
+          >Upload Logo</button>
+        
+          <div>
+         
+          </div>
+        </Box>
+      </Modal>
+
 
       <section style={{ backgroundColor: '#eee' }}>
         <MDBContainer className="py-5">
@@ -179,6 +331,16 @@ const getCoachImage = async (coachId) => {
               }}
               fluid />
             <h1 className='m-5' style={{ fontWeight: 'bold', textTransform: 'uppercase' }}>{teamDetails.name}</h1>
+            <div>
+
+            {datatoken && datatoken.sport === path && (datatoken.role === "coach" || datatoken.role === "manager") ? 
+                        (<>
+                       <button className='btn btn-primary' 
+            style={{ backgroundColor: '#ff2882', border: 'none' }}
+            onClick={handleOpenLogo}>Edit Logo</button></>) : (<></>)}
+
+            
+            </div>
           </div>
 
 
