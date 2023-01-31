@@ -1,10 +1,11 @@
 .videoCard_Container {
-  width: 360px;
+  width: 320px;
   margin-bottom: 45px;
   cursor: pointer;
   display: flex;
   gap: 10px;
-
+  flex-direction: column;
+ 
 }
 
 .videoCard_Image {
@@ -12,14 +13,23 @@
   height: 202px;
   background-color: #999;
   flex: 1;
+  border-radius: 10px
 }
 
-.videoCard_Details {
+/* .videoCard_Details {
   display: flex;
   margin-top: 16px;
   gap: 12px;
   flex: 1;
+} */
+.videoCard_Texts {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+  gap: 12px;
+  flex: 1;
 }
+
 
 .videoCard_ChannelImage {
   width: 36px;
@@ -32,7 +42,7 @@
 
 .videoCard_Title {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 1000;
   /* color: ${({ theme }) => theme.text}; */
 }
 

@@ -50,7 +50,8 @@ function RegisterOthers() {
     email: "",
     imgUrl: "",
     role: "",
-    contact: ""
+    contact: "",
+    store: ""
    
   });
 

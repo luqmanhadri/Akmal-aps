@@ -122,14 +122,7 @@ function Video() {
     navigate(`/profile/${datatoken._id}`)
   }
 
-  // const handleLike = async () => {
-  //   await axios.put(`/account/like/${currentVideo._id}`);
-  //   dispatch(like(currentUser._id));
-  // };
-  // const handleDislike = async () => {
-  //   await axios.put(`/account/dislike/${currentVideo._id}`);
-  //   dispatch(dislike(currentUser._id));
-  // };
+
 
   return (
     <div>
@@ -222,49 +215,39 @@ function Video() {
         <div className='video_content'>
           <div className='video_wrapper'>
             <video className="video_videoFrame" src={video.videoUrl} controls />
+            
           </div>
 
           
 
           <div className='video_details'>
-            <span className='video_info'>
+            {/* <span className='video_info'>
               {video.views} views • {format(video.createdAt)}
-            </span>
-            {/* <div className='video_buttons'>
-            <div className='button' onClick={handleLike}>
-              {video.likes?.includes(currentUser?._id) ? (
-                <ThumbUpIcon />
-              ) : (
-                <ThumbUpOutlinedIcon />
-              )}{" "}
-              {video.likes?.length}
-            </div>
-            <div className='button' onClick={handleDislike}>
-              {video.dislikes?.includes(currentUser?._id) ? (
-                <ThumbDownIcon />
-              ) : (
-                <ThumbDownOffAltOutlinedIcon />
-              )}{" "}
-              Dislike
-            </div>
-            </div> */}
+            </span> */}
 
           </div>
-          <hr className='hr' />
-          <div className='video_channel'>
           <h1 className='video_title'>{video.title}</h1>
-            <div className='video_channelInfo' >
-           
-              <img className="video_image" src={user.imgUrl} />
-              <div className='video_channelDetail' >
-                <span className='video_channelName' >{user.name}</span>
-                <p className='video_description'>{video.desc}</p>
-               
-          <button className="video_buttons btn btn-success"
+          <span className='video_info' style={{marginLeft: '12%'}}>
+               {format(video.createdAt)}
+            </span>
+            
+            <button className="video_buttons btn btn-success"
             onClick={handleOpenEdit}><EditIcon />Edit</button>
           <button className="video_buttons btn btn-danger"
             onClick={handleOpen}><DeleteIcon />Delete</button>
-              </div>
+          <hr className='hr' />
+          <div className='video_channel'>
+            
+            <div className='video_channelInfo' >
+           
+              <img className="video_image" src={user.imgUrl} />
+              <div>
+                <span className='video_channelName' >{user.name}</span>
+                <p className='video_description'>{video.desc}</p>
+                </div>
+               
+          
+             
             </div>
 
           </div>

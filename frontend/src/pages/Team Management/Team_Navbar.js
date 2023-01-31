@@ -10,6 +10,7 @@ function Team_Navbar() {
 
     return (
         <div>
+          
             <Grid container justify="center">
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                     <header className="header">
@@ -20,9 +21,7 @@ function Team_Navbar() {
                         <Link to={`/player_database/${datatoken.sport}`}>
                             <button className='header_button'  ><span className="text">Player Database</span></button>
                         </Link>
-                        <Link to={`/team_sheet/${datatoken.sport}`}>
-                            <button className='header_button' ><span className="text">Team Sheet</span></button>
-                        </Link>
+                       
 
                     </header>
                 </Grid>

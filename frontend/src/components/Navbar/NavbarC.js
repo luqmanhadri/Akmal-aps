@@ -65,7 +65,11 @@ function NavbarC() {
           {datatoken ? (
             <Nav bg="dark">
               <Nav.Link href="/home">Home</Nav.Link>
-              <Nav.Link onClick={() => navigate(`/team/${datatoken.sport}`)}>Team</Nav.Link>
+              {datatoken && (datatoken.role === "athlete" || datatoken.role === "manager"
+              || datatoken.role === "coach") ? 
+              (<Nav.Link onClick={() => navigate(`/team/${datatoken.sport}`)}>Team</Nav.Link>) 
+              : (<></>)}
+              
               <Nav.Link as={Link} to="/booking">Booking</Nav.Link>
               <Nav.Link as={Link} to="/fitness">Fitness</Nav.Link>
               <Nav.Link as={Link} to="/wellness">Wellness</Nav.Link>
