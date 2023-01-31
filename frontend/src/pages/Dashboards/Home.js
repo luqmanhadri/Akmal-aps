@@ -27,6 +27,8 @@ function Home() {
   const [announcement, setAnnouncement] = useState([]);
   const [newAnnouncement, setNewAnnouncement] = useState("");
   const [message, setMessage] = useState("");
+  const [wellness, setwellness] = useState("");
+  const [fitness, setfitness] = useState("");
 
   const token = Cookies.get('access_token');
 
@@ -66,7 +68,10 @@ function Home() {
         const bookingRes = await axios.get(`http://localhost:3001/booking/nearest/${datatoken._id}`);
         setBooking(bookingRes.data)
         console.log("Success")
-       
+        const fitnessGet = await axios.get(`http://localhost:3001/fitness/getfitness/${datatoken._id}`);
+        setfitness(fitnessGet.data)
+        const wellnessGet = await axios.get(`http://localhost:3001/wellness/getmood/${datatoken._id}`);
+        setwellness(wellnessGet.data)
       } catch (err) { }
     };
     fetchData();
@@ -185,7 +190,9 @@ function Home() {
             </div>
             <div className="home-card-body">
               <p className="name" >Your Wellness Status is </p>
-
+              <p>{wellness.wellnessmood}</p>
+              
+              <p>{wellness.injuryInput>0 ? 'Injured' : 'No Injury'}</p>
             </div>
 
 
@@ -199,6 +206,9 @@ function Home() {
             </div>
             <div className="home-card-body">
               <p className="name" >Your Recent Fitness Record :  </p>
+              <p>Activity: {fitness.weeklyactivities}</p>
+              <p>Distance: {fitness.distance} km</p>
+              <p>Exercise Time: {fitness.time}</p>
 
             </div>
 

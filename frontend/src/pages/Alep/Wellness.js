@@ -85,7 +85,7 @@ function Wellness() {
     onSubmit: (data) => {
       axios.post("http://localhost:3001/wellness", data).then((response) => {
         alert(JSON.stringify("Input Data Successfull", null, 2));
-        //postMood()
+        postMood()
       });
     },
   });
@@ -180,22 +180,27 @@ function Wellness() {
     count++;
     return hours;
   });
-  var chartlength=chart.length;
+  var chartlength = chart.length;
 
   function calculateMood() {
+    console.log("Kira")
     if (injuryData > 0) {
       setwellnessmood("Bad");
     }
+    else{
+      setwellnessmood("Good")
+    }
   }
-  postMood();
+  postMood()
   function postMood() {
     const PostMood = {
-      userid: datatoken._id,
+      userId: datatoken._id,
       wellnessmood: wellnessmood,
+      injuryInput:injuryData,
     };
-    console.log(PostMood);
+    //console.log(PostMood);
     axios
-      .post(`http://localhost:3001/wellness/mood/${datatoken._id}`, PostMood)
+      .patch(`http://localhost:3001/wellness/mood/${datatoken._id}`, PostMood)
       .then((response) => {
         // Handle the response
         console.log("Successfull Store Mood to DB");

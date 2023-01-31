@@ -2,7 +2,7 @@ const express = require("express");
 const { db } = require("../models/wellnessData.js");
 const router = express.Router();
 const wellnessDataModel = require("../models/wellnessData.js");
-const WellnessMood = require('../models/wellnessMood.js');
+const WellnessMood = require("../models/wellnessMood.js");
 
 //fetch data
 
@@ -14,17 +14,17 @@ router.get("/", async (req, res, next) => {
 //Call latest data from db
 router.get("/date/:id", async (req, res, next) => {
   const wellDataList = await wellnessDataModel
-    .find({userId :req.params.id})
+    .find({ userId: req.params.id })
     .sort({ createdAt: -1 })
     .limit(1);
   res.json(wellDataList);
 });
- 
+
 //Get Sleep Data
 
 router.get("/sleep/:id", async (req, res, next) => {
   const wellDataList = await wellnessDataModel
-    .find({userId :req.params.id})
+    .find({ userId: req.params.id })
     .sort({ createdAt: -1 })
     .limit(7);
   res.json(wellDataList);
@@ -33,7 +33,7 @@ router.get("/sleep/:id", async (req, res, next) => {
 //Get Check Form Today
 router.get("/form/:id", async (req, res, next) => {
   const wellDataList = await wellnessDataModel
-    .find({userId :req.params.id})
+    .find({ userId: req.params.id })
     .sort({ createdAt: -1 })
     .limit(1);
   res.json(wellDataList);
@@ -48,13 +48,26 @@ router.post("/", async (req, res, next) => {
 
 // post athlete Mood to DB
 
-router.post('/mood/:id', async (req, res) => {
+router.patch("/mood/:id", async (req, res) => {
   try {
-    const newWellnessMood = new WellnessMood(req.body);
-    await newWellnessMood.save();
-    res.json({ message: 'Wellness mood saved successfully' });
+    const newWellnessMood = await WellnessMood.findOneAndUpdate(
+      { userId: req.params.userId },
+      {
+        $set: req.body,
+      },
+      { upsert: true, new: true }
+    );
+    res.json(newWellnessMood);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.json({ message: err.message });
   }
+});
+
+// get mood
+router.get("/getmood/:id", async (req, res, next) => {
+  const newWellnessMood = await WellnessMood.findOne({ userId: req.params.id })
+    .sort({ createdAt: -1 })
+    .limit(1);
+  res.json(newWellnessMood);
 });
 module.exports = router;

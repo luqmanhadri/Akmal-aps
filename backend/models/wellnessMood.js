@@ -12,6 +12,11 @@ const mongoose = require("mongoose")
             required: true,
             
         },
+        injuryInput: {
+            type: Number,
+            required: true,
+            
+        },
 
         
     }, {timestamps: true})

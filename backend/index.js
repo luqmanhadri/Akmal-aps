@@ -1,21 +1,21 @@
-const express = require('express');
-const mongoose = require("mongoose")
-const dotenv = require("dotenv")
+const express = require("express");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 const cors = require("cors");
-const profileRouter = require('./routes/Profile');
-const videoRouter = require('./routes/Video');
-const inventoryRouter = require('./routes/Inventory');
-const eventRouter = require('./routes/Event');
-const wellnessRouter = require('./routes/Wellness');
-const bookingRouter = require('./routes/Booking');
+const profileRouter = require("./routes/Profile");
+const videoRouter = require("./routes/Video");
+const inventoryRouter = require("./routes/Inventory");
+const eventRouter = require("./routes/Event");
+const wellnessRouter = require("./routes/Wellness");
+const bookingRouter = require("./routes/Booking");
 // const commentRouter = require('./routes/Comment');
-const accountRouter = require('./routes/Account');
-const teamRouter = require('./routes/Team');
-const fitnessRouter = require('./routes/Fitness');
-const announcementRouter = require('./routes/Announcement');
-const cookieParser = require("cookie-parser")
+const accountRouter = require("./routes/Account");
+const teamRouter = require("./routes/Team");
+const fitnessRouter = require("./routes/Fitness");
+const announcementRouter = require("./routes/Announcement");
+const cookieParser = require("cookie-parser");
 // const session = require("express-session")
-const fitnessRouter = require('./routes/Fitness');
+//const fitnessRouter = require("./routes/Fitness");
 
 const app = express();
 dotenv.config();
@@ -40,20 +40,22 @@ app.use(express.json());
 // app.use(express.json({ limit: '10mb' }));
 
 const connect = () => {
-    mongoose.connect(process.env.MONGO).then(() => {
-        console.log("Connected to MongoDB")
+  mongoose
+    .connect(process.env.MONGO)
+    .then(() => {
+      console.log("Connected to MongoDB");
     })
     .catch((err) => {
-        throw err;
+      throw err;
     });
-}
+};
 
-app.use(cors(
-  {
+app.use(
+  cors({
     // credentials: true,
-    origin: 'http://localhost:3000'
-}
-));
+    origin: "http://localhost:3000",
+  })
+);
 app.use("/profile", profileRouter);
 app.use("/videos", videoRouter);
 // app.use("/comment", commentRouter);
@@ -65,8 +67,6 @@ app.use("/wellness", wellnessRouter);
 app.use("/booking", bookingRouter);
 app.use("/team", teamRouter);
 app.use("/fitness", fitnessRouter);
-
-
 
 // const connect = async () => {
 //     try {
@@ -96,10 +96,9 @@ app.use("/fitness", fitnessRouter);
 
 // const db = require('./models');
 
-
 app.listen(process.env.APP_PORT, () => {
-    connect()
-    console.log("Server running on port 3001");
+  connect();
+  console.log("Server running on port 3001");
 });
 
 // db.sequelize.sync().then(()=>{
@@ -110,4 +109,3 @@ app.listen(process.env.APP_PORT, () => {
 // });
 
 // });
-

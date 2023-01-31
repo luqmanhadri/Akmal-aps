@@ -14,8 +14,8 @@ const stravaTokenSchema = require("../models/stravaToken.js");
 //   });
 // }
 
-router.get("/getfitness", async (req, res, next) => {
-  clientid = req.body.id;
+router.get("/getfitness/:id", async (req, res, next) => {
+  clientid = req.params.id;
   const fitnessData = await FitnessSchema.findOne({ clientid })
     .sort({ createdAt: -1 })
     .limit(1);
@@ -83,13 +83,13 @@ router.patch("/patchdata/:id", async (req, res, next) => {
   // }
 });
 
-router.post("/token", async (req, res, next) => {
+router.patch("/token", async (req, res, next) => {
   const userid = req.body.userid;
   const token = req.body.accessToken;
   const refresh = req.body.refreshToken;
   const expired = req.body.expires_at;
-  const stravaToken = await stravaTokenSchema
-    .findByIdAndUpdate(
+  try {
+    const stravaToken = await stravaTokenSchema.findByIdAndUpdate(
       userid,
       {
         $set: {
@@ -100,19 +100,17 @@ router.post("/token", async (req, res, next) => {
         },
       },
       {
-        upsert: true,
+        upsert: true, new: true
       }
-    )
-    .then((result) => {
-      res.status(201).json(stravaToken);
-    })
-    .catch((err) => {
-      next(err);
-    });
+    );
+    res.status(201).json(stravaToken);
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.get("/get/:id", async (req, res, next) => {
-  clientid = req.body.id;
+  clientid = req.params.id;
   const stravaToken = await stravaTokenSchema
     .findOne({ userid: clientid })
     .sort({ createdAt: -1 })

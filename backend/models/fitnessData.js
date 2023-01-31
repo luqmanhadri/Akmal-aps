@@ -14,6 +14,14 @@ const FitnessSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    distance: {
+      type: String,
+      required: true,
+    },
+    time: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
