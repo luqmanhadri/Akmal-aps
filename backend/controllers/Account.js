@@ -45,6 +45,27 @@ const updateAccount = async (req,res,next) =>{
     
 }
 
+const updatePassword = async(req,res,next) => {
+  try {
+      const salt = bcrypt.genSaltSync(10);
+      const hash = bcrypt.hashSync(req.body.password, salt);
+      req.body.password = hash;
+      const updatedUser = await Account.findOneAndUpdate(
+        {email : req.params.email},
+        {
+          $set: req.body,
+        },
+        { new: true }
+      );
+      res.json(updatedUser);
+  
+    } catch (err) {
+      next(err);
+    }
+  
+}
+
+
 const approveUser = async (req, res, next) => {
   try {
     const userId = req.params.id;
@@ -75,6 +96,16 @@ const deleteAccount = async (req, res, next) => {
     next(err);
   }
   
+};
+
+const getAccountFP = async (req, res, next) => {
+  const email = req.params.email
+  try {
+    const user = await Account.findOne({email});
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
 };
 
 const getAccount = async (req, res, next) => {
@@ -141,7 +172,7 @@ const getAccountStorekeepers = async (req, res, next) => {
 const randomAccount = async (req, res, next) => {
   try {
     const profile = await Account.aggregate([
-      { $match: { role: 'Athlete' } },
+      { $match: { role: 'athlete' } },
       { $sample: { size: 12 } }]);
     res.json(profile);
   } catch (err) {
@@ -312,5 +343,5 @@ const signin = async (req, res, next) => {
 module.exports = {createAccount, updateAccount, deleteAccount, getAccount, randomAccount, signin, 
 createAchievement, deleteAchievement,  searchAccount, getAccountCoaches,
 getAccountManagers, getAccountStorekeepers, createComment, deleteComment, getAccountBySport, 
-approveUser, randomAccountHome, getAccountUnapproved}
+approveUser, randomAccountHome, getAccountUnapproved, getAccountFP, updatePassword}
 

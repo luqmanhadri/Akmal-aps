@@ -18,16 +18,20 @@ import { Grid } from '@mui/material';
 import axios from 'axios';
 import {toast} from 'react-toastify';
 
+
 const ItemCard = ({ item, startDate, endDate, endTime, startTime }) => {
     const token = Cookies.get('access_token');
 
     const datatoken = JSON.parse(token)
     const user_id = datatoken._id
+    const approved = datatoken.approved
+    console.log(approved)
     const [quantity, setQuantity] = useState(0);
 
     const handleAddToCart = (quantity, item, user_id, startDate, endDate, endTime, startTime) => {
         // Get the current cart items from local storage
         let cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+        
         // Get the item amount
         const itemAmount = item.item_amount;
         // Check if the item is already in the cart
@@ -168,10 +172,18 @@ const ItemCard = ({ item, startDate, endDate, endTime, startTime }) => {
 
                                                         <button className='btn btn-primary'
                                                             onClick={() => {
+
+                                                                if (datatoken.approved === false) {
+                                                                    toast.error("You are not approved yet to make a booking. For account approval, please contact administrator!", 
+                                                                    {position: toast.POSITION.TOP_CENTER});
+                                                                    return;
+                                                                }
+                                                                
                                                                 if (!quantity || !startDate || !endDate || !startTime || !endTime) {
                                                                     toast.error("Please fill all fields", {position: toast.POSITION.TOP_CENTER});
                                                                     return;
                                                                 }
+                                                                
                                                                 handleAddToCart(quantity, item, user_id, 
                                                                     startDate, endDate, startTime, endTime)
                                                                

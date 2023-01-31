@@ -18,27 +18,47 @@ const addVideo = async (req, res, next) => {
   }
 };
 
-const updateVideo = async (req, res, next) => {
-  try {
-    const video = await Video.findById(req.params.id);
-    if (!video) return next(res.json("Video not found!"));
-    if (req.user.id === video.userId) {
-      const updatedVideo = await Video.findByIdAndUpdate(
-        req.params.id,
-        {
-          $set: req.body,
-        },
-        { new: true }
-      );
-      res.json(updatedVideo);
-    } else {
-      return next(res.json("You can update only your video!"));
-    }
-  } catch (err) {
-    next(err);
-  }
-};
+// const updateVideo = async (req, res, next) => {
+//   try {
+//     const video = await Video.findById(req.params.id);
+//     if (!video) return next(res.json("Video not found!"));
+//     if (req.user.id === video.userId) {
+//       const updatedVideo = await Video.findByIdAndUpdate(
+//         req.params.id,
+//         {
+//           $set: req.body,
+//         },
+//         { new: true }
+//       );
+//       res.json(updatedVideo);
+//     } else {
+//       return next(res.json("You can update only your video!"));
+//     }
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
+const updateVideo = async (req,res,next) =>{
+  // if (req.params.id === req.user.id) {
+      try {
+        const updatedVideo = await Video.findByIdAndUpdate(
+          req.params.id,
+          {
+            $set: req.body,
+          },
+          { new: true }
+        );
+        res.json(updatedVideo);
+      } catch (err) {
+        next(err);
+      }
+    // } 
+    // else {
+    //   return next(res.json("You can update only your account!"));
+    // }
+  
+}
 const deleteVideo = async (req, res, next) => {
   try {
     // const video = await Video.findById(req.params.id);

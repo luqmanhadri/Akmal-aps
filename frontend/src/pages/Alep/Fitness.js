@@ -118,7 +118,8 @@ getTokenfromDB();
 
 function getTokenfromDB() {
   axios
-    .get(`http://localhost:3001/fitness/get/${datatoken._id}`)
+    // .get(`http://localhost:3001/fitness/get/${datatoken._id}`)
+    .get("http://localhost:3001/fitness/get/${datatoken._id}")
     .then((response) => {
       // Get the refreshToken, accessToken, and expires_at values from the response data
       //const { refreshToken, accessToken, expires_at } = response.data;

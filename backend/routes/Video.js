@@ -9,7 +9,7 @@ router.post("/",
 addVideo)
 
 //update video
-router.put("/:id", verifyToken, updateVideo)
+router.put("/:id", updateVideo)
 
 //delete video
 router.delete("/:id", deleteVideo);

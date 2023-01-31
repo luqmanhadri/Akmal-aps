@@ -32,17 +32,17 @@ function Home() {
 
   if (token) {
     const data = JSON.parse(token);
-    console.log(data);
+    // console.log(data);
   } else {
     console.log("Failed")
   }
 
-  
+
   let datatoken
-  
+
   if (token && typeof token !== 'undefined') {
     datatoken = JSON.parse(token);
-    console.log(datatoken._id)
+    // console.log(datatoken._id)
     // use datatoken here
   }
   // useEffect(() => {
@@ -65,8 +65,8 @@ function Home() {
         setProfileDetails(accountRes.data);
         const bookingRes = await axios.get(`http://localhost:3001/booking/nearest/${datatoken._id}`);
         setBooking(bookingRes.data)
-        console.log("Success")
-       
+        // console.log("Success")
+        console.log(booking)
       } catch (err) { }
     };
     fetchData();
@@ -111,27 +111,28 @@ function Home() {
         <Grid item xs={12} xl={6} sm={6} >
           <div className="home-card">
             <div className="home-card-header">
-              <img src={datatoken.imgUrl ? 
-                datatoken.imgUrl : 
-                'https://resources.premierleague.com/premierleague/photos/players/250x250/Photo-Missing.png'} 
-                 className="profile-img" />
+              <img src={datatoken.imgUrl ?
+                datatoken.imgUrl :
+                'https://resources.premierleague.com/premierleague/photos/players/250x250/Photo-Missing.png'}
+                className="profile-img" />
             </div>
             <div className="home-card-body">
               <p className="name" onClick={() => navigate(`/profile/${datatoken._id}`)}>{datatoken.username}</p>
 
-              <p >Name : {datatoken.name}</p>
-              <p >Sport : {datatoken.sport}</p>
-              <p >Age : {datatoken.age}</p>
-              <p >Height : {datatoken.height}</p>
-              <p >Email : {datatoken.contact}</p>
-              <p >Birthday : {datatoken.birthday}</p>
+              <p >Name : {profileDetails.name}</p>
+              <p >Sport : {profileDetails.sport}</p>
+              <p >Age : {profileDetails.age}</p>
+              <p >Height : {profileDetails.height}</p>
+              <p >Email : {profileDetails.email}</p>
+              <p >Contact : {profileDetails.contact}</p>
+              <p >Birthday : {profileDetails.birthday}</p>
             </div>
 
 
 
           </div>
         </Grid>
-{/* <Grid item xs={12} xl={6} sm={6} >
+        {/* <Grid item xs={12} xl={6} sm={6} >
 <div className="profile-home-container">
           <span className="pro">PRO</span>
           <img className="round" src={datatoken.imgUrl ? datatoken.imgUrl : 'https://resources.premierleague.com/premierleague/photos/players/250x250/Photo-Missing.png'} alt="user" />
@@ -157,8 +158,8 @@ function Home() {
               <h1>Bookings</h1>
             </div>
             <div className="home-card-body">
-             
-             {booking ? 
+
+              {/* {booking !== [] && booking !== "undefined" && booking !== "" && booking !== Array(0) ? 
              (<div>
              <p className="name" >Nearest Booking Details</p>
              <p>Item : {booking.item_name}</p>
@@ -170,7 +171,22 @@ function Home() {
              <p>End Time : {booking.endTime}</p>
              </div> )
              :(<p className="name" >No Bookings As Of Now</p>)}
-              
+               */}
+
+              {booking.length > 0 ? (
+                <div>
+                  <p className="name">Nearest Booking Details</p>
+                  <p>Item : {booking.item_name}</p>
+                  <p>Amount : {booking.item_amount}</p>
+                  <p>Store : {booking.store}</p>
+                  <p>Start Date : {booking.startDate}</p>
+                  <p>Start Time : {booking.startTime}</p>
+                  <p>End Date : {booking.startDate}</p>
+                  <p>End Time : {booking.endTime}</p>
+                </div>
+              ) : (
+                <p className="name">No Bookings As Of Now</p>
+              )}
 
             </div>
 
@@ -209,7 +225,7 @@ function Home() {
 
       </Grid>
 
-    
+
     </div>
   )
 }
