@@ -39,6 +39,8 @@ import BookingStatus from './pages/Booking/BookingStatus';
 import 'react-toastify/dist/ReactToastify.css'
 import Create_Announcement from './pages/Dashboards/Create_Announcement';
 import Forgot_Password from './pages/Authentication/Forgot_Password';
+import Create_Team from './pages/Dashboards/Create_Team';
+import Register_Admin from './pages/Dashboards/Register_Admin';
 
 function App() {
   // const client = new QueryClient();
@@ -88,6 +90,9 @@ function App() {
             <Route path="announcement" element={< Create_Announcement/>} />
             <Route path="forgotpassword" element={< Forgot_Password/>} />
             <Route path="wellness/:id" element={< Forgot_Password/>} />
+            <Route path="createteam" element={< Create_Team/>} />
+            <Route path="registeradmin" element={< Register_Admin/>} />
+            
           </Route>
         </Routes>
     </Router>

@@ -9,6 +9,12 @@
 
 
 .video_title {
+ 
+  font-size: 25px;
+  font-weight: 600;
+  margin-top: 1%;
+  margin-left: 12%;
+  
   margin: 50px auto 0; 
   font-size: 20px;
   font-weight: 400;
@@ -30,37 +36,27 @@
 } */
 
 .video_buttons {
-  display: flex;
+
   gap: 10px;
   margin: 5px;
   /* color: ${({ theme }) => theme.text}; */
 }
 
-.video_button {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  cursor: pointer;
-}
-
-/* const Hr = styled.hr`
-  margin: 15px 0px;
-  border: 0.5px solid ${({ theme }) => theme.soft};
-`; */
-
 .video_channel {
   display: flex;
-  justify-content: space-between;
+
 }
 
 .video_channelInfo {
   display: flex;
+  /* flex-direction: column; */
   gap: 20px;
+  margin-left: 12%;
 }
 
 .video_image {
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
 }
 
@@ -72,6 +68,7 @@
 
 .video_channelName {
   font-weight: 500;
+  font-size: 18px;
 }
 
 .video_channelCounter {
@@ -82,7 +79,8 @@
 }
 
 .video_description {
-  font-size: 14px;
+  font-size: 16px;
+  margin-top: 5px;
 }
 
 .video_subscribe {
@@ -97,13 +95,15 @@
 }
 
 .video_videoFrame {
-  margin: 50px auto 0; 
+  margin: 50px auto 0;
   margin-top: 50px;
-  max-height: 1080px;
-  width: 70%;
+  /* max-height: 1080px; */
+  width: 75%;
   height: 700px;
+  height: 100%;
   object-fit: cover;
   justify-content: center;
   display: flex;
   border-radius: 10px;
 }
+

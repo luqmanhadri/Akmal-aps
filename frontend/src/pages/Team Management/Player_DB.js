@@ -13,6 +13,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Team_Navbar from './Team_Navbar';
 import { Avatar, IconButton } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 function Player_DB() {
 
@@ -53,11 +54,11 @@ function Player_DB() {
             <TableRow style={{ backgroundColor: '#37003c' }}>
             <TableCell style={{ color: 'white' }}></TableCell>
               <TableCell style={{ color: 'white' }} align="left">Name</TableCell>
-              <TableCell align="left" style={{ color: 'white' }}>Position</TableCell>
+              <TableCell align="left" style={{ color: 'white' }}>State</TableCell>
               <TableCell align="left" style={{ color: 'white' }}>Age</TableCell>
-              <TableCell align="left" style={{ color: 'white' }}>Username</TableCell>
-              <TableCell align="left" style={{ color: 'white' }}>Wellness</TableCell>
-              <TableCell align="left" style={{ color: 'white' }}>Fitness</TableCell>
+              <TableCell align="center" style={{ color: 'white' }}>Username</TableCell>
+              <TableCell align="center" style={{ color: 'white' }}>Wellness</TableCell>
+              <TableCell align="center" style={{ color: 'white' }}>Fitness</TableCell>
               {/* <TableCell align="right">Protein&nbsp;(g)</TableCell> */}
             </TableRow>
           </TableHead>
@@ -78,11 +79,16 @@ function Player_DB() {
                 <TableCell component="th" scope="row" align="left">
                   {player.name}
                 </TableCell>
-                <TableCell align="left">{player.position}</TableCell>
+                <TableCell align="left">{player.state}</TableCell>
                 <TableCell align="left">{player.age}</TableCell>
-                <TableCell align="left">{player.username}</TableCell>
-                <TableCell align="left">{wellness.wellnessmood}</TableCell>
-                <TableCell align="left">{fitness.weeklyactivities}</TableCell>
+                <TableCell align="center">{player.username}</TableCell>
+                <TableCell align="center">
+                  <button 
+                  onClick={() => navigate(`/wellness/${player._id}`)}
+                  className='btn btn-primary'><VisibilityIcon/>See Wellness Record</button></TableCell>
+                <TableCell align="center"><button 
+                  onClick={() => navigate(`/fitness/${player._id}`)}
+                  className='btn btn-primary'><VisibilityIcon/>See Fitness Record</button></TableCell>
                 {/* <TableCell align="right">{row.protein}</TableCell> */}
               </TableRow>
             ))}

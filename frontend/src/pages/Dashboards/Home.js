@@ -77,37 +77,6 @@ function Home() {
     fetchData();
   }, [datatoken._id]);
 
-  // if(token) {
-  //   console.log(token)
-  // } else {
-  //   console.log("No token")
-  // }
-
-
-
-  // const addAnnouncement = async () => {
-  //   await axios.post("http://localhost:3001/announcement",
-  //     {
-  //       announcementBody: newAnnouncement
-  //       // , ProfileId: _id
-  //     }
-  //     , { withCredentials: true }
-
-  //   )
-  //     .then((response) => {
-  //       if (response.data.error) {
-  //         console.log(response.data.error);
-  //       } else {
-  //         const announcementToAdd = {
-  //           announcementBody: newAnnouncement,
-  //           // username: response.data.username,
-  //         };
-  //         setAnnouncement([...announcement, announcementToAdd]);
-  //         setNewAnnouncement("");
-  //       }
-  //     });
-  // };
-
 
   return (
     <div>
@@ -125,58 +94,41 @@ function Home() {
               <p className="name" onClick={() => navigate(`/profile/${datatoken._id}`)}>{datatoken.username}</p>
 
               <p >Name : {profileDetails.name}</p>
-              <p >Sport : {profileDetails.sport}</p>
-              <p >Age : {profileDetails.age}</p>
-              <p >Height : {profileDetails.height}</p>
+              <p >Role : {profileDetails.role}</p>
+              {datatoken && (datatoken.role === "admin" 
+              || datatoken.role === "storekeeper") ? (<></>) : 
+              (<><p >Sport : {profileDetails.sport}</p>
+              <p >Age : {profileDetails.age}</p></>) }
+              
+              
+              {datatoken.role !== "athlete" ? (<>
+              </>) : (<>
+                <p >Height : {profileDetails.height}</p>
+              <p >Weight : {profileDetails.weight}</p>
+              <p >Birthday : {profileDetails.birthday}</p></>)}
+              
               <p >Email : {profileDetails.email}</p>
               <p >Contact : {profileDetails.contact}</p>
-              <p >Birthday : {profileDetails.birthday}</p>
+              
             </div>
 
 
 
           </div>
         </Grid>
-        {/* <Grid item xs={12} xl={6} sm={6} >
-<div className="profile-home-container">
-          <span className="pro">PRO</span>
-          <img className="round" src={datatoken.imgUrl ? datatoken.imgUrl : 'https://resources.premierleague.com/premierleague/photos/players/250x250/Photo-Missing.png'} alt="user" />
-          <h3>Ricky Park</h3>
-          <h6>New York</h6>
-          <p>User interface designer and <br /> front-end developer</p>
-          <div className="buttons">
-            <button className="primary">
-              Message
-            </button>
-            <button className="primary ghost">
-              Following
-            </button>
-          </div>
-          
-        </div>
-        </Grid> */}
+       
 
-
-        <Grid item xs={12} xl={6} sm={6}>
+{datatoken && (datatoken.role === "admin" 
+              || datatoken.role === "storekeeper") ? (<></>) 
+              : (<>
+              <Grid item xs={12} xl={6} sm={6}>
           <div className="home-card">
             <div className="home-card-header">
               <h1>Bookings</h1>
             </div>
             <div className="home-card-body">
 
-              {/* {booking !== [] && booking !== "undefined" && booking !== "" && booking !== Array(0) ? 
-             (<div>
-             <p className="name" >Nearest Booking Details</p>
-             <p>Item : {booking.item_name}</p>
-             <p>Amount : {booking.item_amount}</p>
-             <p>Store : {booking.store}</p>
-             <p>Start Date : {booking.startDate}</p>
-             <p>Start Time : {booking.startTime}</p>
-             <p>End Date : {booking.startDate}</p>
-             <p>End Time : {booking.endTime}</p>
-             </div> )
-             :(<p className="name" >No Bookings As Of Now</p>)}
-               */}
+           
 
               {booking.length > 0 ? (
                 <div>
@@ -197,8 +149,11 @@ function Home() {
 
 
           </div>
-        </Grid>
+        </Grid></>) }
+        
 
+        {datatoken && datatoken.role !== "athlete" ? (<></>) : 
+        (<>
         <Grid item xs={12} xl={6} sm={6}>
           <div className="home-card">
             <div className="home-card-header">
@@ -231,6 +186,10 @@ function Home() {
 
           </div>
         </Grid>
+        </>) }
+        
+
+        
 
 
       </Grid>

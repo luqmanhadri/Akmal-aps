@@ -19,7 +19,7 @@ function Add_Team_Achievement({ setOpen }) {
                 achievement: achievement,
                 year : selectedYear
             })
-
+        window.location.reload()
         setOpen(false)
 
     }

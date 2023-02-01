@@ -65,12 +65,15 @@ function NavbarC() {
           {datatoken ? (
             <Nav bg="dark">
               <Nav.Link href="/home">Home</Nav.Link>
-              <Nav.Link onClick={() => navigate(`/team/${datatoken.sport}`)}>Team</Nav.Link>
+              {datatoken && (datatoken.role === "athlete" || datatoken.role === "manager" || datatoken.role === "coach") && datatoken.approved === true ? 
+              (<Nav.Link onClick={() => navigate(`/team/${datatoken.sport}`)}>Team</Nav.Link>) 
+              : (<></>)}
+              
               <Nav.Link as={Link} to="/booking">Booking</Nav.Link>
               <Nav.Link as={Link} to="/fitness">Fitness</Nav.Link>
               <Nav.Link as={Link} to="/wellness">Wellness</Nav.Link>
 
-              {datatoken && datatoken.role === "storekeeper" ? 
+              {datatoken && (datatoken.role === "storekeeper" && datatoken.approve === true || datatoken.role === "admin" ) ? 
               ( <Nav.Link className="navbarcollapse" 
               as={Link} to="/inventory">Storekeeper Dashboard</Nav.Link>) 
               : (<></>)}

@@ -46,6 +46,15 @@ const getTeam = async (req, res, next) => {
   }
 };
 
+const getAllTeams = async (req, res, next) => {
+  try {
+    const team = await Team.find();
+    res.json(team);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const randomTeam = async (req, res, next) => {
   try {
     const teams = await Team.aggregate([
@@ -60,7 +69,7 @@ const randomTeamHome = async (req, res, next) => {
   try {
     const team = await Team.aggregate([
       
-      { $sample: { size: 2 } }]);
+      { $sample: { size: 4 } }]);
     res.json(team);
   } catch (err) {
     next(err);
@@ -133,23 +142,36 @@ const deleteAchievement = async (req, res, next) => {
   }
 };
 
-// const createSheet = async (req, res, next) => {
-//   const teamId = req.params.id;
-//   const players= req.body.players
-//   try {
-//     await Team.findByIdAndUpdate(teamId, {
-//       $push: { 
-//         // players:
-//         // players
-//         players: { $each: players } 
-//       },
-//     });
-//   } catch (err) {
-//     next(err);
-//   }
-// const team = new Team()
-// await team.save()
-// }
+const deleteManager = async (req, res, next) => {
+  const teamname = req.params.name;
+  const managerid = req.params.managerid;
+  
+  try {
+    // Find the user by their name and update the comment field to remove the comment with the specified commentId
+    await Team.findOneAndUpdate({name: teamname}, 
+      { $pull: { manager: {_id: managerid} } });
+
+    return res.json("Manager deleted");
+  } catch (err) {
+    return res.json("Manager can't be deleted")
+  }
+};
+
+const deleteCoach = async (req, res, next) => {
+  const teamname = req.params.name;
+  const coachid = req.params.coachid;
+  
+  try {
+    // Find the user by their name and update the comment field to remove the comment with the specified commentId
+    await Team.findOneAndUpdate({name: teamname}, 
+      { $pull: { coach: {_id: coachid} } });
+
+    return res.json("Coach deleted");
+  } catch (err) {
+    return res.json("Coach can't be deleted")
+  }
+};
+
 
 const createSheet = async (req, res, next) => {
   const teamName = req.params.name;
@@ -169,4 +191,5 @@ const createSheet = async (req, res, next) => {
   
 
 module.exports = {createTeam, updateTeam, getTeam, createAchievement, randomTeam, 
-  createSheet, addManager, addCoach, deleteAchievement, randomTeamHome}
+  createSheet, addManager, addCoach, deleteAchievement, randomTeamHome, getAllTeams,
+deleteManager, deleteCoach}

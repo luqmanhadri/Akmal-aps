@@ -225,12 +225,19 @@ function Video() {
         <div className="video_content">
           <div className="video_wrapper">
             <video className="video_videoFrame" src={video.videoUrl} controls />
+            
           </div>
 
           {/* <div className='video_details'>
             <span className='video_info'>
             <h1 className='video_title'>{video.title}</h1>
               {video.views} views • {format(video.createdAt)}
+            </span> */}
+
+          </div>
+          <h1 className='video_title'>{video.title}</h1>
+          <span className='video_info' style={{marginLeft: '12%'}}>
+               {format(video.createdAt)}
             </span>
             {/* <div className='video_buttons'>
             <div className='button' onClick={handleLike}>

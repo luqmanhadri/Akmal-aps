@@ -21,6 +21,7 @@ function Add_Achievement({ setOpenAchievement }) {
             })
 
         setOpenAchievement(false)
+        window.location.reload()
 
     }
 

@@ -169,11 +169,21 @@ const getAccountStorekeepers = async (req, res, next) => {
   }
 };
 
+// const randomAccount = async (req, res, next) => {
+//   try {
+//     const profile = await Account.aggregate([
+//       { $match: { role: 'athlete' } },
+//       { $sample: { size: 12 } }]);
+//     res.json(profile);
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+
 const randomAccount = async (req, res, next) => {
   try {
-    const profile = await Account.aggregate([
-      { $match: { role: 'athlete' } },
-      { $sample: { size: 12 } }]);
+    const profile = await Account.find(
+      {role: 'athlete', approved: true});
     res.json(profile);
   } catch (err) {
     next(err);
@@ -183,7 +193,7 @@ const randomAccount = async (req, res, next) => {
 const randomAccountHome = async (req, res, next) => {
   try {
     const profile = await Account.aggregate([
-      { $match: { role: 'Athlete' } },
+      { $match: { role: 'athlete', approved: true } },
       { $sample: { size: 4 } }]);
     res.json(profile);
   } catch (err) {

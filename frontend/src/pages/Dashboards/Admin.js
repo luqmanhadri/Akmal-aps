@@ -98,7 +98,14 @@ function Admin() {
                             <button className='header_button' >
                                 <span className="text">Announcement</span></button>
                         </Link>
-
+                        <Link to="/createteam">
+                            <button className='header_button' >
+                                <span className="text">Create Team</span></button>
+                        </Link>
+                        <Link to="/registeradmin">
+                            <button className='header_button' >
+                                <span className="text">Register Admin</span></button>
+                        </Link>
 
                     </header>
                 </Grid>
@@ -107,13 +114,14 @@ function Admin() {
       <div>
         
         <h1 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '5px' }}>New User Requests</h1>
+        <label>Role :</label>
         <select placeholder='Select store'
           // value={selectedStore}
 
           className="auth_input"
           onChange={handleChange}
         >
-          <option value="">Select Role</option>
+          <option value="">All</option>
           <option value="athlete">Athlete</option>
           <option value="coach">Coach</option>
           <option value="manager">Manager</option>
@@ -135,9 +143,12 @@ function Admin() {
                     <MDBCardText>Username : {value.username}</MDBCardText>
                     <MDBCardText>Name : {value.name}</MDBCardText>
                     <MDBCardText>Age : {value.age}</MDBCardText>
-                    <MDBCardText>Birthday : {value.birthday}</MDBCardText>
-                    <MDBCardText>Height : {value.height}</MDBCardText>
+                    
+                    {value.role !== "athlete" ? 
+                    (<></>) : (<> <MDBCardText>Height : {value.height}</MDBCardText>
                     <MDBCardText>Weight : {value.weight}</MDBCardText>
+                    <MDBCardText>Birthday : {value.birthday}</MDBCardText></>)}
+                   
                     <MDBCardText>Email : {value.email}</MDBCardText>
                     <MDBCardText>Contact : {value.contact}</MDBCardText>
                     <MDBCardText>Gender : {value.gender}</MDBCardText>
