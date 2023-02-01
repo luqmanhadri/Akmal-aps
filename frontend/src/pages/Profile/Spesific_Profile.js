@@ -32,6 +32,7 @@ import {
   MDBListGroupItem,
   MDBCardHeader
 } from 'mdb-react-ui-kit';
+import { toast } from 'react-toastify';
 
 function Spesific_Profile() {
 
