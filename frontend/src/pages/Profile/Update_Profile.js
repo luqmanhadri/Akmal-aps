@@ -54,13 +54,15 @@ const Update_Profile = () => {
   const [age, setAge] = useState(profileDetails.age);
   const [birthday, setBirthday] = useState(profileDetails.birthday);
   const [height, setHeight] = useState(profileDetails.height);
-  const [sport, setSport] = useState(profileDetails.sport);
+  // const [sport, setSport] = useState(profileDetails.sport);
   const [email, setEmail] = useState(profileDetails.email);
   const [weight, setWeight] = useState(profileDetails.weight);
   const [state, setState] = useState(profileDetails.state);
   const [gender, setGender] = useState(profileDetails.gender);
   const [contact, setContact] = useState(profileDetails.contact);
   
+  const [sportDropdown, setSportDropdown] = useState([]);
+
   const [image, setImage] = useState(undefined);
   
 
@@ -86,29 +88,38 @@ const Update_Profile = () => {
 
   
   const [imageUrl, setImageUrl] = useState("");
-
+  const [sports, setSports] = useState(profileDetails.sport);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const accountRes = 
-        await axios.get(`http://localhost:3001/account/find/${datatoken._id}`);
+        const accountRes =
+          await axios.get(`http://localhost:3001/account/find/${datatoken._id}`);
+        const sportsData = await axios.get('http://localhost:3001/team/all');
 
+        // setSports(sports.data);
+        
         setProfileDetails(accountRes.data);
         setImageUrl(accountRes.data.imgUrl);
+        setSportDropdown(Array.from(new Set(sportsData.data.map(sport => sport.name))))
+        // setSports(accountRes.data.sport);
 
 
       } catch (err) { }
     }
-    fetchData();
+    fetchData( [datatoken._id]);
   })
+
+  
 
   const handleChange = (event) => {
     setImageUrl(URL.createObjectURL(event.target.files[0]));
     
     console.log(imageUrl)
   };
- 
+
+  
+
 
   const uploadFile = async (file) => {
     const storage = getStorage(app);
@@ -185,7 +196,7 @@ const Update_Profile = () => {
         birthday: birthday,
         height: height,
         weight: weight,
-        sport: sport,
+        sport: sports,
         email: email,
         state: state,
         gender: gender,
@@ -324,12 +335,22 @@ const Update_Profile = () => {
 
        
                 <div className="user-box">
-                    <input className='signup_input'
-                        type="text"
-                        defaultValue={profileDetails.sport}
-                        onChange={(e) => setSport(e.target.value )}
-                    />
-                    <label>Sport : </label>
+                 
+                  <select placeholder='Select store'
+                 
+                  
+                    // defaultValue={sports || profileDetails.sport}
+                  // defaultValue={profileDetails.sport}
+                   value={sports || profileDetails.sport}
+                    className="signup_input"
+                    onChange={(e) =>
+                      setSports(e.target.value)}>
+                      {sportDropdown.map(sport => (
+        <option key={sport} value={sport}>{sport}</option>
+      ))}
+              
+                  </select>
+                  <label>Sport : </label>
                 </div>
          
 

@@ -11,7 +11,7 @@ import { userRequest } from '../../requestMethod';
 import { publicRequest } from '../../requestMethod';
 import { Grid } from '@mui/material';
 import AnnouncementSlider from './AnnouncementSlider';
-import {MDBCard,MDBCardBody,MDBCardImage,MDBCardLink} from 'mdb-react-ui-kit';
+import { MDBCard, MDBCardBody, MDBCardImage, MDBCardLink } from 'mdb-react-ui-kit';
 // import Slider from "react-slick";
 
 
@@ -24,15 +24,6 @@ function Landing() {
   const [listofProfiles, setListofProfiles] = useState([]);
   const [listofTeams, setListofTeams] = useState([]);
 
-  // useEffect( () => {
-  //     axios.get("http://localhost:3001/announcement").then((response) => {
-  //         setAnnouncements(response.data);
-  //       });
-
-  //       axios.get("http://localhost:3001/account/random").then((response) => {
-  //         setListofProfiles(response.data);
-  // });
-  // }, []);
 
   useEffect(() => {
     const getAnnouncement = async () => {
@@ -43,8 +34,8 @@ function Landing() {
           setListofProfiles(response.data);
         });
         axios.get("http://localhost:3001/team/randomhome").then((response) => {
-      setListofTeams(response.data);
-    });
+          setListofTeams(response.data);
+        });
         setAnnouncements(res.data);
       } catch { }
     };
@@ -67,20 +58,20 @@ function Landing() {
 
         </Grid>
 
-       
-          {/* <h1> Meet Our Athletes! </h1> */}
-          
-          {listofProfiles.map((value, key) => {
-              return (
-                // <Row xl={12} style={{marginLeft: '2px'}}>
-                <Grid item xs={12} lg={3}>
+
+        {/* <h1> Meet Our Athletes! </h1> */}
+
+        {listofProfiles.map((value, key) => {
+          return (
+            // <Row xl={12} style={{marginLeft: '2px'}}>
+            <Grid item xs={12} lg={3}>
               <div className="profile-card-container" key={key}>
                 <div className="card" onClick={() => navigate(`/profile/${value._id}`)}>
                   <div className="imgBx">
-                    <img src={value.imgUrl ? value.imgUrl : 
+                    <img src={value.imgUrl ? value.imgUrl :
                       //'https://flaticons.net/icon.php?slug_category=application&slug_icon=user-profile'
                       'https://resources.premierleague.com/premierleague/photos/players/250x250/Photo-Missing.png'
-                    } 
+                    }
                       alt="" />
                   </div>
                   <div className="contentBx">
@@ -101,43 +92,44 @@ function Landing() {
               </div>
 
 
-           
-              </Grid>
-              )
-            })}
-             
 
-
-             {listofTeams.length > 0 && listofTeams
-      
-      .map((team,key )=> (
-         <Grid item xl={3} sm={6} xs={12} key={key}>
-
-            <MDBCard className="m-2 card-hover">
-              <MDBCardBody className="text-center">
-                <MDBCardImage
-                  src={team.logoUrl}
-                  alt="avatar"
-                  className="rounded-circle mt-4 mb-4"
-                  style={{ width: '150px', height: '150px' }}
-                  fluid />
-                <p className="text-muted mb-4">{team.name}</p>
-                <MDBCardLink onClick={() => navigate(`/team/${team.name}`)} 
-                style={{ cursor: 'pointer', ':hover': { cursor: 'pointer' } }}
-                >View Profile</MDBCardLink>
-                
-              </MDBCardBody>
-            </MDBCard>
-
-         </Grid>
-      ))}
             </Grid>
+          )
+        })}
 
-       
+
+
+        {listofTeams.length > 0 && listofTeams
+
+          .map((team, key) => (
+
+            <Grid item xl={3} sm={6} xs={12} key={key}>
+
+              <MDBCard className="m-2 card-hover">
+                <MDBCardBody className="text-center">
+                  <MDBCardImage
+                    src={team.logoUrl}
+                    alt="avatar"
+                    className="rounded-circle mt-4 mb-4"
+                    style={{ width: '150px', height: '150px' }}
+                    fluid />
+                  <p className="text-muted mb-4">{team.name}</p>
+                  <MDBCardLink onClick={() => navigate(`/team/${team.name}`)}
+                    style={{ cursor: 'pointer', ':hover': { cursor: 'pointer' } }}
+                  >View Profile</MDBCardLink>
+
+                </MDBCardBody>
+              </MDBCard>
+
+            </Grid>
+          ))}
+      </Grid>
 
 
 
-      
+
+
+
 
 
 
