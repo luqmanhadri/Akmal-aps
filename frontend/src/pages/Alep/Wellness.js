@@ -326,14 +326,14 @@ function Wellness() {
                       ) : (
                         <span class="fw-bold">not</span>
                       )}{" "}
-                      submit wellness form today. Check your new badge in your
+                      submit wellness form today. Check your
                       profile.
                     </p>
                     <Link
                       to={`/profile/${datatoken._id}`}
                       className="btn btn-sm btn-outline-primary"
                     >
-                      View Badges
+                      View Profile
                     </Link>
                   </div>
                 </div>

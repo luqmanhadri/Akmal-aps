@@ -275,8 +275,8 @@ function Fitness() {
       id: datatoken._id,
       athleteName: athleteFirstname,
       weeklyactivities: weekActivityCount,
-      distance:(Math.round(totalDistance / 10) / 100),
-      time:`${totalExcerciseTime}h ${minutes}m`,
+      distance: Math.round(totalDistance / 10) / 100,
+      time: `${totalExcerciseTime}h ${minutes}m`,
     };
     console.log(fitnessData);
     try {
@@ -491,12 +491,12 @@ function Fitness() {
                         </p>
                         <div className="row">
                           <div className="col-md-4">
-                          <button
+                            <button
                               href={`/profile/${datatoken._id}`}
                               class="btn btn-sm btn-outline-primary"
                             >
                               View Profile
-                              </button>
+                            </button>
                           </div>
                           <div className="col-md-3">
                             <button
@@ -829,7 +829,7 @@ function Fitness() {
                               <i class="fab fa-angular fa-lg text-danger me-3"></i>{" "}
                               <strong>1</strong>
                             </td>
-                            <td>Albert Cook</td>
+                            <td>Muhammad Arsyad</td>
                             <td>188.9 km</td>
                           </tr>
                           <tr>
@@ -837,24 +837,24 @@ function Fitness() {
                               <i class="fab fa-react fa-lg text-info me-3"></i>{" "}
                               <strong>2</strong>
                             </td>
-                            <td>Barry Hunter</td>
-                            <td>182.1 km</td>
+                            <td>Afiq Aiman Shuhaimi</td>
+                            <td>7 km</td>
                           </tr>
                           <tr>
                             <td>
                               <i class="fab fa-vuejs fa-lg text-success me-3"></i>{" "}
                               <strong>3</strong>
                             </td>
-                            <td>Trevor Baker</td>
-                            <td>172.9 km</td>
+                            <td>Haadif</td>
+                            <td>5 km</td>
                           </tr>
                           <tr>
                             <td>
                               <i class="fab fa-bootstrap fa-lg text-primary me-3"></i>{" "}
                               <strong>4</strong>
                             </td>
-                            <td>Jerry Milton</td>
-                            <td>157.8 km</td>
+                            <td>Faris Haikal</td>
+                            <td>0 km</td>
                           </tr>
                         </tbody>
                       </table>

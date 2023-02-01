@@ -14,7 +14,6 @@ const teamRouter = require("./routes/Team");
 const fitnessRouter = require("./routes/Fitness");
 const announcementRouter = require("./routes/Announcement");
 const cookieParser = require("cookie-parser");
-const path = require("path");
 // const session = require("express-session")
 //const fitnessRouter = require("./routes/Fitness");
 
@@ -51,7 +50,6 @@ const connect = () => {
     });
 };
 
-app.use(express.static(path.join(__dirname, "client/build")))
 app.use(
   cors({
     // credentials: true,
