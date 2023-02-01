@@ -102,6 +102,10 @@ function Admin() {
                             <button className='header_button' >
                                 <span className="text">Create Team</span></button>
                         </Link>
+                        <Link to="/registeradmin">
+                            <button className='header_button' >
+                                <span className="text">Register Admin</span></button>
+                        </Link>
 
                     </header>
                 </Grid>

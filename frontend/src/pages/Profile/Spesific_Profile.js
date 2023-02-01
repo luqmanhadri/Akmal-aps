@@ -14,6 +14,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton } from '@mui/material';
 import { Modal, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
+import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
 import {
   MDBCol,
   MDBContainer,
@@ -80,6 +82,7 @@ function Spesific_Profile() {
 
   const deleteAchievement = async (achievementId) => {
     await axios.delete(`http://localhost:3001/account/achievement/${path}/${achievementId}`)
+    window.location.reload()
   }
 
 
@@ -111,22 +114,31 @@ function Spesific_Profile() {
       <h1 style={{ fontWeight: 'bold', textAlign: 'center', marginTop: '10px' }}
       >Profile</h1>
       <MDBContainer className="py-3">
+        {datatoken && datatoken.role === "athlete" ? 
+        (<>
         <MDBRow>
           <MDBCol>
-            <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4">
-              
-              <MDBBreadcrumbItem active>Fitness</MDBBreadcrumbItem>
+            <MDBBreadcrumb className="rounded-3 p-3 mb-4" 
+            onClick={() => navigate(`/fitness/${datatoken._id}`)} 
+            style={{ background: 'linear-gradient(270deg,#963cff,#37003c)', color: 'white' }}>
+              <MonitorHeartIcon/>
+              <MDBBreadcrumbItem active  
+              style={{ color: 'white', marginLeft: '10px' }}>Fitness</MDBBreadcrumbItem>
             </MDBBreadcrumb>
           </MDBCol>
 
 
           <MDBCol>
-            <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4">
-             
-              <MDBBreadcrumbItem active>Wellness</MDBBreadcrumbItem>
+            <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4"
+            onClick={() => navigate(`/wellness/${datatoken._id}`)} 
+            style={{ background: 'linear-gradient(270deg,#963cff,#37003c)', color: 'white' }}>
+            
+            <SelfImprovementIcon/>
+              <MDBBreadcrumbItem active style={{ color: 'white', marginLeft: '10px' }}>Wellness</MDBBreadcrumbItem>
             </MDBBreadcrumb>
           </MDBCol>
-        </MDBRow>
+        </MDBRow></>) : (<></>)}
+        
 
         <MDBRow>
           <MDBCol lg="4">
@@ -144,7 +156,10 @@ function Spesific_Profile() {
                   className="mt-4"
                   style={{ width: '210px', height: '210px', border: '2px solid white', borderRadius: '10%', backgroundColor: 'white' }}
                   fluid />
-                <MDBRow style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {datatoken && (datatoken.role === "storekeeper" 
+                  || datatoken.role === "admin") ? (<></>) 
+                  : (<>
+                  <MDBRow style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <img style={{
                     height: '60px', width: '120px',
                     marginTop: '15px', marginBottom: '6px'
@@ -178,7 +193,8 @@ function Spesific_Profile() {
                                               : profileDetails.state === "Selangor" ?
                                                 "https://www.flagcolorcodes.com/data/Flag-of-Selangor.png"
                                                 : <></>} />
-                </MDBRow>
+                </MDBRow></>)}
+                
                 <MDBCardText className="mb-1 mt-3"
                   style={{ color: 'white' }}>@{profileDetails.username}</MDBCardText>
                 <MDBCardText className="mb-4" style={{ color: 'white' }}>{profileDetails.role}</MDBCardText>
@@ -202,47 +218,49 @@ function Spesific_Profile() {
                 </div>
               </MDBCardBody>
             </MDBCard>
+{datatoken && (datatoken.role === "storekeeper" || datatoken.role === "admin") ? 
+(<></>) : (<> <MDBCard className="mb-4 mb-lg-0">
+<MDBCardBody className="p-0">
+  <MDBListGroup flush className="rounded-3">
+    <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3"
+      style={{ background: 'linear-gradient(270deg,#963cff,#37003c)' }}>
+      <MDBCardText style={{ color: 'white' }}>Achievements</MDBCardText>
+      {datatoken && datatoken._id === path ? (
+        <button className='btn btn-primary update_button'
+          onClick={() => {
+            if (datatoken.approved === false) {
+              toast.error("You are not authorized yet to edit your achievements. Please contact the administrator!", {
+                position: toast.POSITION.TOP_CENTER,
+              });
+              return;
+            }
+            setOpenAchievement(true)
+          }}> Add Achievements </button>
+      ) : (
+        <div></div>
+      )}
+    </MDBListGroupItem>
+    {achievements.map((achievement) => {
+      return (
+        // <li key={achievement._id}>
+        //   {achievement.year}: {achievement.achievement}
 
-            <MDBCard className="mb-4 mb-lg-0">
-              <MDBCardBody className="p-0">
-                <MDBListGroup flush className="rounded-3">
-                  <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3"
-                    style={{ background: 'linear-gradient(270deg,#963cff,#37003c)' }}>
-                    <MDBCardText style={{ color: 'white' }}>Achievements</MDBCardText>
-                    {datatoken && datatoken._id === path ? (
-                      <button className='btn btn-primary update_button'
-                        onClick={() => {
-                          if (datatoken.approved === false) {
-                            toast.error("You are not authorized yet to edit your achievements. Please contact the administrator!", {
-                              position: toast.POSITION.TOP_CENTER,
-                            });
-                            return;
-                          }
-                          setOpenAchievement(true)
-                        }}> Add Achievements </button>
-                    ) : (
-                      <div></div>
-                    )}
-                  </MDBListGroupItem>
-                  {achievements.map((achievement) => {
-                    return (
-                      // <li key={achievement._id}>
-                      //   {achievement.year}: {achievement.achievement}
+        //   <IconButton><EditIcon/></IconButton>
+        //   <IconButton onClick={() => deleteAchievement(achievement._id)}><DeleteIcon/></IconButton>
+        // </li>
+        <MDBListGroupItem key={achievement._id} className="d-flex justify-content-between align-items-center p-3">
+          <MDBCardText>{achievement.year}: {achievement.achievement}</MDBCardText>
+          <DeleteIcon onClick={() => deleteAchievement(achievement._id)}></DeleteIcon>
+        </MDBListGroupItem>
 
-                      //   <IconButton><EditIcon/></IconButton>
-                      //   <IconButton onClick={() => deleteAchievement(achievement._id)}><DeleteIcon/></IconButton>
-                      // </li>
-                      <MDBListGroupItem key={achievement._id} className="d-flex justify-content-between align-items-center p-3">
-                        <MDBCardText>{achievement.year}: {achievement.achievement}</MDBCardText>
-                      </MDBListGroupItem>
-
-                    );
-                  })}
+      );
+    })}
 
 
-                </MDBListGroup>
-              </MDBCardBody>
-            </MDBCard>
+  </MDBListGroup>
+</MDBCardBody>
+</MDBCard></>)}
+           
 
           </MDBCol>
           <MDBCol lg="8">

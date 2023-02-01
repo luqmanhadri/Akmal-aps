@@ -90,8 +90,11 @@ function Home() {
 
               <p >Name : {profileDetails.name}</p>
               <p >Role : {profileDetails.role}</p>
-              <p >Sport : {profileDetails.sport}</p>
-              <p >Age : {profileDetails.age}</p>
+              {datatoken && (datatoken.role === "admin" 
+              || datatoken.role === "storekeeper") ? (<></>) : 
+              (<><p >Sport : {profileDetails.sport}</p>
+              <p >Age : {profileDetails.age}</p></>) }
+              
               
               {datatoken.role !== "athlete" ? (<>
               </>) : (<>
@@ -108,46 +111,19 @@ function Home() {
 
           </div>
         </Grid>
-        {/* <Grid item xs={12} xl={6} sm={6} >
-<div className="profile-home-container">
-          <span className="pro">PRO</span>
-          <img className="round" src={datatoken.imgUrl ? datatoken.imgUrl : 'https://resources.premierleague.com/premierleague/photos/players/250x250/Photo-Missing.png'} alt="user" />
-          <h3>Ricky Park</h3>
-          <h6>New York</h6>
-          <p>User interface designer and <br /> front-end developer</p>
-          <div className="buttons">
-            <button className="primary">
-              Message
-            </button>
-            <button className="primary ghost">
-              Following
-            </button>
-          </div>
-          
-        </div>
-        </Grid> */}
+       
 
-
-        <Grid item xs={12} xl={6} sm={6}>
+{datatoken && (datatoken.role === "admin" 
+              || datatoken.role === "storekeeper") ? (<></>) 
+              : (<>
+              <Grid item xs={12} xl={6} sm={6}>
           <div className="home-card">
             <div className="home-card-header">
               <h1>Bookings</h1>
             </div>
             <div className="home-card-body">
 
-              {/* {booking !== [] && booking !== "undefined" && booking !== "" && booking !== Array(0) ? 
-             (<div>
-             <p className="name" >Nearest Booking Details</p>
-             <p>Item : {booking.item_name}</p>
-             <p>Amount : {booking.item_amount}</p>
-             <p>Store : {booking.store}</p>
-             <p>Start Date : {booking.startDate}</p>
-             <p>Start Time : {booking.startTime}</p>
-             <p>End Date : {booking.startDate}</p>
-             <p>End Time : {booking.endTime}</p>
-             </div> )
-             :(<p className="name" >No Bookings As Of Now</p>)}
-               */}
+           
 
               {booking.length > 0 ? (
                 <div>
@@ -168,8 +144,11 @@ function Home() {
 
 
           </div>
-        </Grid>
+        </Grid></>) }
+        
 
+        {datatoken && datatoken.role !== "athlete" ? (<></>) : 
+        (<>
         <Grid item xs={12} xl={6} sm={6}>
           <div className="home-card">
             <div className="home-card-header">
@@ -197,6 +176,10 @@ function Home() {
 
           </div>
         </Grid>
+        </>) }
+        
+
+        
 
 
       </Grid>

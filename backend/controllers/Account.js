@@ -193,7 +193,7 @@ const randomAccount = async (req, res, next) => {
 const randomAccountHome = async (req, res, next) => {
   try {
     const profile = await Account.aggregate([
-      { $match: { role: 'Athlete' } },
+      { $match: { role: 'athlete', approved: true } },
       { $sample: { size: 4 } }]);
     res.json(profile);
   } catch (err) {

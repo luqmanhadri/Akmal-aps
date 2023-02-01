@@ -69,7 +69,7 @@ const randomTeamHome = async (req, res, next) => {
   try {
     const team = await Team.aggregate([
       
-      { $sample: { size: 2 } }]);
+      { $sample: { size: 4 } }]);
     res.json(team);
   } catch (err) {
     next(err);

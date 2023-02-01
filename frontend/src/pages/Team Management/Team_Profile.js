@@ -245,6 +245,7 @@ function Team_Profile() {
 
   const deleteAchievement = async (achievementId) => {
     await axios.delete(`http://localhost:3001/team/achievement/${path}/${achievementId}`)
+    window.location.reload()
   }
 
 

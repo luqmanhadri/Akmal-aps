@@ -48,7 +48,7 @@ function Search_Team() {
         <input
           className='profile_searchbar'
           // className='search_bbar'
-          placeholder='Enter team name / sport'
+          placeholder='Enter team name'
           type="text"
           // onChange={handleSearchInput}
           onChange={(e) => setFilteredTeams(e.target.value)}
@@ -77,7 +77,7 @@ function Search_Team() {
                 <p className="text-muted mb-4">{team.name}</p>
                 <MDBCardLink onClick={() => navigate(`/team/${team.name}`)} 
                 style={{ cursor: 'pointer', ':hover': { cursor: 'pointer' } }}
-                >View Profile</MDBCardLink>
+                >View Team</MDBCardLink>
                 
               </MDBCardBody>
             </MDBCard>
