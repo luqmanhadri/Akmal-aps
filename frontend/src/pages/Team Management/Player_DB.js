@@ -18,12 +18,18 @@ function Player_DB() {
 
   const path = useLocation().pathname.split("/")[2];
   const [players, setPlayers] = useState([]);
+  const [wellness, setwellness] = useState("");
+  const [fitness, setfitness] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const players = await axios.get(`http://localhost:3001/account/sport/${path}`);
         setPlayers(players.data);
+        const fitnessGet = await axios.get(`http://localhost:3001/fitness/getfitness/${datatoken._id}`);
+        setfitness(fitnessGet.data)
+        const wellnessGet = await axios.get(`http://localhost:3001/wellness/getmood/${datatoken._id}`);
+        setwellness(wellnessGet.data)
       } catch (err) { }
     };
     fetchData();
@@ -75,8 +81,8 @@ function Player_DB() {
                 <TableCell align="left">{player.position}</TableCell>
                 <TableCell align="left">{player.age}</TableCell>
                 <TableCell align="left">{player.username}</TableCell>
-                <TableCell align="left">Wellness</TableCell>
-                <TableCell align="left">Fitness</TableCell>
+                <TableCell align="left">{wellness.wellnessmood}</TableCell>
+                <TableCell align="left">{fitness.weeklyactivities}</TableCell>
                 {/* <TableCell align="right">{row.protein}</TableCell> */}
               </TableRow>
             ))}

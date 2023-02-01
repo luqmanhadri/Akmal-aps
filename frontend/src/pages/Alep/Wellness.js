@@ -85,6 +85,7 @@ function Wellness() {
     onSubmit: (data) => {
       axios.post("http://localhost:3001/wellness", data).then((response) => {
         alert(JSON.stringify("Input Data Successfull", null, 2));
+        window.location.reload(false)
         postMood()
       });
     },
