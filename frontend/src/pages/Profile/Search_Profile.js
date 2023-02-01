@@ -52,22 +52,6 @@ function Search_Profile() {
   let navigate = useNavigate();
  
 
-  // useEffect(() => {
-  //   axios.get("http://localhost:3001/account/random").then((response) => {
-  //     // retrieve sport name data from other table
-  //     axios.get(`http://localhost:3001/team/find/${datatoken.sport}`).then((sport) => {
-  //       // create new object with sport field mapped to the corresponding name
-  //       const mappedData = response.data.map(profile => {
-  //         return {
-  //           ...profile,
-  //           sport: sport.data.name
-  //         }
-  //       });
-  //       setListofProfiles(mappedData);
-  //     });
-  //   });
-  // }, []);
-
   useEffect(() => {
     axios.get("http://localhost:3001/account/random").then((response) => {
       // retrieve sport name data from other table

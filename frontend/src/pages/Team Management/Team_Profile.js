@@ -72,8 +72,8 @@ function Team_Profile() {
   const [coachImages, setCoachImages] = useState({});
   const { currentUser } = useSelector((state) => state.user);
   const [showDialog, setShowDialog] = useState(false);
-const toggleDialog = () => setShowDialog(!showDialog);
-  
+  const toggleDialog = () => setShowDialog(!showDialog);
+
   const dispatch = useDispatch();
   let navigate = useNavigate();
 
@@ -102,7 +102,7 @@ const toggleDialog = () => setShowDialog(!showDialog);
 
   useEffect(() => {
     const fetchData = async () => {
-      
+
       try {
         const teamRes = await axios.get(`http://localhost:3001/team/find/${path}`);
         setTeamDetails(teamRes.data);
@@ -112,12 +112,12 @@ const toggleDialog = () => setShowDialog(!showDialog);
         setManager(teamRes.data.manager)
         setCoach(teamRes.data.coach)
         console.log(teamRes.data)
-        
+
       } catch (err) { }
     };
 
     fetchData();
-    
+
   }, []);
 
   const uploadFile = async (file) => {
@@ -127,39 +127,39 @@ const toggleDialog = () => setShowDialog(!showDialog);
     const storageRef = ref(storage, fileName);
     // const uploadTask = storageRef.put(file);
     const uploadTask = uploadBytesResumable(storageRef, file);
-   
+
     return new Promise((resolve, reject) => {
-        uploadTask.on(
-            "state_changed",
-            (snapshot) => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log("Upload is " + progress + "% done");
-                switch (snapshot.state) {
-                    case "paused":
-                        console.log("Upload is paused");
-                        break;
-                    case "running":
-                        console.log("Upload is running");
-                        break;
-                    default:
-                        break;
-                }
-            },
-            (error) => {
-                reject(error);
-            },
-            // async () => {
-            //     const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-            //     resolve(downloadURL);
-            // }
-            () => {
-                      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                        // setImageUrl(downloadURL);
-                        resolve(downloadURL);
-                      });
-                      
-                    }
-        );
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+            default:
+              break;
+          }
+        },
+        (error) => {
+          reject(error);
+        },
+        // async () => {
+        //     const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+        //     resolve(downloadURL);
+        // }
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            // setImageUrl(downloadURL);
+            resolve(downloadURL);
+          });
+
+        }
+      );
     });
   }
 
@@ -167,57 +167,57 @@ const toggleDialog = () => setShowDialog(!showDialog);
     const storage = getStorage();
     // const fileName = url.split('/').pop();
     // console.log(fileName)
-  
-  // Create a reference to the file to delete
-  const desertRef = ref(storage, url);
-  
-  // Delete the file
-  deleteObject(desertRef).then(() => {
-    // File deleted successfully
-  }).catch((error) => {
-    // Uh-oh, an error occurred!
-  });
+
+    // Create a reference to the file to delete
+    const desertRef = ref(storage, url);
+
+    // Delete the file
+    deleteObject(desertRef).then(() => {
+      // File deleted successfully
+    }).catch((error) => {
+      // Uh-oh, an error occurred!
+    });
   };
 
   const athletes = players.filter((player) => player.role === "athlete" && player.approved === true);
 
   useEffect(() => {
     const fetchManagerImages = async () => {
-        manager.forEach(async (manager) => {
-            const image = await getManagerImage(manager.id);
-            setManagerImages(prevImages => ({ ...prevImages, [manager.id]: image }));
-        });
+      manager.forEach(async (manager) => {
+        const image = await getManagerImage(manager.id);
+        setManagerImages(prevImages => ({ ...prevImages, [manager.id]: image }));
+      });
     };
     fetchManagerImages();
-}, [manager]);
+  }, [manager]);
 
- 
+
 
   const getManagerImage = async (managerId) => {
     const response = await axios.get(`http://localhost:3001/account/find/${managerId}`);
     console.log(response.data.imgUrl)
     return response.data.imgUrl;
-    
+
   }
 
   useEffect(() => {
     const fetchCoachImages = async () => {
-        coach.forEach(async (coach) => {
-            const image = await getCoachImage(coach.id);
-            setCoachImages(prevImages => ({ ...prevImages, [coach.id]: image }));
-        });
+      coach.forEach(async (coach) => {
+        const image = await getCoachImage(coach.id);
+        setCoachImages(prevImages => ({ ...prevImages, [coach.id]: image }));
+      });
     };
     fetchCoachImages();
-}, [coach]);
+  }, [coach]);
 
-const getCoachImage = async (coachId) => {
-  const response = await axios.get(`http://localhost:3001/account/find/${coachId}`);
-  console.log(response.data.imgUrl)
-  return response.data.imgUrl;
-  
-}
-const [openLogo, setOpenLogo] = useState(false);
-const handleOpenLogo = () => setOpenLogo(true);
+  const getCoachImage = async (coachId) => {
+    const response = await axios.get(`http://localhost:3001/account/find/${coachId}`);
+    console.log(response.data.imgUrl)
+    return response.data.imgUrl;
+
+  }
+  const [openLogo, setOpenLogo] = useState(false);
+  const handleOpenLogo = () => setOpenLogo(true);
   const handleCloseLogo = () => setOpenLogo(false);
 
   const handleChange = (event) => {
@@ -226,13 +226,13 @@ const handleOpenLogo = () => setOpenLogo(true);
   const handleLogoUpload = async (e) => {
     e.preventDefault();
     const previousLogo = teamDetails.logoUrl;
-    
+
     const newLogo = await uploadFile(logo, "logoUrl");
-  
+
     await axios.put(`http://localhost:3001/team/${path}`,
       {
         logoUrl: newLogo,
-        
+
       }
     )
 
@@ -250,8 +250,9 @@ const handleOpenLogo = () => setOpenLogo(true);
 
   return (
     <div>
-      {datatoken && datatoken.sport == path ? (<Team_Navbar />) : (<div></div>)}
 
+      {datatoken && (datatoken.role === "coach" || datatoken.role === "manager")
+        && datatoken.sport === path && datatoken.approve === true ? (<Team_Navbar />) : (<></>)}
       <Modal
         open={openLogo}
         onClose={handleCloseLogo}
@@ -279,28 +280,29 @@ const handleOpenLogo = () => setOpenLogo(true);
             Update Team Logo
           </Typography>
           <label>
-          <input
-                accept="image/*"
-                id="profilePhoto"
-                type="file"
-                style={{ display: 'none' }}
+            <input
+              accept="image/*"
+              id="profilePhoto"
+              type="file"
+              style={{ display: 'none' }}
               //  value={profileDetails.imgUrl}
-                onChange={(event) => 
-                  {handleChange(event);
-                    setLogo(event.target.files[0])}}
+              onChange={(event) => {
+                handleChange(event);
+                setLogo(event.target.files[0])
+              }}
             />
-          <Avatar 
-          // src={URL.createObjectURL(logo)}
-          src={avatarLogo}
-          style={{height: '100px', width: '100px', marginTop: '10px', cursor: 'pointer'}}/>
+            <Avatar
+              // src={URL.createObjectURL(logo)}
+              src={avatarLogo}
+              style={{ height: '100px', width: '100px', marginTop: '10px', cursor: 'pointer' }} />
           </label>
-          {}
+
           <button className='btn btn-primary mt-4'
-          onClick={handleLogoUpload}
+            onClick={handleLogoUpload}
           >Upload Logo</button>
-        
+
           <div>
-         
+
           </div>
         </Box>
       </Modal>
@@ -333,13 +335,17 @@ const handleOpenLogo = () => setOpenLogo(true);
             <h1 className='m-5' style={{ fontWeight: 'bold', textTransform: 'uppercase' }}>{teamDetails.name}</h1>
             <div>
 
-            {datatoken && datatoken.sport === path && (datatoken.role === "coach" || datatoken.role === "manager") ? 
-                        (<>
-                       <button className='btn btn-primary' 
-            style={{ backgroundColor: '#ff2882', border: 'none' }}
-            onClick={handleOpenLogo}>Edit Logo</button></>) : (<></>)}
+              {datatoken
+                && (datatoken.role === "coach" && datatoken.sport === path
+                  || datatoken.role === "manager" && datatoken.sport === path
+                  || datatoken.role === "admin")
+                && datatoken.approved === true ?
+                (<>
+                  <button className='btn btn-primary'
+                    style={{ backgroundColor: '#ff2882', border: 'none' }}
+                    onClick={handleOpenLogo}>Edit Logo</button></>) : (<></>)}
 
-            
+
             </div>
           </div>
 
@@ -352,51 +358,21 @@ const handleOpenLogo = () => setOpenLogo(true);
                   <MDBListGroup flush className="rounded-3" >
                     <MDBListGroupItem className="d-flex justify-content-between align-items-center" style={{ backgroundColor: '#37003c' }}>
                       <MDBCardText style={{ color: 'white' }}>Details</MDBCardText>
-                      {/* {datatoken && datatoken.sport === path ? (
-                        <button className='btn btn-primary update_button'
-                          onClick={() => setOpen(true)}
-                          style={{ backgroundColor: '#ff2882', border: 'none' }}
-                        > Edit </button>
-                      ) : (
-                        <div></div>
-                      )} */}
 
-                    
+
+
                     </MDBListGroupItem>
 
                     {manager.map((manager) => {
-                      
-                      // const managerImage = getManagerImage(manager.id);
 
-                      // const [managerImage, setManagerImage] = useState('');
-
-                      // useEffect(() => {
-                      //   getManagerImage(manager.id).then(imgUrl => setManagerImage(imgUrl));
-                      // }, [manager.id]);
                       return (
                         <MDBListGroupItem key={manager.id} className="d-flex justify-content-between align-items-center">
                           <MDBCol>
-                          <Avatar src={managerImages[manager.id]} 
-                          style={{height : '100px', width : '100px'}}/>
+                            <Avatar src={managerImages[manager.id]}
+                              style={{ height: '100px', width: '100px' }} />
                           </MDBCol>
                           <MDBCol>
-                          <MDBCardText >Manager : {manager.name}</MDBCardText>
-                          </MDBCol>
-
-                        </MDBListGroupItem>
-
-
-                      );
-                    })} 
-
-                    {coach.map((coach) => {
-                      return (
-                        <MDBListGroupItem key={coach.id} className="d-flex justify-content-between align-items-center">
-                          <MDBCol>
-                          <Avatar src={coachImages[coach.id]} style={{height : '100px', width : '100px'}}/>
-                          </MDBCol>
-                          <MDBCol>
-                          <MDBCardText >Coach : {coach.name ? coach.name : "TBA"}</MDBCardText>
+                            <MDBCardText >Manager : {manager.name}</MDBCardText>
                           </MDBCol>
 
                         </MDBListGroupItem>
@@ -404,7 +380,23 @@ const handleOpenLogo = () => setOpenLogo(true);
 
                       );
                     })}
-                   
+
+                    {coach.map((coach) => {
+                      return (
+                        <MDBListGroupItem key={coach.id} className="d-flex justify-content-between align-items-center">
+                          <MDBCol>
+                            <Avatar src={coachImages[coach.id]} style={{ height: '100px', width: '100px' }} />
+                          </MDBCol>
+                          <MDBCol>
+                            <MDBCardText >Coach : {coach.name ? coach.name : "TBA"}</MDBCardText>
+                          </MDBCol>
+
+                        </MDBListGroupItem>
+
+
+                      );
+                    })}
+
 
 
                   </MDBListGroup>
@@ -427,11 +419,15 @@ const handleOpenLogo = () => setOpenLogo(true);
                 <MDBListGroup>
                   <MDBListGroupItem className="d-flex justify-content-between align-items-center" style={{ backgroundColor: '#37003c' }}>
                     <MDBCardText style={{ color: 'white' }}
-                    onClick={() => setOpen(true)}>Team Achievements</MDBCardText>
-                    {datatoken && datatoken.sport === path && (datatoken.role === "coach" ||datatoken.role === "manager") ? (
-                      <button className='btn btn-primary update_button' 
-                      onClick={() => setOpen(true)}
-                      style={{ backgroundColor: '#ff2882', border: 'none' }}> Add Achievements </button>
+                      onClick={() => setOpen(true)}>Team Achievements</MDBCardText>
+                    {datatoken
+                      && (datatoken.role === "coach" && datatoken.sport === path
+                        || datatoken.role === "manager" && datatoken.sport === path
+                        || datatoken.role === "admin")
+                      && datatoken.approved === true ? (
+                      <button className='btn btn-primary update_button'
+                        onClick={() => setOpen(true)}
+                        style={{ backgroundColor: '#ff2882', border: 'none' }}> Add Achievements </button>
                     ) : (
                       <div></div>
                     )}
@@ -448,16 +444,20 @@ const handleOpenLogo = () => setOpenLogo(true);
                         (<>
                         <IconButton onClick={() => editAchievement(achievement._id)}><EditIcon/></IconButton></>) : (<></>)} */}
 
-                        {datatoken && datatoken.sport === path && (datatoken.role === "coach" || datatoken.role === "manager") ? 
-                        (<>
-                        <IconButton 
-                        // onClick={() => deleteAchievement(achievement._id)}
-                        >
-                          <DeleteIcon/></IconButton></>) : (<></>)}
-                        
-                        
+                        {datatoken
+                          && (datatoken.role === "coach" && datatoken.sport === path
+                            || datatoken.role === "manager" && datatoken.sport === path
+                            || datatoken.role === "admin")
+                          && datatoken.approved === true ?
+                          (<>
+                            <IconButton
+                            onClick={() => deleteAchievement(achievement._id)}
+                            >
+                              <DeleteIcon /></IconButton></>) : (<></>)}
+
+
                       </MDBListGroupItem>
-   
+
 
                     );
                   })}
@@ -470,7 +470,7 @@ const handleOpenLogo = () => setOpenLogo(true);
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                   <TableHead>
                     <TableRow style={{ backgroundColor: '#37003c' }}>
-                    <TableCell style={{ color: 'white' }}></TableCell>
+                      <TableCell style={{ color: 'white' }}></TableCell>
                       <TableCell style={{ color: 'white' }}>Name</TableCell>
                       <TableCell style={{ color: 'white' }} align="right">State</TableCell>
                       <TableCell style={{ color: 'white' }} align="right">Age</TableCell>
@@ -484,16 +484,16 @@ const handleOpenLogo = () => setOpenLogo(true);
                         key={player._id}
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                       >
-                        <TableCell component="th" scope="row" 
-                        onClick={() => navigate(`/profile/${player._id}`)}
-                        style={{cursor: 'pointer'}}
+                        <TableCell component="th" scope="row"
+                          onClick={() => navigate(`/profile/${player._id}`)}
+                          style={{ cursor: 'pointer' }}
                         >
-                          <Avatar src={player.imgUrl} style={{height: '100px', width: '100px'}}/>
-          
+                          <Avatar src={player.imgUrl} style={{ height: '100px', width: '100px' }} />
+
                         </TableCell>
-                        <TableCell component="th" scope="row" 
-                        onClick={() => navigate(`/profile/${player._id}`)}
-                        style={{cursor: 'pointer'}}
+                        <TableCell component="th" scope="row"
+                          onClick={() => navigate(`/profile/${player._id}`)}
+                          style={{ cursor: 'pointer' }}
                         >
                           {player.name}
                         </TableCell>

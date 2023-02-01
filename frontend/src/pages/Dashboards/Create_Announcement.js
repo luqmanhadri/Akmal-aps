@@ -64,6 +64,10 @@ function Create_Announcement() {
                             <button className='header_button' >
                                 <span className="text">Announcement</span></button>
                         </Link>
+                        <Link to="/createteam">
+                            <button className='header_button' >
+                                <span className="text">Create Team</span></button>
+                        </Link>
 
 
                     </header>

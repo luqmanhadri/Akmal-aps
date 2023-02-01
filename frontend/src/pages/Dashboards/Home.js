@@ -125,12 +125,19 @@ function Home() {
               <p className="name" onClick={() => navigate(`/profile/${datatoken._id}`)}>{datatoken.username}</p>
 
               <p >Name : {profileDetails.name}</p>
+              <p >Role : {profileDetails.role}</p>
               <p >Sport : {profileDetails.sport}</p>
               <p >Age : {profileDetails.age}</p>
-              <p >Height : {profileDetails.height}</p>
+              
+              {datatoken.role !== "athlete" ? (<>
+              </>) : (<>
+                <p >Height : {profileDetails.height}</p>
+              <p >Weight : {profileDetails.weight}</p>
+              <p >Birthday : {profileDetails.birthday}</p></>)}
+              
               <p >Email : {profileDetails.email}</p>
               <p >Contact : {profileDetails.contact}</p>
-              <p >Birthday : {profileDetails.birthday}</p>
+              
             </div>
 
 

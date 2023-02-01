@@ -24,9 +24,8 @@ function Card({video}) {
           // type={type}
           src={video.videoUrl}
         />
-        <div className='videoCard_Details' 
-        // type={type}
-        >
+       
+       
           {/* <img className="videoCard_ChannelImage"
             // type={type}
             src={channel.img}
@@ -39,7 +38,7 @@ function Card({video}) {
                {format(video.createdAt)}</div>
           </div>
           
-        </div>
+       
       </div>
     </Link>
   )
