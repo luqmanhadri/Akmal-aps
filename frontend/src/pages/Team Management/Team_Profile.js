@@ -248,6 +248,16 @@ function Team_Profile() {
     window.location.reload()
   }
 
+  const deleteManager = async (managerId) => {
+    await axios.delete(`http://localhost:3001/team/manager/${path}/${managerId}`)
+    window.location.reload()
+  }
+
+  const deleteCoach = async (coachId) => {
+    await axios.delete(`http://localhost:3001/team/coach/${path}/${coachId}`)
+    window.location.reload()
+  }
+
 
   return (
     <div>
@@ -378,6 +388,8 @@ function Team_Profile() {
                           <MDBCol>
                             <MDBCardText >Manager : {manager.name}</MDBCardText>
                           </MDBCol>
+                          <MDBCol ><DeleteIcon 
+                          onClick={() => deleteManager(manager._id)}/></MDBCol>
 
                         </MDBListGroupItem>
 
@@ -394,6 +406,8 @@ function Team_Profile() {
                           <MDBCol>
                             <MDBCardText >Coach : {coach.name ? coach.name : "TBA"}</MDBCardText>
                           </MDBCol>
+                          <MDBCol ><DeleteIcon 
+                          onClick={() => deleteCoach(coach._id)}/></MDBCol>
 
                         </MDBListGroupItem>
 

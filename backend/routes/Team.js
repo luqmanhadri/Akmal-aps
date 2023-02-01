@@ -1,7 +1,7 @@
 const express = require("express");
 const { createTeam, createAchievement, randomTeam, 
     getTeam, createSheet, updateTeam, addManager, 
-    addCoach, deleteAchievement, randomTeamHome, getAllTeams } = require("../controllers/Team");
+    addCoach, deleteAchievement, randomTeamHome, getAllTeams, deleteManager, deleteCoach } = require("../controllers/Team");
 // const { verifyToken } = require("../middlewares/verifyToken");
 const router = express.Router();
 
@@ -34,5 +34,9 @@ router.post("/coach/:name", addCoach)
 
 //delete comment
 router.delete("/achievement/:name/:achievementid", deleteAchievement)
+
+router.delete("/manager/:name/:managerid", deleteManager)
+
+router.delete("/coach/:name/:coachid", deleteCoach)
 
 module.exports = router;
