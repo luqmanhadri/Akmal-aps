@@ -72,6 +72,37 @@ function Home() {
     fetchData();
   }, [datatoken._id]);
 
+  // if(token) {
+  //   console.log(token)
+  // } else {
+  //   console.log("No token")
+  // }
+
+
+
+  // const addAnnouncement = async () => {
+  //   await axios.post("http://localhost:3001/announcement",
+  //     {
+  //       announcementBody: newAnnouncement
+  //       // , ProfileId: _id
+  //     }
+  //     , { withCredentials: true }
+
+  //   )
+  //     .then((response) => {
+  //       if (response.data.error) {
+  //         console.log(response.data.error);
+  //       } else {
+  //         const announcementToAdd = {
+  //           announcementBody: newAnnouncement,
+  //           // username: response.data.username,
+  //         };
+  //         setAnnouncement([...announcement, announcementToAdd]);
+  //         setNewAnnouncement("");
+  //       }
+  //     });
+  // };
+
 
   return (
     <div>

@@ -181,7 +181,7 @@ function Booking() {
                 // className="auth_input"
                 onChange={handleChange}>
                 {storeDropdown.map(store => (
-                  <option key={store} value={store} style={{color: 'black'}}>{store}</option>
+                  <option key={store} value={store}>{store}</option>
                 ))}
                 {/* {storeDropdown.map(store => (
         <option key={store} value={store}>{store}</option>

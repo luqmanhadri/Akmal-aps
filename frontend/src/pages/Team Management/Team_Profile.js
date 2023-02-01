@@ -252,11 +252,6 @@ const handleOpenLogo = () => setOpenLogo(true);
     <div>
       {datatoken && datatoken.sport == path ? (<Team_Navbar />) : (<div></div>)}
 
-      {datatoken
-                && (datatoken.role === "coach" && datatoken.sport === path
-                  || datatoken.role === "manager" && datatoken.sport === path
-                  || datatoken.role === "admin")
-                && datatoken.approved === true ? (<Team_Navbar />) : (<></>)}
       <Modal
         open={openLogo}
         onClose={handleCloseLogo}

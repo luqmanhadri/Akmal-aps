@@ -49,10 +49,18 @@ function Spesific_Profile() {
   const path = useLocation().pathname.split("/")[2];
   const token = Cookies.get('access_token');
 
+  if (token) {
+    const data = JSON.parse(token);
+    // console.log(data);
+  } else {
+    console.log("Failed")
+  }
+
   let datatoken
 
   if (token && typeof token !== 'undefined') {
     datatoken = JSON.parse(token);
+    // use datatoken here
   }
 
 
@@ -267,22 +275,19 @@ function Spesific_Profile() {
 
       <h1 style={{ fontWeight: 'bold', textAlign: 'center', marginTop: '10px' }}>Player Profile</h1>
       <MDBContainer className="py-3">
-        <MDBRow>
-          <MDBCol>
-            <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4">
-              
-              <MDBBreadcrumbItem active>Fitness</MDBBreadcrumbItem>
-            </MDBBreadcrumb>
-          </MDBCol>
-
-
-          <MDBCol>
-            <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4">
-             
-              <MDBBreadcrumbItem active>Wellness</MDBBreadcrumbItem>
-            </MDBBreadcrumb>
-          </MDBCol>
-        </MDBRow>
+        {/* <MDBRow>
+            <MDBCol>
+              <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4">
+                <MDBBreadcrumbItem>
+                  <a href='#'>Home</a>
+                </MDBBreadcrumbItem>
+                <MDBBreadcrumbItem>
+                  <a href="#">User</a>
+                </MDBBreadcrumbItem>
+                <MDBBreadcrumbItem active>User Profile</MDBBreadcrumbItem>
+              </MDBBreadcrumb>
+            </MDBCol>
+          </MDBRow> */}
 
         <MDBRow>
           <MDBCol lg="4">
@@ -337,20 +342,12 @@ function Spesific_Profile() {
                 </MDBRow>
                 <MDBCardText className="mb-1 mt-3"
                   style={{ color: 'white' }}>@{profileDetails.username}</MDBCardText>
-                <MDBCardText className="mb-4" style={{ color: 'white' }}>{profileDetails.role}</MDBCardText>
+                <MDBCardText className="mb-4"
+                  style={{ color: 'white' }}>{profileDetails.sport} Player</MDBCardText>
 
                 <div className="d-flex justify-content-center mb-2">
                   {datatoken && datatoken._id === path ? (
-                    <button className='btn btn-primary update_button'
-                      onClick={() => {
-                        if (datatoken.approved === false) {
-                          toast.error("You are not authorized yet to edit your profile details. Please contact the administrator!", {
-                            position: toast.POSITION.TOP_CENTER,
-                          });
-                          return;
-                        }
-                        navigate("/update_profile")
-                      }}> Edit Profile </button>
+                    <button className='btn btn-primary update_button' onClick={() => navigate("/update_profile")}> Edit Profile </button>
                   ) : (
                     <div></div>
                   )}
@@ -366,16 +363,7 @@ function Spesific_Profile() {
                     style={{ background: 'linear-gradient(270deg,#963cff,#37003c)' }}>
                     <MDBCardText style={{ color: 'white' }}>Achievements</MDBCardText>
                     {datatoken && datatoken._id === path ? (
-                      <button className='btn btn-primary update_button'
-                        onClick={() => {
-                          if (datatoken.approved === false) {
-                            toast.error("You are not authorized yet to edit your achievements. Please contact the administrator!", {
-                              position: toast.POSITION.TOP_CENTER,
-                            });
-                            return;
-                          }
-                          setOpenAchievement(true)
-                        }}> Add Achievements </button>
+                      <button className='btn btn-primary update_button' onClick={() => setOpenAchievement(true)}> Add Achievements </button>
                     ) : (
                       <div></div>
                     )}
@@ -446,17 +434,6 @@ function Spesific_Profile() {
                 <MDBListGroupItem>
                   <MDBRow style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
                     <MDBCol sm="3">
-                      <MDBCardText>Sport</MDBCardText>
-                    </MDBCol>
-                    <MDBCol sm="9">
-                      <MDBCardText className="fw-bold">{profileDetails.sport}</MDBCardText>
-                    </MDBCol>
-                  </MDBRow>
-                </MDBListGroupItem>
-
-                <MDBListGroupItem>
-                  <MDBRow style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
-                    <MDBCol sm="3">
                       <MDBCardText>State</MDBCardText>
                     </MDBCol>
                     <MDBCol sm="9">
@@ -464,29 +441,27 @@ function Spesific_Profile() {
                     </MDBCol>
                   </MDBRow>
                 </MDBListGroupItem>
-                {datatoken && datatoken.role !== "athlete" ? (<></>)
-                  : (<>
-                    <MDBListGroupItem>
-                      <MDBRow style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
-                        <MDBCol sm="3">
-                          <MDBCardText>Height</MDBCardText>
-                        </MDBCol>
-                        <MDBCol sm="9">
-                          <MDBCardText className="fw-bold">{profileDetails.height}</MDBCardText>
-                        </MDBCol>
-                      </MDBRow>
-                    </MDBListGroupItem>
-                    <MDBListGroupItem>
-                      <MDBRow style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
-                        <MDBCol sm="3">
-                          <MDBCardText>Weight</MDBCardText>
-                        </MDBCol>
-                        <MDBCol sm="9">
-                          <MDBCardText className="fw-bold">{profileDetails.weight} kg</MDBCardText>
-                        </MDBCol>
-                      </MDBRow>
-                    </MDBListGroupItem></>)}
 
+                <MDBListGroupItem>
+                  <MDBRow style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
+                    <MDBCol sm="3">
+                      <MDBCardText>Height</MDBCardText>
+                    </MDBCol>
+                    <MDBCol sm="9">
+                      <MDBCardText className="fw-bold">{profileDetails.height}</MDBCardText>
+                    </MDBCol>
+                  </MDBRow>
+                </MDBListGroupItem>
+                <MDBListGroupItem>
+                  <MDBRow style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
+                    <MDBCol sm="3">
+                      <MDBCardText>Weight</MDBCardText>
+                    </MDBCol>
+                    <MDBCol sm="9">
+                      <MDBCardText className="fw-bold">{profileDetails.weight} kg</MDBCardText>
+                    </MDBCol>
+                  </MDBRow>
+                </MDBListGroupItem>
                 {datatoken && (datatoken.role === "admin"
                   || (datatoken.role === "coach" && datatoken.sport === profileDetails.sport) ||
                   (datatoken.role === "manager" && datatoken.sport === profileDetails.sport)
@@ -525,66 +500,31 @@ function Spesific_Profile() {
 
             </MDBCard>
 
+            <MDBRow>
+              <MDBCol md="12">
+                <MDBCard className="mb-4 mb-md-0">
+                  <MDBCardBody>
+                    <MDBCardText className="mb-4">Player Videos</MDBCardText>
+                    {videos.map((video) => (
+
+                      <MDBCol sm="6">
+                        <Card key={video._id} video={video} />
+                      </MDBCol>
+
+                    ))}
+                    {datatoken && datatoken._id === path ? (
+                      <button className='btn btn-primary upload_button' onClick={() => setOpen(true)}> Upload </button>
+                    ) : (
+                      <div></div>
+                    )}
 
 
-            {datatoken && datatoken.role !== "athlete" ? (<></>)
-              : (<>
-                <MDBRow>
-                  <MDBCol md="12">
-                    <MDBListGroup>
-                      <MDBListGroupItem style={{
-                        background: 'linear-gradient(270deg,#963cff,#37003c)'
-                      }}>
-                        <MDBCardText style={{
-                          textAlign: 'center',
-                          color: 'white'
-                        }}
-                        >Player Videos
-                          {datatoken && datatoken._id === path ? (
-                            <button className='btn btn-primary upload_button'
-                              style={{ marginLeft: '50px' }}
-                              onClick={() => {
-                                if (datatoken.approved === false) {
-                                  toast.error("You are not authorized yet to upload videos. Please contact the administrator!", {
-                                    position: toast.POSITION.TOP_CENTER,
-                                  });
-                                  return;
-                                }
-                                setOpen(true)
-                              }}> Upload </button>
-                          ) : (
-                            <></>
-                          )}</MDBCardText>
-                      </MDBListGroupItem>
-                      <MDBListGroupItem>
-                        <MDBRow>
-                          {videos.map((video) => (
-
-                            <MDBCol xl={6} style={{ display: 'flex', justifyContent: 'center' }}>
-
-                              <Card key={video._id} video={video} />
-
-                            </MDBCol>
+                  </MDBCardBody>
+                </MDBCard>
+              </MDBCol>
 
 
-                          ))}
-                        </MDBRow>
-
-                      </MDBListGroupItem>
-                    </MDBListGroup>
-                  </MDBCol>
-                </MDBRow>
-              </>)}
-
-
-
-
-
-
-
-
-
-
+            </MDBRow>
           </MDBCol>
         </MDBRow>
       </MDBContainer>
