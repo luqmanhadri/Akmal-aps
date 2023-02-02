@@ -67,11 +67,12 @@ function Home() {
         setProfileDetails(accountRes.data);
         const bookingRes = await axios.get(`http://localhost:3001/booking/nearest/${datatoken._id}`);
         setBooking(bookingRes.data)
-        console.log("Success")
         const fitnessGet = await axios.get(`http://localhost:3001/fitness/getfitness/${datatoken._id}`);
         setfitness(fitnessGet.data)
         const wellnessGet = await axios.get(`http://localhost:3001/wellness/getmood/${datatoken._id}`);
         setwellness(wellnessGet.data)
+        // console.log("Success")
+        console.log(booking)
       } catch (err) { }
     };
     fetchData();

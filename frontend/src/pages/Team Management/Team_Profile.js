@@ -263,10 +263,10 @@ function Team_Profile() {
     <div>
 
       {datatoken
-                && (datatoken.role === "coach" && datatoken.sport === path
-                  || datatoken.role === "manager" && datatoken.sport === path
-                  || datatoken.role === "admin")
-                && datatoken.approved === true ? (<Team_Navbar />) : (<></>)}
+        && (datatoken.role === "coach" && datatoken.sport === path
+          || datatoken.role === "manager" && datatoken.sport === path
+          || datatoken.role === "admin")
+        && datatoken.approved === true ? (<Team_Navbar />) : (<></>)}
       <Modal
         open={openLogo}
         onClose={handleCloseLogo}
@@ -388,8 +388,12 @@ function Team_Profile() {
                           <MDBCol>
                             <MDBCardText >Manager : {manager.name}</MDBCardText>
                           </MDBCol>
-                          <MDBCol ><DeleteIcon 
-                          onClick={() => deleteManager(manager._id)}/></MDBCol>
+                          {datatoken && (datatoken.role === "coach" && datatoken.sport === path
+                            || datatoken.role === "manager" && datatoken.sport === path
+                            || datatoken.role === "admin")
+                            && datatoken.approved === true ? (<> <MDBCol ><DeleteIcon
+                              onClick={() => deleteManager(manager._id)} /></MDBCol></>) : (<></>)}
+                         
 
                         </MDBListGroupItem>
 
@@ -406,8 +410,12 @@ function Team_Profile() {
                           <MDBCol>
                             <MDBCardText >Coach : {coach.name ? coach.name : "TBA"}</MDBCardText>
                           </MDBCol>
-                          <MDBCol ><DeleteIcon 
-                          onClick={() => deleteCoach(coach._id)}/></MDBCol>
+                          
+                             {datatoken && (datatoken.role === "coach" && datatoken.sport === path
+                            || datatoken.role === "manager" && datatoken.sport === path
+                            || datatoken.role === "admin")
+                            && datatoken.approved === true ? (<> <MDBCol ><DeleteIcon
+                              onClick={() => deleteCoach(coach._id)} /></MDBCol></>) : (<></>)}
 
                         </MDBListGroupItem>
 
@@ -469,7 +477,7 @@ function Team_Profile() {
                           && datatoken.approved === true ?
                           (<>
                             <IconButton
-                            onClick={() => deleteAchievement(achievement._id)}
+                              onClick={() => deleteAchievement(achievement._id)}
                             >
                               <DeleteIcon /></IconButton></>) : (<></>)}
 
