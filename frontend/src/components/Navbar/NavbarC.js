@@ -70,10 +70,12 @@ function NavbarC() {
               : (<></>)}
               
               <Nav.Link as={Link} to="/booking">Booking</Nav.Link>
-              <Nav.Link as={Link} to="/fitness">Fitness</Nav.Link>
-              <Nav.Link as={Link} to="/wellness">Wellness</Nav.Link>
+              {datatoken && datatoken.role === "storekeeper" && datatoken.approved === true ? (<></>) 
+              : (<><Nav.Link as={Link} to="/fitness">Fitness</Nav.Link>
+              <Nav.Link as={Link} to="/wellness">Wellness</Nav.Link></>)}
+              
 
-              {datatoken && (datatoken.role === "storekeeper" && datatoken.approve === true || datatoken.role === "admin" ) ? 
+              {datatoken && (datatoken.role === "storekeeper" && datatoken.approved === true || datatoken.role === "admin" ) ? 
               ( <Nav.Link className="navbarcollapse" 
               as={Link} to="/inventory">Storekeeper Dashboard</Nav.Link>) 
               : (<></>)}

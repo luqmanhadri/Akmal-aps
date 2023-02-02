@@ -114,7 +114,10 @@ function Spesific_Profile() {
       <h1 style={{ fontWeight: 'bold', textAlign: 'center', marginTop: '10px' }}
       >Profile</h1>
       <MDBContainer className="py-3">
-        {datatoken && datatoken.role === "athlete" ? 
+        {datatoken && (datatoken.role === "admin" && datatoken._id !==path
+                  || (datatoken.role === "coach" && datatoken.sport === profileDetails.sport && datatoken._id !== path) ||
+                  (datatoken.role === "manager" && datatoken.sport === profileDetails.sport && datatoken._id !== path)
+                  || (datatoken.role === "athlete" && datatoken._id === profileDetails._id && datatoken.sport === profileDetails.sport)) ? 
         (<>
         <MDBRow>
           <MDBCol>
@@ -218,7 +221,8 @@ function Spesific_Profile() {
                 </div>
               </MDBCardBody>
             </MDBCard>
-{datatoken && (datatoken.role === "storekeeper" || datatoken.role === "admin") ? 
+{datatoken && ( (datatoken.role === "storekeeper" && datatoken._id ===path )
+|| (datatoken.role === "admin" && datatoken._id ===path)) ? 
 (<></>) : (<> <MDBCard className="mb-4 mb-lg-0">
 <MDBCardBody className="p-0">
   <MDBListGroup flush className="rounded-3">
@@ -250,7 +254,10 @@ function Spesific_Profile() {
         // </li>
         <MDBListGroupItem key={achievement._id} className="d-flex justify-content-between align-items-center p-3">
           <MDBCardText>{achievement.year}: {achievement.achievement}</MDBCardText>
-          <DeleteIcon onClick={() => deleteAchievement(achievement._id)}></DeleteIcon>
+          {datatoken && datatoken._id === path ? 
+          (<> <DeleteIcon onClick={() => deleteAchievement(achievement._id)}></DeleteIcon></>) 
+          : (<></>)}
+         
         </MDBListGroupItem>
 
       );
