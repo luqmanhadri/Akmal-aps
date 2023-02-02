@@ -12,6 +12,7 @@ import runicon from "../../utils/Run.png";
 import LineChart from "../../components/Fitness/FitnessChart";
 import Cookies from "js-cookie";
 import "./Fitness.css";
+import { useLocation } from "react-router-dom";
 
 const jwt = Cookies.get("access_token");
 if (jwt) {
@@ -29,6 +30,7 @@ if (jwt && typeof jwt !== "undefined") {
 }
 //console.log(datatoken)
 function Fitness() {
+  const path = useLocation().pathname.split("/")[2];
   // Authorization Process
   const authLink = "https://www.strava.com/oauth/token";
   const clientID = 97652;
@@ -93,10 +95,10 @@ function Fitness() {
         console.log("ERROR to POST Authorize");
       });
   }
-  //console.log(datatoken._id)
+  //console.log(path)
   function postTokenToDB() {
     const PostToken = {
-      userid: datatoken._id,
+      userid: path,
       refreshToken: `${refreshToken}`,
       accessToken: `${accessToken}`,
       expires_at: `${expiresAt}`,
@@ -117,7 +119,7 @@ function Fitness() {
 
   function getTokenfromDB() {
     axios
-      .get(`http://localhost:3001/fitness/get/${datatoken._id}`)
+      .get(`http://localhost:3001/fitness/get/${path}`)
       .then((response) => {
         // Get the refreshToken, accessToken, and expires_at values from the response data
         //const { refreshToken, accessToken, expires_at } = response.data;
@@ -269,10 +271,10 @@ function Fitness() {
   // console.log(weeklyactivity)
   var weekActivityCount =
     Number(athleteRecentRunStats.count) + Number(athleteRecentCycleStats.count);
-  //console.log(datatoken._id)
+  //console.log(path)
   async function postActivities() {
     const fitnessData = {
-      id: datatoken._id,
+      id: path,
       athleteName: athleteFirstname,
       weeklyactivities: weekActivityCount,
       distance: Math.round(totalDistance / 10) / 100,
@@ -281,7 +283,7 @@ function Fitness() {
     console.log(fitnessData);
     try {
       const response = await axios.patch(
-        `http://localhost:3001/fitness/patchdata/${datatoken._id}`,
+        `http://localhost:3001/fitness/patchdata/${path}`,
         fitnessData
       );
       console.log("Success postActivity", response.data);
@@ -492,7 +494,7 @@ function Fitness() {
                         <div className="row">
                           <div className="col-md-4">
                             <button
-                              href={`/profile/${datatoken._id}`}
+                              href={`/profile/${path}`}
                               class="btn btn-sm btn-outline-primary"
                             >
                               View Profile

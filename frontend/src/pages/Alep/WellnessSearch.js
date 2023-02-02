@@ -63,6 +63,7 @@ if (token && typeof token !== "undefined") {
 function Wellness() {
   const path = useLocation().pathname.split("/")[2];
   const [wellnessmood, setwellnessmood] = useState("N/A");
+  const [profileDetails, setProfileDetails] = useState({});
 
   const validationSchema = Yup.object({
     trainingInput: Yup.number(),
@@ -102,6 +103,8 @@ function Wellness() {
   let fromDBsleepDataEnd;
   useEffect(() => {
     async function getInjury() {
+      const accountRes = await axios.get(`http://localhost:3001/account/find/${path}`);
+      setProfileDetails(accountRes.data);
       const request = await axios.get(
         `http://localhost:3001/wellness/date/${path}`
       );
@@ -791,7 +794,7 @@ function Wellness() {
                         <small class="text-success text-nowrap fw-semibold">
                           <i class="bx bx-chevron-up"></i>Name
                         </small>
-                        <h3 class="mb-0">{datatoken.name}</h3>
+                        <h3 class="mb-0">{profileDetails.name}</h3>
                       </div>
                     </div>
                     <div id="profileReportChart"></div>

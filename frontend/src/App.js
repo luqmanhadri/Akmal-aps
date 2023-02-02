@@ -26,6 +26,7 @@ import Player_DB from './pages/Team Management/Player_DB';
 import Fitness from './pages/Alep/Fitness';
 import Wellness from './pages/Alep/Wellness';
 import WellnessSearch from './pages/Alep/WellnessSearch';
+import FitnessSearch from './pages/Alep/FitnessSearch';
 import AddEvent from './pages/Alep/AddEvent';
 import Schedule from './pages/Alep/Schedule';
 import Search_Team from './pages/Team Management/Search_Team';
@@ -89,7 +90,8 @@ function App() {
             <Route path="inventorylist" element={< InventoryList/>} />
             <Route path="announcement" element={< Create_Announcement/>} />
             <Route path="forgotpassword" element={< Forgot_Password/>} />
-            <Route path="wellness/:id" element={< Forgot_Password/>} />
+            <Route path="wellness/:id" element={< WellnessSearch/>} />
+            <Route path="fitness/:id" element={< FitnessSearch/>} />
             <Route path="createteam" element={< Create_Team/>} />
             <Route path="registeradmin" element={< Register_Admin/>} />
             

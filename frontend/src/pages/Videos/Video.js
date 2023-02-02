@@ -234,7 +234,7 @@ function Video() {
               {video.views} views • {format(video.createdAt)}
             </span> */}
 
-          </div>
+          
           <h1 className='video_title'>{video.title}</h1>
           <span className='video_info' style={{marginLeft: '12%'}}>
                {format(video.createdAt)}

@@ -119,7 +119,7 @@ function Spesific_Profile() {
         <MDBRow>
           <MDBCol>
             <MDBBreadcrumb className="rounded-3 p-3 mb-4" 
-            onClick={() => navigate(`/fitness/${datatoken._id}`)} 
+            onClick={() => navigate(`/fitness/${path}`)} 
             style={{ background: 'linear-gradient(270deg,#963cff,#37003c)', color: 'white' }}>
               <MonitorHeartIcon/>
               <MDBBreadcrumbItem active  
@@ -130,7 +130,7 @@ function Spesific_Profile() {
 
           <MDBCol>
             <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4"
-            onClick={() => navigate(`/wellness/${datatoken._id}`)} 
+            onClick={() => navigate(`/wellness/${path}`)} 
             style={{ background: 'linear-gradient(270deg,#963cff,#37003c)', color: 'white' }}>
             
             <SelfImprovementIcon/>

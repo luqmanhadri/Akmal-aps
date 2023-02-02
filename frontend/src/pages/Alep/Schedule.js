@@ -14,7 +14,7 @@ function Schedule() {
   useEffect(() => {
     axios.get("http://localhost:3001/event").then((response) => {
       setlistofEvent(response.data);
-      console.log(response.data)
+      //console.log(response.data)
     });
   }, []);
 

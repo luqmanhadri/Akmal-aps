@@ -192,7 +192,6 @@ function Wellness() {
       setwellnessmood("Good")
     }
   }
-  postMood()
   function postMood() {
     const PostMood = {
       userId: datatoken._id,
