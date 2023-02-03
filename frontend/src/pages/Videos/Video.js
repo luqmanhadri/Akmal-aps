@@ -230,11 +230,12 @@ function Video() {
           <span className='video_info' style={{marginLeft: '12%'}}>
                {format(video.createdAt)}
             </span>
-            
-            <button className="video_buttons btn btn-success"
+            {datatoken && datatoken._id === user._id ? (<>
+              <button className="video_buttons btn btn-success"
             onClick={handleOpenEdit}><EditIcon />Edit</button>
           <button className="video_buttons btn btn-danger"
-            onClick={handleOpen}><DeleteIcon />Delete</button>
+            onClick={handleOpen}><DeleteIcon />Delete</button></>) : (<></>)}
+            
           <hr className='hr' />
           <div className='video_channel'>
             

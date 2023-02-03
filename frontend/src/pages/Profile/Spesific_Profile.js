@@ -396,8 +396,61 @@ function Spesific_Profile() {
 
 
 
-            {datatoken && datatoken.role !== "athlete" ? (<></>)
+            {datatoken && datatoken.approved === true && 
+            (datatoken._id === path && datatoken.role === "athlete" ||
+            datatoken._id !== path && datatoken.role === "manager" ||
+            datatoken._id !== path && datatoken.role === "coach"||
+            datatoken._id !== path && datatoken.role === "admin" )? (<>
+              <MDBRow>
+                  <MDBCol md="12">
+                    <MDBListGroup>
+                      <MDBListGroupItem style={{
+                        background: 'linear-gradient(270deg,#963cff,#37003c)'
+                      }}>
+                        <MDBCardText style={{
+                          textAlign: 'center',
+                          color: 'white'
+                        }}
+                        >Player Videos
+                          {datatoken && datatoken._id === path ? (
+                            <button className='btn btn-primary upload_button'
+                              style={{ marginLeft: '50px' }}
+                              onClick={() => {
+                                if (datatoken.approved === false) {
+                                  toast.error("You are not authorized yet to upload videos. Please contact the administrator!", {
+                                    position: toast.POSITION.TOP_CENTER,
+                                  });
+                                  return;
+                                }
+                                setOpen(true)
+                              }}> Upload </button>
+                          ) : (
+                            <></>
+                          )}</MDBCardText>
+                      </MDBListGroupItem>
+                      <MDBListGroupItem>
+                        <MDBRow>
+                          {videos.map((video) => (
+
+                            <MDBCol xl={6} style={{ display: 'flex', justifyContent: 'center' }}>
+
+                              <Card key={video._id} video={video} />
+
+                            </MDBCol>
+
+
+                          ))}
+                        </MDBRow>
+
+                      </MDBListGroupItem>
+                    </MDBListGroup>
+                  </MDBCol>
+                </MDBRow></>)
               : (<>
+                
+              </>)}
+
+              {!datatoken ? (<>
                 <MDBRow>
                   <MDBCol md="12">
                     <MDBListGroup>
@@ -442,8 +495,9 @@ function Spesific_Profile() {
                       </MDBListGroupItem>
                     </MDBListGroup>
                   </MDBCol>
-                </MDBRow>
-              </>)}
+                </MDBRow></>) : (<></>)}
+              
+             
 
 
 
