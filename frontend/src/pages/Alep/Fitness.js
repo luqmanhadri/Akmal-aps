@@ -39,6 +39,7 @@ function Fitness() {
   var authprocess = false;
   var buttonPress = false;
   const [authorizationDone, setauthorizationDone] = useState(false);
+  const [tokenData, settokenData] = useState();
 
   function initalAuth() {
     window.location.href = `https://www.strava.com/oauth/authorize?client_id=97652&redirect_uri=http://localhost:3000/fitness&response_type=code&scope=activity:read_all,profile:read_all`;
@@ -80,7 +81,6 @@ function Fitness() {
         // Handle the response
         // Get the refresh_token and access_token values from the response data
         const { refresh_token, access_token, expires_at } = response.data;
-
         // Store the values in variables
         refreshToken = refresh_token;
         accessToken = access_token;
@@ -289,6 +289,7 @@ function Fitness() {
       console.error(error);
     }
   }
+  console.log(token)
 
   function deAuthorize() {
     try {
@@ -436,7 +437,7 @@ function Fitness() {
     datasets: [
       {
         label: "Activities",
-        data: [2, 1, 0, 1, 2, 3, 4],
+        data: [0, 0, 3, 0, 0, 0, 0],
         fill: false,
         borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
@@ -837,7 +838,7 @@ function Fitness() {
                               <i class="fab fa-react fa-lg text-info me-3"></i>{" "}
                               <strong>2</strong>
                             </td>
-                            <td>Afiq Aiman Shuhaimi</td>
+                            <td>Ikhwan</td>
                             <td>7 km</td>
                           </tr>
                           <tr>
@@ -845,8 +846,8 @@ function Fitness() {
                               <i class="fab fa-vuejs fa-lg text-success me-3"></i>{" "}
                               <strong>3</strong>
                             </td>
-                            <td>Ikhwan</td>
-                            <td>5 km</td>
+                            <td>Afiq Aiman Shuhaimi</td>
+                            <td>0 km</td>
                           </tr>
                           <tr>
                             <td>
